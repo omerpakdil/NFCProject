@@ -1,25 +1,22 @@
 import { Ionicons } from '@expo/vector-icons';
-import LottieView from 'lottie-react-native';
 import React, { useState } from 'react';
 import {
-    Alert,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Alert,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 import Button from '../components/Button';
-import Card from '../components/Card';
 import { COLORS, SIZES } from '../constants/theme';
 
 // Store ve abonelik verileri
 import useSubscriptionStore, {
-    FEATURES,
-    PRICING,
-    SUBSCRIPTION_PLANS
+  FEATURES,
+  PRICING,
+  SUBSCRIPTION_PLANS
 } from '../features/subscription/subscriptionStore';
 
 const SubscriptionScreen = ({ navigation }) => {
@@ -176,50 +173,29 @@ const SubscriptionScreen = ({ navigation }) => {
   
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton} 
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color={COLORS.text} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Premium Abonelik</Text>
-        <View style={styles.emptySpace} />
-      </View>
-      
-      <ScrollView contentContainerStyle={styles.content}>
-        {/* Premium açıklaması */}
-        <View style={styles.introSection}>
-          <View style={styles.animationContainer}>
-            <LottieView
-              source={require('../assets/animations/premium.json')}
-              autoPlay
-              loop
-              style={styles.animation}
-            />
+      <View style={styles.content}>
+        {/* Premium içeriği */}
+        <View style={styles.premiumContent}>
+          <View style={styles.premiumHeader}>
+            <Ionicons name="star" size={48} color={COLORS.premium} />
+            <Text style={styles.premiumSubtitle}>
+              Sınırsız tarama, gelişmiş özellikler ve daha fazlası
+            </Text>
           </View>
-          
-          <Text style={styles.title}>Premium'a Geçin</Text>
-          <Text style={styles.subtitle}>
-            Tüm özelliklere sınırsız erişim ve daha fazlası
-          </Text>
-        </View>
-        
-        {/* Abonelik planları */}
-        <View style={styles.plansContainer}>
-          {renderPlanCard(SUBSCRIPTION_PLANS.WEEKLY)}
-          {renderPlanCard(SUBSCRIPTION_PLANS.MONTHLY)}
-          {renderPlanCard(SUBSCRIPTION_PLANS.YEARLY)}
-          {renderPlanCard(SUBSCRIPTION_PLANS.LIFETIME)}
-        </View>
-        
-        {/* Premium özellikleri */}
-        <Card style={styles.featuresCard}>
-          <Text style={styles.featuresTitle}>Premium Özellikler</Text>
+
+          {/* Premium özellikleri */}
           <View style={styles.featuresList}>
             {Object.values(FEATURES).map(renderFeatureItem)}
           </View>
-        </Card>
+
+          {/* Abonelik planları */}
+          <View style={styles.plansContainer}>
+            {renderPlanCard(SUBSCRIPTION_PLANS.WEEKLY)}
+            {renderPlanCard(SUBSCRIPTION_PLANS.MONTHLY)}
+            {renderPlanCard(SUBSCRIPTION_PLANS.YEARLY)}
+            {renderPlanCard(SUBSCRIPTION_PLANS.LIFETIME)}
+          </View>
+        </View>
         
         {/* Satın alma butonu */}
         <View style={styles.purchaseContainer}>
@@ -229,7 +205,7 @@ const SubscriptionScreen = ({ navigation }) => {
             * Abonelikler otomatik olarak yenilenir. İstediğiniz zaman ayarlardan iptal edebilirsiniz.
           </Text>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -239,67 +215,36 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: SIZES.screenPadding,
-    paddingTop: SIZES.medium,
-    paddingBottom: SIZES.small,
-  },
-  backButton: {
-    padding: 8,
-  },
-  headerTitle: {
-    fontSize: SIZES.large,
-    fontWeight: 'bold',
-    color: COLORS.text,
-  },
-  emptySpace: {
-    width: 40,
-  },
   content: {
-    flexGrow: 1,
-    paddingHorizontal: SIZES.screenPadding,
-    paddingBottom: SIZES.screenPadding,
+    flex: 1,
+    padding: 16,
+    paddingTop: 30,
+    paddingBottom: 16,
   },
-  introSection: {
+  premiumContent: {
+    flex: 1,
     alignItems: 'center',
-    marginBottom: SIZES.xlarge,
   },
-  animationContainer: {
-    width: 120,
-    height: 120,
-    marginBottom: SIZES.medium,
+  premiumHeader: {
+    alignItems: 'center',
+    marginBottom: 16,
   },
-  animation: {
-    width: '100%',
-    height: '100%',
-  },
-  title: {
-    fontSize: SIZES.xlarge,
-    fontWeight: 'bold',
-    color: COLORS.text,
-    marginBottom: SIZES.small,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: SIZES.medium,
+  premiumSubtitle: {
+    fontSize: 14,
     color: COLORS.textSecondary,
     textAlign: 'center',
+    marginTop: 8,
   },
-  plansContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    marginBottom: SIZES.large,
+  featuresList: {
+    gap: 6,
+    marginBottom: 25,
   },
   planCard: {
     width: '48%',
     backgroundColor: COLORS.cardBackground,
     borderRadius: SIZES.cardRadius,
-    padding: SIZES.medium,
-    marginBottom: SIZES.medium,
+    padding: 10,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
@@ -314,21 +259,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   planTitle: {
-    fontSize: SIZES.medium,
+    fontSize: 14,
     fontWeight: 'bold',
     color: COLORS.text,
     textTransform: 'capitalize',
   },
   planPrice: {
-    fontSize: SIZES.large,
+    fontSize: 16,
     fontWeight: 'bold',
     color: COLORS.text,
   },
   planPeriod: {
-    fontSize: SIZES.small,
+    fontSize: 12,
     color: COLORS.textSecondary,
   },
   discountBadge: {
@@ -348,41 +293,36 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontWeight: 'bold',
   },
-  featuresCard: {
-    marginBottom: SIZES.large,
+  purchaseContainer: {
+    marginTop: 'auto',
+    paddingTop: 16,
   },
-  featuresTitle: {
-    fontSize: SIZES.large,
-    fontWeight: 'bold',
-    color: COLORS.text,
-    marginBottom: SIZES.medium,
+  purchaseButton: {
+    marginBottom: 10,
   },
-  featuresList: {
-    gap: SIZES.small,
+  disclaimerText: {
+    fontSize: 12,
+    color: COLORS.textSecondary,
+    textAlign: 'center',
+    marginTop: 6,
   },
   featureItem: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   featureText: {
-    fontSize: SIZES.medium,
+    fontSize: 14,
     color: COLORS.text,
-    marginLeft: SIZES.small,
+    marginLeft: 8,
   },
   premiumIndicator: {
-    marginLeft: 6,
+    marginLeft: 4,
   },
-  purchaseContainer: {
-    marginTop: SIZES.medium,
-  },
-  purchaseButton: {
-    marginBottom: SIZES.medium,
-  },
-  disclaimerText: {
-    fontSize: SIZES.small,
-    color: COLORS.textSecondary,
-    textAlign: 'center',
-    marginTop: SIZES.small,
+  plansContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    marginBottom: 32,
   },
 });
 

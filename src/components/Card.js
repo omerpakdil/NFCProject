@@ -29,6 +29,13 @@ const Card = ({
   );
 };
 
+// Card.Content bileşeni
+Card.Content = ({ children, style }) => (
+  <View style={[styles.content, style]}>
+    {children}
+  </View>
+);
+
 const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.cardBackground,
@@ -39,6 +46,9 @@ const styles = StyleSheet.create({
   },
   elevated: {
     ...SHADOWS.medium,
+  },
+  content: {
+    flex: 1,
   },
 });
 

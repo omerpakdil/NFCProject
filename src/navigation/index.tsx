@@ -5,20 +5,18 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Tema
 import { COLORS } from '../constants/theme';
 
-// Ekranlar (henüz oluşturulmadı)
-// Ana ekranlar
+// Ekranlar
 import HistoryScreen from '../screens/HistoryScreen';
 import HomeScreen from '../screens/HomeScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-
-// Diğer ekranlar
 import OnboardingScreen from '../screens/OnboardingScreen';
 import ScanDetailScreen from '../screens/ScanDetailScreen';
 import ScanResultScreen from '../screens/ScanResultScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 import SubscriptionScreen from '../screens/SubscriptionScreen';
 import WriteTagScreen from '../screens/WriteTagScreen';
 
@@ -153,12 +151,14 @@ const SettingsStackNavigator = () => {
 
 // Tab Navigator
 const TabNavigator = () => {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+          let iconName: 'home' | 'home-outline' | 'time' | 'time-outline' | 'settings' | 'settings-outline' = 'home';
 
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
@@ -175,12 +175,16 @@ const TabNavigator = () => {
         tabBarStyle: {
           backgroundColor: COLORS.surface,
           borderTopColor: COLORS.border,
-          paddingBottom: 5,
-          height: 60,
+          height: 60 + insets.bottom,
+          paddingBottom: insets.bottom,
+          paddingTop: 5,
         },
         tabBarLabelStyle: {
           fontSize: 12,
           marginBottom: 5,
+        },
+        tabBarItemStyle: {
+          paddingVertical: 5,
         }
       })}
     >
@@ -206,16 +210,13 @@ const OnboardingNavigator = () => {
 
 // Ana Navigator
 export default function Navigation() {
-  // İlk başlangıçta onboarding gösterip göstermeme durumu
-  const [isFirstLaunch, setIsFirstLaunch] = useState(null);
+  const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(null);
   
   useEffect(() => {
-    // İlk başlatma durumunu kontrol et
     const checkIfFirstLaunch = async () => {
       try {
         const hasLaunched = await AsyncStorage.getItem('hasLaunched');
         if (hasLaunched === null) {
-          // İlk başlatma
           setIsFirstLaunch(true);
           await AsyncStorage.setItem('hasLaunched', 'true');
         } else {
@@ -230,7 +231,6 @@ export default function Navigation() {
     checkIfFirstLaunch();
   }, []);
   
-  // Yükleniyor durumu
   if (isFirstLaunch === null) {
     return null;
   }
@@ -238,17 +238,11 @@ export default function Navigation() {
   return (
     <NavigationContainer theme={DarkTheme}>
       <StatusBar style="light" />
-      <MainStack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        {isFirstLaunch ? (
-          <MainStack.Screen name="OnboardingFlow" component={OnboardingNavigator} />
-        ) : (
-          <MainStack.Screen name="MainFlow" component={TabNavigator} />
-        )}
-      </MainStack.Navigator>
+      {isFirstLaunch ? (
+        <OnboardingNavigator />
+      ) : (
+        <TabNavigator />
+      )}
     </NavigationContainer>
   );
 } 

@@ -1,14 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-    Alert,
-    FlatList,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import Button from '../components/Button';
@@ -154,12 +154,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: SIZES.screenPadding,
-    paddingTop: SIZES.large,
-    paddingBottom: SIZES.medium,
+    paddingHorizontal: 15,
+    paddingTop: 60,
+    paddingBottom: 15,
   },
   headerTitle: {
-    fontSize: SIZES.xlarge,
+    fontSize: 28,
     fontWeight: 'bold',
     color: COLORS.text,
   },

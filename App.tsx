@@ -8,7 +8,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { COLORS } from './src/constants/theme';
-import Navigation from './src/navigation';
+import Navigation from './src/navigation/index';
 
 // Splash ekranını göstermeye devam et
 SplashScreen.preventAutoHideAsync();

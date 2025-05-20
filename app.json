@@ -34,14 +34,13 @@
       "package": "com.nfcreaderpro.app"
     },
     "plugins": [
-      "expo-nfc",
-      "expo-secure-store",
-      "expo-in-app-purchases"
+      "expo-secure-store"
     ],
     "extra": {
       "eas": {
         "projectId": "nfc-reader-pro"
       }
-    }
+    },
+    "scheme": "nfc-reader-pro"
   }
 }

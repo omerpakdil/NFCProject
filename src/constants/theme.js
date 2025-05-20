@@ -15,6 +15,7 @@ export const COLORS = {
   warning: '#FF9800',
   info: '#2196F3',
   premium: '#FFD700',
+  disabled: '#ADB5BD',
 };
 
 export const FONT = {
@@ -26,13 +27,20 @@ export const FONT = {
 export const SIZES = {
   xsmall: 10,
   small: 12,
+  medium: 14,
+  large: 16,
+  xlarge: 18,
+  xxlarge: 24,
+  
+  // Spacing
+  tiny: 4,
+  small: 8,
   medium: 16,
-  large: 20,
-  xlarge: 24,
-  xxlarge: 32,
+  large: 24,
+  xlarge: 32,
   
   // Screen padding
-  screenPadding: 16,
+  screenPadding: 20,
   
   // Border radius
   borderRadius: 12,
