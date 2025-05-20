@@ -1,42 +1,47 @@
 {
   "expo": {
-    "name": "NFCProject",
-    "slug": "NFCProject",
+    "name": "NFC Reader Pro",
+    "slug": "nfc-reader-pro",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "nfcproject",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#121212"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nfcreaderpro.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Bu uygulama QR kodları taramak için kameraya erişim gerektirir.",
+        "NFCReaderUsageDescription": "Bu uygulama NFC etiketlerini okumak ve yazmak için NFC'ye erişim gerektirir."
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#121212"
       },
-      "edgeToEdgeEnabled": true
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "permissions": [
+        "NFC",
+        "VIBRATE"
+      ],
+      "package": "com.nfcreaderpro.app"
     },
     "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ]
+      "expo-nfc",
+      "expo-secure-store",
+      "expo-in-app-purchases"
     ],
-    "experiments": {
-      "typedRoutes": true
+    "extra": {
+      "eas": {
+        "projectId": "nfc-reader-pro"
+      }
     }
   }
 }
