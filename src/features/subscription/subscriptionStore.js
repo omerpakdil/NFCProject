@@ -87,9 +87,9 @@ export const PRICING = {
 const useSubscriptionStore = create(
   persist(
     (set, get) => ({
-      // Kullanıcı abonelik durumu
-      currentPlan: SUBSCRIPTION_PLANS.FREE,
-      subscriptionEndDate: null,
+      // Kullanıcı abonelik durumu - Test için varsayılan olarak premium
+      currentPlan: SUBSCRIPTION_PLANS.MONTHLY,
+      subscriptionEndDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString(), // 30 gün sonra
       isLifetime: false,
       
       // Abonelik durumu kontrol fonksiyonları

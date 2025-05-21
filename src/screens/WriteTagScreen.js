@@ -2,20 +2,20 @@ import { Ionicons } from '@expo/vector-icons';
 import LottieView from 'lottie-react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import Button from '../components/Button';
 import Card from '../components/Card';
+import CustomAlert from '../components/CustomAlert';
 import { COLORS, SIZES } from '../constants/theme';
 
 // Store ve servisler
@@ -35,24 +35,34 @@ const WriteTagScreen = ({ navigation, route }) => {
   const [dataType, setDataType] = useState(DATA_TYPES.TEXT);
   const [dataValue, setDataValue] = useState('');
   const [hasNfc, setHasNfc] = useState(null);
+  const [alertConfig, setAlertConfig] = useState({
+    visible: false,
+    title: '',
+    message: '',
+    type: 'info',
+    buttons: []
+  });
   
   useEffect(() => {
     // Premium özelliği kontrol et
     if (!canUseFeature('write')) {
-      Alert.alert(
-        'Premium Özellik',
-        'NFC yazma özelliği sadece premium aboneler için kullanılabilir.',
-        [
+      setAlertConfig({
+        visible: true,
+        title: 'Premium Özellik',
+        message: 'NFC yazma özelliği sadece premium aboneler için kullanılabilir.',
+        type: 'info',
+        buttons: [
           { 
             text: 'Premium\'a Geç', 
             onPress: () => navigation.navigate('Subscription') 
           },
           { 
             text: 'Geri Dön', 
+            style: 'cancel',
             onPress: () => navigation.goBack() 
           },
         ]
-      );
+      });
       return;
     }
     
@@ -62,11 +72,18 @@ const WriteTagScreen = ({ navigation, route }) => {
       setHasNfc(nfcAvailable);
       
       if (!nfcAvailable) {
-        Alert.alert(
-          'NFC Kullanılamıyor',
-          'Bu cihaz NFC desteklemiyor veya NFC devre dışı bırakılmış.',
-          [{ text: 'Tamam', onPress: () => navigation.goBack() }]
-        );
+        setAlertConfig({
+          visible: true,
+          title: 'NFC Kullanılamıyor',
+          message: 'Bu cihaz NFC desteklemiyor veya NFC devre dışı bırakılmış.',
+          type: 'error',
+          buttons: [
+            { 
+              text: 'Tamam', 
+              onPress: () => navigation.goBack() 
+            }
+          ]
+        });
       }
     };
     
@@ -87,7 +104,13 @@ const WriteTagScreen = ({ navigation, route }) => {
   // Etiket yazma işlemi başlat
   const handleWrite = async () => {
     if (!dataValue.trim()) {
-      Alert.alert('Hata', 'Lütfen yazmak istediğiniz veriyi girin.');
+      setAlertConfig({
+        visible: true,
+        title: 'Hata',
+        message: 'Lütfen yazmak istediğiniz veriyi girin.',
+        type: 'error',
+        buttons: [{ text: 'Tamam' }]
+      });
       return;
     }
     
@@ -110,21 +133,39 @@ const WriteTagScreen = ({ navigation, route }) => {
           
           // Bildirim
           setTimeout(() => {
-            Alert.alert('Başarılı', message || 'NFC etiketi başarıyla yazıldı.');
+            setAlertConfig({
+              visible: true,
+              title: 'Başarılı',
+              message: message || 'NFC etiketi başarıyla yazıldı.',
+              type: 'success',
+              buttons: [{ text: 'Tamam' }]
+            });
           }, 1200);
         },
         // Hata callback
         (error) => {
           setIsWriting(false);
           setWriteStatus('error');
-          Alert.alert('Hata', error || 'NFC etiketi yazılırken bir hata oluştu.');
+          setAlertConfig({
+            visible: true,
+            title: 'Hata',
+            message: error || 'NFC etiketi yazılırken bir hata oluştu.',
+            type: 'error',
+            buttons: [{ text: 'Tamam' }]
+          });
         }
       );
     } catch (error) {
       console.log('Yazma hatası:', error);
       setIsWriting(false);
       setWriteStatus('error');
-      Alert.alert('Hata', 'NFC etiketi yazılırken bir hata oluştu: ' + error.message);
+      setAlertConfig({
+        visible: true,
+        title: 'Hata',
+        message: 'NFC etiketi yazılırken bir hata oluştu: ' + error.message,
+        type: 'error',
+        buttons: [{ text: 'Tamam' }]
+      });
     }
   };
   
@@ -311,6 +352,15 @@ const WriteTagScreen = ({ navigation, route }) => {
           />
         </ScrollView>
       </KeyboardAvoidingView>
+      
+      <CustomAlert
+        visible={alertConfig.visible}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+        buttons={alertConfig.buttons}
+        onClose={() => setAlertConfig(prev => ({ ...prev, visible: false }))}
+      />
     </SafeAreaView>
   );
 };
@@ -325,7 +375,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: SIZES.screenPadding,
-    paddingTop: SIZES.medium,
+    paddingTop: 60,
     paddingBottom: SIZES.small,
   },
   backButton: {

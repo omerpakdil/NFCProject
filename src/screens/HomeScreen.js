@@ -1,17 +1,18 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, Animated, Modal, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Modal, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // Bileşenler ve sabitler
 import Button from '../components/Button';
 import Card from '../components/Card';
+import CustomAlert from '../components/CustomAlert';
 import IconButton from '../components/IconButton';
-import { COLORS } from '../constants/theme';
+import { COLORS, SIZES } from '../constants/theme';
 
 // Store ve servisler
 import useHistoryStore from '../features/history/historyStore';
-import NfcService from '../features/nfc/nfcService';
+import NfcService, { DATA_TYPES } from '../features/nfc/nfcService';
 import useSubscriptionStore from '../features/subscription/subscriptionStore';
 
 const StatusCard = ({ icon, title, subtext, onPress }) => (
@@ -46,29 +47,6 @@ const PremiumCard = ({ onPress }) => (
       style={styles.premiumButton}
       icon="star"
     />
-  </Card>
-);
-
-const ScanCard = ({ scan, onPress }) => (
-  <Card style={styles.scanCard}>
-    <Card.Content style={styles.scanCardContent}>
-      <View style={styles.scanTypeIcon}>
-        <Ionicons 
-          name={scan.type === 'url' ? 'link' : 'text'} 
-          size={20} 
-          color={COLORS.primary} 
-        />
-      </View>
-      <View style={styles.scanInfo}>
-        <Text style={styles.scanTitle}>{scan.title}</Text>
-        <Text style={styles.scanSubtext}>{scan.date}</Text>
-      </View>
-      <IconButton
-        icon="chevron-right"
-        size={24}
-        onPress={onPress}
-      />
-    </Card.Content>
   </Card>
 );
 
@@ -374,15 +352,22 @@ const ScanModal = ({ visible, onClose, onStartScan }) => {
 const HomeScreen = ({ navigation }) => {
   // State
   const [isScanning, setIsScanning] = useState(false);
-  const [hasNfc, setHasNfc] = useState(true); // NFC'yi varsayılan olarak true yapıyorum
+  const [hasNfc, setHasNfc] = useState(true);
   const [showScanModal, setShowScanModal] = useState(false);
+  const [alertConfig, setAlertConfig] = useState({
+    visible: false,
+    title: '',
+    message: '',
+    type: 'info',
+    buttons: []
+  });
   
   // Store
   const { scans } = useHistoryStore();
   const { isPremiumUser, canUseFeature } = useSubscriptionStore();
   
-  // Son 5 tarama geçmişi
-  const recentScans = scans.slice(0, 5);
+  // Son taramalar - Premium kullanıcılar için 4, ücretsiz kullanıcılar için 2
+  const recentScans = scans.slice(0, isPremiumUser() ? 4 : 2);
   
   // NFC kontrolünü geçici olarak devre dışı bırakıyorum
   // useEffect(() => {
@@ -416,11 +401,13 @@ const HomeScreen = ({ navigation }) => {
   // Tarama butonuna basıldığında
   const handleScan = async () => {
     if (!hasNfc) {
-      Alert.alert(
-        'NFC Kullanılamıyor',
-        'Bu cihaz NFC desteklemiyor veya NFC devre dışı bırakılmış.',
-        [{ text: 'Tamam' }]
-      );
+      setAlertConfig({
+        visible: true,
+        title: 'NFC Kullanılamıyor',
+        message: 'Bu cihaz NFC desteklemiyor veya NFC devre dışı bırakılmış.',
+        type: 'error',
+        buttons: [{ text: 'Tamam' }]
+      });
       return;
     }
     
@@ -451,12 +438,24 @@ const HomeScreen = ({ navigation }) => {
         // Hata callback
         (error) => {
           setIsScanning(false);
-          Alert.alert('Hata', error || 'NFC tarama sırasında bir hata oluştu.');
+          setAlertConfig({
+            visible: true,
+            title: 'Hata',
+            message: error || 'NFC tarama sırasında bir hata oluştu.',
+            type: 'error',
+            buttons: [{ text: 'Tamam' }]
+          });
         }
       );
     } catch (error) {
       setIsScanning(false);
-      Alert.alert('Hata', 'NFC tarama başlatılamadı: ' + error.message);
+      setAlertConfig({
+        visible: true,
+        title: 'Hata',
+        message: 'NFC tarama başlatılamadı: ' + error.message,
+        type: 'error',
+        buttons: [{ text: 'Tamam' }]
+      });
     }
   };
   
@@ -468,6 +467,51 @@ const HomeScreen = ({ navigation }) => {
   // Geçmiş ekranına git
   const handleViewHistory = () => {
     navigation.navigate('History');
+  };
+  
+  const getIconName = (scan) => {
+    if (!scan || !scan.data) return "document-text";
+    
+    switch(scan.data.type) {
+      case DATA_TYPES.URL:
+        return "link";
+      case DATA_TYPES.PHONE:
+        return "call";
+      case DATA_TYPES.EMAIL:
+        return "mail";
+      case DATA_TYPES.WIFI:
+        return "wifi";
+      case DATA_TYPES.CONTACT:
+        return "person";
+      case DATA_TYPES.TEXT:
+        return "document-text";
+      case DATA_TYPES.CUSTOM:
+      default:
+        return "code-working";
+    }
+  };
+  
+  const getDisplayValue = (scan) => {
+    if (!scan || !scan.data) return "NFC Etiketi";
+    
+    const value = scan.data.value;
+    if (!value || value.trim() === "") {
+      return scan.tagType || "NFC Etiketi";
+    }
+    
+    // URL, telefon ve email'i kısalt
+    if (value.length > 30) {
+      return value.substring(0, 27) + "...";
+    }
+    
+    return value;
+  };
+  
+  const formatDate = (timestamp) => {
+    if (!timestamp) return "";
+    
+    const date = new Date(timestamp);
+    return date.toLocaleDateString('tr-TR');
   };
   
   return (
@@ -539,11 +583,35 @@ const HomeScreen = ({ navigation }) => {
               {recentScans.length > 0 ? (
                 <View style={styles.scansList}>
                   {recentScans.map((scan, index) => (
-                    <ScanCard
+                    <Card 
                       key={index}
-                      scan={scan}
-                      onPress={() => navigation.navigate('ScanDetail', { scan })}
-                    />
+                      style={styles.scanCard}
+                      onPress={() => navigation.navigate('ScanDetailScreen', { scanId: scan.id })}
+                    >
+                      <View style={styles.scanCardContent}>
+                        <View style={styles.scanTypeIcon}>
+                          <Ionicons 
+                            name={getIconName(scan)} 
+                            size={22} 
+                            color={COLORS.primary} 
+                          />
+                        </View>
+                        <View style={styles.scanInfo}>
+                          <Text style={styles.scanTitle} numberOfLines={1}>
+                            {getDisplayValue(scan)}
+                          </Text>
+                          <Text style={styles.scanSubtext}>
+                            {scan.tagType} • {formatDate(scan.timestamp)}
+                          </Text>
+                        </View>
+                        <Ionicons 
+                          name="chevron-forward" 
+                          size={20} 
+                          color={COLORS.textSecondary}
+                          style={styles.scanArrow}
+                        />
+                      </View>
+                    </Card>
                   ))}
                 </View>
               ) : (
@@ -578,6 +646,15 @@ const HomeScreen = ({ navigation }) => {
         visible={showScanModal}
         onClose={() => setShowScanModal(false)}
         onStartScan={handleStartScan}
+      />
+      
+      <CustomAlert
+        visible={alertConfig.visible}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+        buttons={alertConfig.buttons}
+        onClose={() => setAlertConfig(prev => ({ ...prev, visible: false }))}
       />
     </SafeAreaView>
   );
@@ -692,37 +769,49 @@ const styles = StyleSheet.create({
     marginRight: 2,
   },
   scansList: {
-    gap: 12,
+    flexDirection: 'column',
+    width: '100%',
   },
   scanCard: {
     backgroundColor: COLORS.surface,
+    borderRadius: SIZES.cardRadius,
+    overflow: 'hidden',
+    marginBottom: 10,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
   },
   scanCardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
     padding: 12,
+    width: '100%',
+    position: 'relative',
   },
   scanTypeIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: COLORS.background,
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 12,
   },
   scanInfo: {
     flex: 1,
+    marginRight: 8,
   },
   scanTitle: {
     fontSize: 14,
     fontWeight: 'bold',
     color: COLORS.text,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   scanSubtext: {
     fontSize: 12,
     color: COLORS.textSecondary,
+  },
+  scanArrow: {
+    marginLeft: 'auto',
   },
   scanButtonContainer: {
     position: 'absolute',

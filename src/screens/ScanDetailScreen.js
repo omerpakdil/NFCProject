@@ -1,19 +1,21 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import {
-    Alert,
-    Linking,
-    SafeAreaView,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  Linking,
+  SafeAreaView,
+  ScrollView,
+  Share,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import Button from '../components/Button';
 import Card from '../components/Card';
+import CustomAlert from '../components/CustomAlert';
 import PremiumBadge from '../components/PremiumBadge';
 import { COLORS, SIZES } from '../constants/theme';
 
@@ -32,6 +34,15 @@ const ScanDetailScreen = ({ navigation, route }) => {
   
   // Notlar (premium özelliği)
   const [notes, setNotes] = useState('');
+  
+  // Alert Durumu
+  const [alertConfig, setAlertConfig] = useState({
+    visible: false,
+    title: '',
+    message: '',
+    type: 'info',
+    buttons: []
+  });
   
   useEffect(() => {
     // Route'dan scanId parametresini al
@@ -153,10 +164,12 @@ const ScanDetailScreen = ({ navigation, route }) => {
   
   // Taramayı sil
   const handleDelete = () => {
-    Alert.alert(
-      'Taramayı Sil',
-      'Bu tarama kaydını silmek istediğinize emin misiniz?',
-      [
+    setAlertConfig({
+      visible: true,
+      title: 'Taramayı Sil',
+      message: 'Bu tarama kaydını silmek istediğinize emin misiniz?',
+      type: 'warning',
+      buttons: [
         { text: 'İptal', style: 'cancel' },
         { 
           text: 'Sil', 
@@ -167,7 +180,7 @@ const ScanDetailScreen = ({ navigation, route }) => {
           },
         },
       ]
-    );
+    });
   };
   
   // Yeni bir NFC etiketi yaz (premium özellik)
@@ -176,6 +189,20 @@ const ScanDetailScreen = ({ navigation, route }) => {
       navigation.navigate('WriteTag', { initialData: scanData.data.value });
     } else {
       navigation.navigate('Subscription');
+    }
+  };
+  
+  // Notları kaydet
+  const handleSaveNotes = () => {
+    if (scanData) {
+      updateScan(scanData.id, { notes });
+      setAlertConfig({
+        visible: true,
+        title: 'Başarılı',
+        message: 'Notlar kaydedildi.',
+        type: 'success',
+        buttons: [{ text: 'Tamam' }]
+      });
     }
   };
   
@@ -221,6 +248,47 @@ const ScanDetailScreen = ({ navigation, route }) => {
         {/* Tarama içeriği */}
         {renderContentByType()}
         
+        {/* Notlar Bölümü */}
+        <Card style={styles.notesCard}>
+          <View style={styles.notesHeader}>
+            <Text style={styles.notesTitle}>Notlar</Text>
+            {canUseFeature('advanced_history') ? (
+              <TouchableOpacity 
+                style={styles.saveButton} 
+                onPress={handleSaveNotes}
+              >
+                <Text style={styles.saveButtonText}>Kaydet</Text>
+              </TouchableOpacity>
+            ) : (
+              <PremiumBadge small />
+            )}
+          </View>
+          
+          <TextInput
+            style={styles.notesInput}
+            placeholder="Bu tarama hakkında notlar ekleyin..."
+            placeholderTextColor={COLORS.textSecondary}
+            value={notes}
+            onChangeText={setNotes}
+            multiline
+            editable={canUseFeature('advanced_history')}
+          />
+          
+          {!canUseFeature('advanced_history') && (
+            <View style={styles.premiumNotesInfo}>
+              <Text style={styles.premiumNotesText}>
+                Not eklemek için premium aboneliğe geçin
+              </Text>
+              <Button
+                title="Premium'a Geç"
+                style={styles.premiumButton}
+                small
+                onPress={() => navigation.navigate('Subscription')}
+              />
+            </View>
+          )}
+        </Card>
+        
         {/* Yazma özelliği */}
         <Card style={styles.writeCard}>
           <View style={styles.writeCardHeader}>
@@ -247,6 +315,15 @@ const ScanDetailScreen = ({ navigation, route }) => {
           />
         </Card>
       </ScrollView>
+      
+      <CustomAlert
+        visible={alertConfig.visible}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+        buttons={alertConfig.buttons}
+        onClose={() => setAlertConfig(prev => ({ ...prev, visible: false }))}
+      />
     </SafeAreaView>
   );
 };
@@ -270,7 +347,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: SIZES.screenPadding,
-    paddingTop: SIZES.medium,
+    paddingTop: 60,
     paddingBottom: SIZES.small,
   },
   backButton: {
@@ -347,6 +424,51 @@ const styles = StyleSheet.create({
   },
   writeButton: {
     marginTop: SIZES.medium,
+  },
+  notesCard: {
+    marginBottom: SIZES.medium,
+  },
+  notesHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  notesTitle: {
+    fontSize: SIZES.large,
+    fontWeight: 'bold',
+    color: COLORS.text,
+  },
+  notesInput: {
+    backgroundColor: COLORS.surface,
+    borderRadius: SIZES.borderRadius,
+    padding: SIZES.medium,
+    color: COLORS.text,
+    minHeight: 100,
+    textAlignVertical: 'top',
+  },
+  saveButton: {
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+  },
+  saveButtonText: {
+    color: COLORS.text,
+    fontWeight: '600',
+    fontSize: SIZES.small,
+  },
+  premiumNotesInfo: {
+    marginTop: SIZES.medium,
+    alignItems: 'center',
+  },
+  premiumNotesText: {
+    color: COLORS.textSecondary,
+    marginBottom: 8,
+    fontSize: SIZES.small,
+  },
+  premiumButton: {
+    marginTop: 8,
   },
 });
 

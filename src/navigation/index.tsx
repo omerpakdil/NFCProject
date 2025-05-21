@@ -67,14 +67,25 @@ const HomeStackNavigator = () => {
         }} 
       />
       <HomeStack.Screen 
+        name="ScanDetailScreen" 
+        component={ScanDetailScreen} 
+        options={{ 
+          headerShown: false 
+        }} 
+      />
+      <HomeStack.Screen 
         name="ScanResult" 
         component={ScanResultScreen} 
-        options={{ title: 'Tarama Sonucu' }} 
+        options={{ 
+          headerShown: false 
+        }} 
       />
       <HomeStack.Screen 
         name="WriteTag" 
         component={WriteTagScreen} 
-        options={{ title: 'Etiket Yaz' }} 
+        options={{ 
+          headerShown: false 
+        }} 
       />
       <HomeStack.Screen 
         name="Subscription" 
@@ -109,9 +120,11 @@ const HistoryStackNavigator = () => {
         }} 
       />
       <HistoryStack.Screen 
-        name="ScanDetail" 
+        name="ScanDetailScreen" 
         component={ScanDetailScreen} 
-        options={{ title: 'Tarama Detayı' }} 
+        options={{ 
+          headerShown: false 
+        }} 
       />
     </HistoryStack.Navigator>
   );
