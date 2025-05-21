@@ -2,13 +2,13 @@ import { Ionicons } from '@expo/vector-icons';
 import LottieView from 'lottie-react-native';
 import React, { useRef, useState } from 'react';
 import {
-    Dimensions,
-    FlatList,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Dimensions,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 import Button from '../components/Button';
@@ -129,6 +129,7 @@ const OnboardingScreen = ({ navigation }) => {
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
+        style={styles.flatList}
       />
 
       <View style={styles.footer}>
@@ -155,6 +156,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
+    justifyContent: 'space-between',
   },
   skipContainer: {
     position: 'absolute',
@@ -175,10 +177,10 @@ const styles = StyleSheet.create({
   },
   animationContainer: {
     width: width * 0.8,
-    height: height * 0.4,
+    height: height * 0.35,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 30,
   },
   animation: {
     width: '100%',
@@ -186,7 +188,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 20,
   },
   title: {
     fontSize: SIZES.xxlarge,
@@ -203,6 +205,8 @@ const styles = StyleSheet.create({
   },
   footer: {
     padding: SIZES.screenPadding,
+    paddingBottom: SIZES.screenPadding + 20,
+    marginBottom: 20,
   },
   dotsContainer: {
     flexDirection: 'row',
@@ -222,6 +226,9 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '100%',
+  },
+  flatList: {
+    flex: 1,
   },
 });
 
