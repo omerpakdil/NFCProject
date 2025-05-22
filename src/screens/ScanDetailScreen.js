@@ -16,18 +16,20 @@ import {
 
 import Button from '../components/Button';
 import Card from '../components/Card';
+import CategorySelector from '../components/CategorySelector';
 import CustomAlert from '../components/CustomAlert';
 import PremiumBadge from '../components/PremiumBadge';
+import TagInput from '../components/TagInput';
 import { COLORS, SIZES } from '../constants/theme';
 
 // Store ve servisler
-import useHistoryStore from '../features/history/historyStore';
+import useHistoryStore, { DEFAULT_CATEGORIES } from '../features/history/historyStore';
 import NfcService, { DATA_TYPES } from '../features/nfc/nfcService';
 import useSubscriptionStore from '../features/subscription/subscriptionStore';
 
 const ScanDetailScreen = ({ navigation, route }) => {
   // Store
-  const { getScanById, deleteScan, updateScan } = useHistoryStore();
+  const { getScanById, deleteScan, updateScan, allTags, assignCategory, toggleFavorite } = useHistoryStore();
   const { canUseFeature } = useSubscriptionStore();
   
   // Tarama verisi
@@ -42,6 +44,11 @@ const ScanDetailScreen = ({ navigation, route }) => {
   
   // Notlar (premium özelliği)
   const [notes, setNotes] = useState('');
+  
+  // Gelişmiş geçmiş yönetimi ile ilgili state'ler
+  const [tags, setTags] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState('other');
+  const [isFavorite, setIsFavorite] = useState(false);
   
   // Alert Durumu
   const [alertConfig, setAlertConfig] = useState({
@@ -63,6 +70,11 @@ const ScanDetailScreen = ({ navigation, route }) => {
       if (scan) {
         setScanData(scan);
         setNotes(scan.notes || '');
+        
+        // Gelişmiş geçmiş yönetimi alanları
+        setTags(scan.tags || []);
+        setSelectedCategoryId(scan.categoryId || 'other');
+        setIsFavorite(scan.isFavorite || false);
         
         // Şifreli içerik kontrolü
         if (scan.data.type === DATA_TYPES.PROTECTED) {
@@ -305,10 +317,69 @@ const ScanDetailScreen = ({ navigation, route }) => {
     }
   };
   
+  // Kategori değişikliği
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+    if (scanData) {
+      assignCategory(scanData.id, categoryId);
+      setScanData({
+        ...scanData,
+        categoryId
+      });
+    }
+  };
+  
+  // Etiket ekleme
+  const handleAddTag = (tag) => {
+    if (scanData) {
+      const updatedTags = [...tags, tag];
+      setTags(updatedTags);
+      
+      updateScan(scanData.id, { tags: updatedTags });
+      setScanData({
+        ...scanData,
+        tags: updatedTags
+      });
+    }
+  };
+  
+  // Etiket silme
+  const handleRemoveTag = (tag) => {
+    if (scanData) {
+      const updatedTags = tags.filter(t => t !== tag);
+      setTags(updatedTags);
+      
+      updateScan(scanData.id, { tags: updatedTags });
+      setScanData({
+        ...scanData,
+        tags: updatedTags
+      });
+    }
+  };
+  
+  // Favoriye ekleme/çıkarma
+  const handleToggleFavorite = () => {
+    if (scanData) {
+      const newFavoriteStatus = !isFavorite;
+      setIsFavorite(newFavoriteStatus);
+      
+      toggleFavorite(scanData.id);
+      setScanData({
+        ...scanData,
+        isFavorite: newFavoriteStatus
+      });
+    }
+  };
+  
   // Notları kaydet
   const handleSaveNotes = () => {
     if (scanData) {
       updateScan(scanData.id, { notes });
+      setScanData({
+        ...scanData,
+        notes
+      });
+      
       setAlertConfig({
         visible: true,
         title: 'Başarılı',
@@ -452,6 +523,20 @@ const ScanDetailScreen = ({ navigation, route }) => {
     );
   };
   
+  // Yeni bir handleDataMerge fonksiyonu ekle
+  const handleDataMerge = () => {
+    if (canUseFeature('data_merge')) {
+      // Tab navigatorlar arasında doğru geçiş için stack adını belirtiyoruz
+      navigation.navigate('Home', {
+        screen: 'DataMerge'
+      });
+    } else {
+      navigation.navigate('Home', {
+        screen: 'Subscription'
+      });
+    }
+  };
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -496,50 +581,100 @@ const ScanDetailScreen = ({ navigation, route }) => {
               <Text style={[styles.infoText, { color: COLORS.primary }]}>Şifre Korumalı</Text>
             </View>
           )}
+          
+          {/* Favori butonu */}
+          <TouchableOpacity 
+            style={[styles.favoriteButton, isFavorite ? styles.favoriteActive : null]} 
+            onPress={handleToggleFavorite}
+          >
+            <Ionicons 
+              name={isFavorite ? "star" : "star-outline"} 
+              size={20} 
+              color={isFavorite ? COLORS.premium : COLORS.textSecondary} 
+            />
+            <Text style={[styles.favoriteText, isFavorite ? styles.favoriteTextActive : null]}>
+              {isFavorite ? 'Favorilerde' : 'Favorilere Ekle'}
+            </Text>
+          </TouchableOpacity>
         </Card>
         
         {/* Tarama içeriği */}
         {renderContentByType()}
         
+        {/* Kategori Seçici - ADVANCED_HISTORY premium özelliği */}
+        {canUseFeature('advanced_history') ? (
+          <Card style={styles.categoryCard}>
+            <View style={styles.cardTitleRow}>
+              <Text style={styles.cardTitle}>Kategori</Text>
+            </View>
+            
+            <CategorySelector 
+              categories={DEFAULT_CATEGORIES}
+              selectedCategoryId={selectedCategoryId}
+              onSelectCategory={handleCategoryChange}
+            />
+          </Card>
+        ) : (
+          <Card style={styles.premiumFeatureCard}>
+            <View style={styles.premiumFeatureRow}>
+              <View style={styles.premiumFeatureTextContainer}>
+                <Text style={styles.premiumFeatureTitle}>
+                  Gelişmiş Geçmiş Yönetimi
+                </Text>
+                <Text style={styles.premiumFeatureDescription}>
+                  Taramaları kategorilere ayır, etiketle, filtrele ve daha fazlası
+                </Text>
+              </View>
+              <PremiumBadge />
+            </View>
+            
+            <Button
+              title="Premium'a Yükselt"
+              onPress={() => navigation.navigate('Home', { screen: 'Subscription' })}
+              style={styles.premiumFeatureButton}
+              icon="star"
+            />
+          </Card>
+        )}
+        
+        {/* Etiket Girişi - ADVANCED_HISTORY premium özelliği */}
+        {canUseFeature('advanced_history') && (
+          <Card style={styles.tagsCard}>
+            <View style={styles.cardTitleRow}>
+              <Text style={styles.cardTitle}>Etiketler</Text>
+            </View>
+            
+            <TagInput
+              tags={tags}
+              availableTags={allTags}
+              onAddTag={handleAddTag}
+              onRemoveTag={handleRemoveTag}
+              maxTags={5}
+            />
+          </Card>
+        )}
+        
         {/* Notlar Bölümü */}
         <Card style={styles.notesCard}>
-          <View style={styles.notesHeader}>
-            <Text style={styles.notesTitle}>Notlar</Text>
-            {canUseFeature('advanced_history') ? (
-              <TouchableOpacity 
-                style={styles.saveButton} 
-                onPress={handleSaveNotes}
-              >
-                <Text style={styles.saveButtonText}>Kaydet</Text>
-              </TouchableOpacity>
-            ) : (
-              <PremiumBadge small />
-            )}
+          <View style={styles.cardTitleRow}>
+            <Text style={styles.cardTitle}>Notlar</Text>
           </View>
           
           <TextInput
             style={styles.notesInput}
-            placeholder="Bu tarama hakkında notlar ekleyin..."
-            placeholderTextColor={COLORS.textSecondary}
+            multiline
+            placeholder="Not ekleyin..."
+            placeholderTextColor={COLORS.textDisabled}
             value={notes}
             onChangeText={setNotes}
-            multiline
-            editable={canUseFeature('advanced_history')}
           />
           
-          {!canUseFeature('advanced_history') && (
-            <View style={styles.premiumNotesInfo}>
-              <Text style={styles.premiumNotesText}>
-                Not eklemek için premium aboneliğe geçin
-              </Text>
-              <Button
-                title="Premium'a Geç"
-                style={styles.premiumButton}
-                small
-                onPress={() => navigation.navigate('Subscription')}
-              />
-            </View>
-          )}
+          <Button
+            title="Notları Kaydet"
+            onPress={handleSaveNotes}
+            icon="save-outline"
+            style={styles.saveButton}
+          />
         </Card>
         
         {/* Yazma özelliği */}
@@ -557,52 +692,53 @@ const ScanDetailScreen = ({ navigation, route }) => {
             title="NFC Etiketi Yaz"
             type={canUseFeature('write') ? 'primary' : 'outline'}
             onPress={handleWriteTag}
-            leftIcon={
-              <Ionicons 
-                name="create" 
-                size={18} 
-                color={canUseFeature('write') ? COLORS.text : COLORS.primary} 
-              />
-            }
+            leftIcon={<Ionicons name="create" size={18} color={canUseFeature('write') ? COLORS.text : COLORS.primary} />}
             style={styles.writeButton}
           />
         </Card>
         
         {/* Etiket Kilitleme özelliği */}
-        <Card style={styles.lockCard}>
+        <Card style={styles.writeCard}>
           <View style={styles.writeCardHeader}>
-            <Text style={styles.writeCardTitle}>NFC Etiketi Kilitleme</Text>
+            <Text style={styles.writeCardTitle}>NFC Etiketi Kilitle</Text>
             {!canUseFeature('lock') && <PremiumBadge small />}
           </View>
           
           <Text style={styles.writeCardText}>
-            NFC etiketini kilitleyin. Kilitlenen etiket bir daha değiştirilemez ve daima aynı veriyi gösterir.
+            NFC etiketini kalıcı olarak kilitleyerek içeriğini koruyun.
           </Text>
-          
-          <View style={styles.warningBox}>
-            <Ionicons name="warning-outline" size={18} color={COLORS.warning} />
-            <Text style={styles.warningBoxText}>
-              Dikkat: Bu işlem geri alınamaz!
-            </Text>
-          </View>
           
           <Button
             title="NFC Etiketi Kilitle"
             type={canUseFeature('lock') ? 'primary' : 'outline'}
             onPress={handleLockTag}
-            leftIcon={
-              <Ionicons 
-                name="lock-closed" 
-                size={18} 
-                color={canUseFeature('lock') ? COLORS.text : COLORS.primary} 
-              />
-            }
+            leftIcon={<Ionicons name="lock-closed" size={18} color={canUseFeature('lock') ? COLORS.text : COLORS.primary} />}
             style={styles.writeButton}
           />
         </Card>
+        
+        {/* Veri Birleştirme */}
+        {canUseFeature('data_merge') && (
+          <Card style={styles.mergeCard}>
+            <View style={styles.writeCardHeader}>
+              <Text style={styles.writeCardTitle}>Veri Birleştir</Text>
+            </View>
+            
+            <Text style={styles.writeCardText}>
+              Bu taramayı veri birleştirme işlemine ekle.
+            </Text>
+            
+            <Button
+              title="Veri Birleştirmeye Ekle"
+              onPress={handleDataMerge}
+              leftIcon={<Ionicons name="git-merge" size={18} color={COLORS.text} />}
+              style={styles.writeButton}
+            />
+          </Card>
+        )}
       </ScrollView>
       
-      {/* Şifre Giriş Modalı */}
+      {/* Şifre Modalı */}
       {renderPasswordModal()}
       
       <CustomAlert
@@ -658,7 +794,7 @@ const styles = StyleSheet.create({
     padding: SIZES.screenPadding,
   },
   infoCard: {
-    marginBottom: SIZES.medium,
+    marginBottom: SIZES.small,
   },
   infoRow: {
     flexDirection: 'row',
@@ -671,7 +807,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   contentCard: {
-    marginBottom: SIZES.medium,
+    marginBottom: SIZES.small,
   },
   contentTitle: {
     fontSize: SIZES.large,
@@ -692,8 +828,7 @@ const styles = StyleSheet.create({
     marginTop: SIZES.medium,
   },
   writeCard: {
-    marginTop: SIZES.small,
-    marginBottom: SIZES.large,
+    marginBottom: SIZES.small,
   },
   writeCardHeader: {
     flexDirection: 'row',
@@ -715,15 +850,15 @@ const styles = StyleSheet.create({
     marginTop: SIZES.medium,
   },
   notesCard: {
-    marginBottom: SIZES.medium,
+    marginBottom: SIZES.small,
   },
-  notesHeader: {
+  cardTitleRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 12,
   },
-  notesTitle: {
+  cardTitle: {
     fontSize: SIZES.large,
     fontWeight: 'bold',
     color: COLORS.text,
@@ -742,43 +877,62 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 6,
   },
-  saveButtonText: {
-    color: COLORS.text,
-    fontWeight: '600',
-    fontSize: SIZES.small,
-  },
-  premiumNotesInfo: {
-    marginTop: SIZES.medium,
-    alignItems: 'center',
-  },
-  premiumNotesText: {
-    color: COLORS.textSecondary,
-    marginBottom: 8,
-    fontSize: SIZES.small,
-  },
-  premiumButton: {
-    marginTop: 8,
-  },
-  lockCard: {
-    marginTop: SIZES.small,
-    marginBottom: SIZES.large,
-  },
-  warningBox: {
+  favoriteButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 152, 0, 0.1)',
-    borderRadius: SIZES.borderRadius,
-    padding: SIZES.small,
-    marginVertical: SIZES.small,
+    backgroundColor: COLORS.surface,
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    marginTop: 12,
+    alignSelf: 'flex-start',
+  },
+  favoriteActive: {
+    backgroundColor: 'rgba(255, 215, 0, 0.15)',
+    borderColor: 'rgba(255, 215, 0, 0.3)',
+    borderWidth: 1,
+  },
+  favoriteText: {
+    fontSize: SIZES.small,
+    color: COLORS.textSecondary,
+    marginLeft: 4,
+  },
+  favoriteTextActive: {
+    color: COLORS.premium,
+    fontWeight: 'bold',
+  },
+  categoryCard: {
+    marginBottom: SIZES.small,
+  },
+  premiumFeatureCard: {
+    marginBottom: SIZES.small,
     borderLeftWidth: 3,
-    borderLeftColor: COLORS.warning,
+    borderLeftColor: COLORS.premium,
   },
-  warningBoxText: {
-    color: COLORS.warning,
-    marginLeft: 8,
-    fontWeight: '600',
+  premiumFeatureRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  // Modal styles
+  premiumFeatureTextContainer: {
+    flex: 1,
+  },
+  premiumFeatureTitle: {
+    fontSize: SIZES.medium,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginBottom: 4,
+  },
+  premiumFeatureDescription: {
+    fontSize: SIZES.small,
+    color: COLORS.textSecondary,
+  },
+  premiumFeatureButton: {
+    marginTop: 12,
+  },
+  tagsCard: {
+    marginBottom: SIZES.small,
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
@@ -843,7 +997,6 @@ const styles = StyleSheet.create({
   passwordModalDecryptButton: {
     flex: 2,
   },
-  // Encrypted content styles
   encryptedContent: {
     alignItems: 'center',
     padding: SIZES.medium,
@@ -876,6 +1029,10 @@ const styles = StyleSheet.create({
     fontSize: SIZES.small,
     fontWeight: 'bold',
     marginLeft: 4,
+  },
+  mergeCard: {
+    marginTop: SIZES.small,
+    marginBottom: SIZES.small,
   },
 });
 

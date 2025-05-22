@@ -369,6 +369,10 @@ const HomeScreen = ({ navigation }) => {
   // Son taramalar - Premium kullanıcılar için 4, ücretsiz kullanıcılar için 2
   const recentScans = scans.slice(0, isPremiumUser() ? 4 : 2);
   
+  // Kalan tarama hakkı bilgisi - Yeni eklenen
+  const remainingScans = useHistoryStore(state => state.getRemainingScans());
+  const isStorageLimitReached = useHistoryStore(state => state.isStorageLimitReached());
+  
   // NFC kontrolünü geçici olarak devre dışı bırakıyorum
   // useEffect(() => {
   //   const checkNfc = async () => {
@@ -551,7 +555,42 @@ const HomeScreen = ({ navigation }) => {
             
             {/* Premium özellikleri */}
             {!isPremiumUser() && (
-              <PremiumCard onPress={handleGetPremium} />
+              <>
+                <PremiumCard onPress={handleGetPremium} />
+                
+                {/* Kalan tarama bilgisi - Yeni eklenen */}
+                <Card style={styles.storageLimitCard}>
+                  <View style={styles.storageLimitContent}>
+                    <View style={styles.storageLimitIconContainer}>
+                      <Ionicons 
+                        name={isStorageLimitReached ? "alert-circle" : "save-outline"} 
+                        size={24} 
+                        color={isStorageLimitReached ? COLORS.warning : COLORS.primary} 
+                      />
+                    </View>
+                    <View style={styles.storageLimitInfo}>
+                      <Text style={styles.storageLimitTitle}>
+                        {isStorageLimitReached 
+                          ? "Depolama Limiti Aşıldı" 
+                          : `Kalan Tarama: ${remainingScans}`}
+                      </Text>
+                      <Text style={styles.storageLimitText}>
+                        {isStorageLimitReached
+                          ? "Yeni taramalar en eski kayıtların üzerine yazılacak"
+                          : "Premium kullanıcılar sınırsız tarama depolayabilir"}
+                      </Text>
+                    </View>
+                  </View>
+                  {isStorageLimitReached && (
+                    <Button
+                      title="Premium'a Yükselt"
+                      onPress={handleGetPremium}
+                      icon="star"
+                      style={styles.storageLimitButton}
+                    />
+                  )}
+                </Card>
+              </>
             )}
 
             {/* Yazma butonu */}
@@ -562,6 +601,17 @@ const HomeScreen = ({ navigation }) => {
                 onPress={() => navigation.navigate('WriteTag')}
                 style={styles.writeButton}
                 title="Yeni NFC Etiketi Oluştur"
+              />
+            )}
+
+            {/* Veri Birleştirme butonu */}
+            {canUseFeature('data_merge') && (
+              <Button
+                mode="contained"
+                icon="git-merge"
+                onPress={() => navigation.navigate('DataMerge')}
+                style={styles.mergeButton}
+                title="NFC Veri Birleştirme"
               />
             )}
 
@@ -691,7 +741,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   statusCard: {
-    marginBottom: 8,
+    marginBottom: 4,
   },
   statusRow: {
     flexDirection: 'row',
@@ -720,7 +770,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surface,
     padding: 15,
     borderRadius: 12,
-    marginBottom: 8,
+    marginBottom: 4,
   },
   premiumTop: {
     flexDirection: 'row',
@@ -739,10 +789,10 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   writeButton: {
-    marginBottom: 8,
+    marginBottom: 0,
   },
   recentScans: {
-    marginTop: 16,
+    marginTop: 8,
     marginBottom: 24,
   },
   sectionHeader: {
@@ -776,7 +826,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surface,
     borderRadius: SIZES.cardRadius,
     overflow: 'hidden',
-    marginBottom: 10,
+    marginBottom: 8,
     paddingHorizontal: 0,
     paddingVertical: 0,
   },
@@ -815,7 +865,7 @@ const styles = StyleSheet.create({
   },
   scanButtonContainer: {
     position: 'absolute',
-    bottom: 24,
+    bottom: 12,
     left: 15,
     right: 15,
     backgroundColor: COLORS.background,
@@ -1009,6 +1059,48 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
     textAlign: 'center',
     lineHeight: 22,
+  },
+  premiumButton: {
+    marginTop: 8,
+  },
+  // Depolama limiti kartı stilleri - Yeni eklenen
+  storageLimitCard: {
+    marginBottom: 0,
+  },
+  storageLimitContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  storageLimitIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: COLORS.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  storageLimitInfo: {
+    flex: 1,
+  },
+  storageLimitTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginBottom: 2,
+  },
+  storageLimitText: {
+    fontSize: 12,
+    color: COLORS.textSecondary,
+  },
+  storageLimitButton: {
+    marginTop: 12,
+  },
+  lockCard: {
+    // ... existing code ...
+  },
+  mergeButton: {
+    marginBottom: 0,
   },
 });
 

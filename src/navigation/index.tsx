@@ -11,6 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 
 // Ekranlar
+import DataMergeScreen from '../screens/DataMergeScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import HomeScreen from '../screens/HomeScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
@@ -91,6 +92,13 @@ const HomeStackNavigator = () => {
         name="Subscription" 
         component={SubscriptionScreen} 
         options={{ title: 'Premium Abonelik' }} 
+      />
+      <HomeStack.Screen 
+        name="DataMerge" 
+        component={DataMergeScreen} 
+        options={{ 
+          headerShown: false 
+        }} 
       />
     </HomeStack.Navigator>
   );

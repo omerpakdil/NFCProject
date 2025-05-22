@@ -7,6 +7,7 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
+  Share,
   StyleSheet,
   Switch,
   Text,
@@ -18,8 +19,9 @@ import {
 import Button from '../components/Button';
 import Card from '../components/Card';
 import CustomAlert from '../components/CustomAlert';
-import { COLORS, SIZES } from '../constants/theme';
-import useHistoryStore from '../features/history/historyStore';
+import TagInput from '../components/TagInput';
+import { COLORS, SHADOWS, SIZES } from '../constants/theme';
+import useHistoryStore, { DEFAULT_CATEGORIES } from '../features/history/historyStore';
 import { DATA_TYPES, TAG_TYPES } from '../features/nfc/nfcService';
 import useSubscriptionStore from '../features/subscription/subscriptionStore';
 
@@ -34,6 +36,7 @@ const HistoryScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [activeFilters, setActiveFilters] = useState({});
+  const [sortOption, setSortOption] = useState('date_desc');
   const [alertConfig, setAlertConfig] = useState({
     visible: false,
     title: '',
@@ -49,6 +52,9 @@ const HistoryScreen = ({ navigation }) => {
     startDate: null,
     endDate: null,
     savedOnly: false,
+    favoritesOnly: false,
+    categories: [],
+    tags: [],
   });
   
   // Tarih filtreleri için text giriş alanları
@@ -56,13 +62,59 @@ const HistoryScreen = ({ navigation }) => {
   const [endDateText, setEndDateText] = useState('');
   
   // Store
-  const { scans, searchScans, clearAllHistory } = useHistoryStore();
+  const { scans, searchScans, clearAllHistory, exportScans } = useHistoryStore();
   const { isPremiumUser, canUseFeature } = useSubscriptionStore();
+  const remainingScans = useHistoryStore(state => state.getRemainingScans());
+  const isStorageLimitReached = useHistoryStore(state => state.isStorageLimitReached());
   
-  // Filtrelenmiş tarama listesi
-  const filteredScans = searchQuery || Object.keys(activeFilters).length > 0 
-    ? searchScans(searchQuery, activeFilters) 
-    : scans;
+  // Sıralama seçenekleri
+  const SORT_OPTIONS = [
+    { id: 'date_desc', label: 'En Yeni', icon: 'time' },
+    { id: 'date_asc', label: 'En Eski', icon: 'time-outline' },
+    { id: 'type', label: 'Etiket Tipi', icon: 'pricetag' },
+    { id: 'data_type', label: 'Veri Tipi', icon: 'document-text' },
+  ];
+
+  // Filtrelenmiş ve sıralanmış tarama listesi
+  const getFilteredAndSortedScans = () => {
+    let result = searchQuery || Object.keys(activeFilters).length > 0 
+      ? searchScans(searchQuery, activeFilters) 
+      : scans;
+
+    // Sıralama uygula
+    result = [...result].sort((a, b) => {
+      switch (sortOption) {
+        case 'date_desc':
+          return new Date(b.timestamp) - new Date(a.timestamp);
+        case 'date_asc':
+          return new Date(a.timestamp) - new Date(b.timestamp);
+        case 'type':
+          return a.tagType.localeCompare(b.tagType);
+        case 'data_type':
+          return a.data.type.localeCompare(b.data.type);
+        default:
+          return 0;
+      }
+    });
+
+    return result;
+  };
+
+  // Dışa aktarma işlemi
+  const handleExport = () => {
+    const format = 'csv'; // veya 'json'
+    const exportedData = exportScans(format, activeFilters);
+    
+    // Dosya adı oluştur
+    const timestamp = new Date().toISOString().split('T')[0];
+    const fileName = `nfc_scans_${timestamp}.${format}`;
+    
+    // Dosyayı kaydet veya paylaş
+    Share.share({
+      title: fileName,
+      message: exportedData,
+    });
+  };
   
   // Tüm geçmişi temizle
   const handleClearHistory = () => {
@@ -127,6 +179,21 @@ const HistoryScreen = ({ navigation }) => {
     if (filters.savedOnly) {
       newActiveFilters.savedOnly = true;
     }
+
+    // Favoriler filtresi
+    if (filters.favoritesOnly) {
+      newActiveFilters.favoritesOnly = true;
+    }
+
+    // Kategori filtresi
+    if (filters.categories.length > 0) {
+      newActiveFilters.categories = filters.categories;
+    }
+
+    // Etiket filtresi
+    if (filters.tags.length > 0) {
+      newActiveFilters.tags = filters.tags;
+    }
     
     setActiveFilters(newActiveFilters);
     setFilterModalVisible(false);
@@ -140,6 +207,9 @@ const HistoryScreen = ({ navigation }) => {
       startDate: null,
       endDate: null,
       savedOnly: false,
+      favoritesOnly: false,
+      categories: [],
+      tags: [],
     });
     setStartDateText('');
     setEndDateText('');
@@ -227,6 +297,37 @@ const HistoryScreen = ({ navigation }) => {
             </View>
             
             <ScrollView style={styles.modalBody}>
+              {/* Sıralama seçenekleri */}
+              <View style={styles.filterSection}>
+                <Text style={styles.filterSectionTitle}>Sıralama</Text>
+                <View style={styles.sortOptionsContainer}>
+                  {SORT_OPTIONS.map((option) => (
+                    <TouchableOpacity
+                      key={option.id}
+                      style={[
+                        styles.sortOption,
+                        sortOption === option.id && styles.sortOptionSelected
+                      ]}
+                      onPress={() => setSortOption(option.id)}
+                    >
+                      <Ionicons 
+                        name={option.icon} 
+                        size={18} 
+                        color={sortOption === option.id ? COLORS.primary : COLORS.textSecondary} 
+                      />
+                      <Text
+                        style={[
+                          styles.sortOptionText,
+                          sortOption === option.id && styles.sortOptionTextSelected
+                        ]}
+                      >
+                        {option.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
               {/* Tag tipleri filtreleme */}
               <View style={styles.filterSection}>
                 <Text style={styles.filterSectionTitle}>Etiket Tipi</Text>
@@ -336,6 +437,76 @@ const HistoryScreen = ({ navigation }) => {
                   Sadece notları olan taramaları göster
                 </Text>
               </View>
+
+              {/* Favoriler filtresi */}
+              <View style={styles.filterSection}>
+                <View style={styles.switchRow}>
+                  <Text style={styles.filterSectionTitle}>Sadece Favoriler</Text>
+                  <Switch
+                    value={filters.favoritesOnly}
+                    onValueChange={(value) => setFilters(prev => ({ ...prev, favoritesOnly: value }))}
+                    trackColor={{ false: COLORS.border, true: COLORS.primary }}
+                    thumbColor={filters.favoritesOnly ? COLORS.text : COLORS.textSecondary}
+                  />
+                </View>
+              </View>
+
+              {/* Kategori filtresi */}
+              <View style={styles.filterSection}>
+                <Text style={styles.filterSectionTitle}>Kategoriler</Text>
+                <View style={styles.tagOptionsContainer}>
+                  {Object.values(DEFAULT_CATEGORIES).map((category) => (
+                    <TouchableOpacity
+                      key={category.id}
+                      style={[
+                        styles.categoryOption,
+                        filters.categories.includes(category.id) && styles.categoryOptionSelected,
+                        { borderColor: category.color }
+                      ]}
+                      onPress={() => {
+                        setFilters(prev => ({
+                          ...prev,
+                          categories: prev.categories.includes(category.id)
+                            ? prev.categories.filter(id => id !== category.id)
+                            : [...prev.categories, category.id]
+                        }));
+                      }}
+                    >
+                      <Ionicons 
+                        name={category.icon} 
+                        size={16} 
+                        color={filters.categories.includes(category.id) ? category.color : COLORS.textSecondary} 
+                      />
+                      <Text
+                        style={[
+                          styles.categoryOptionText,
+                          filters.categories.includes(category.id) && { color: category.color }
+                        ]}
+                      >
+                        {category.name}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              {/* Etiket filtresi */}
+              <View style={styles.filterSection}>
+                <Text style={styles.filterSectionTitle}>Etiketler</Text>
+                <TagInput
+                  tags={filters.tags}
+                  availableTags={useHistoryStore.getState().allTags}
+                  onAddTag={(tag) => setFilters(prev => ({
+                    ...prev,
+                    tags: [...prev.tags, tag]
+                  }))}
+                  onRemoveTag={(tag) => setFilters(prev => ({
+                    ...prev,
+                    tags: prev.tags.filter(t => t !== tag)
+                  }))}
+                  maxTags={5}
+                />
+              </View>
             </ScrollView>
             
             <View style={styles.modalFooter}>
@@ -346,11 +517,20 @@ const HistoryScreen = ({ navigation }) => {
                 style={styles.resetButton}
                 textStyle={styles.resetButtonText}
               />
-              <Button
-                title="Filtreleri Uygula"
-                onPress={applyFilters}
-                style={styles.applyButton}
-              />
+              <View style={styles.modalFooterButtons}>
+                <Button
+                  title="Dışa Aktar"
+                  mode="outlined"
+                  onPress={handleExport}
+                  icon="download"
+                  style={styles.exportButton}
+                />
+                <Button
+                  title="Uygula"
+                  onPress={applyFilters}
+                  style={styles.applyButton}
+                />
+              </View>
             </View>
           </View>
         </View>
@@ -459,6 +639,62 @@ const HistoryScreen = ({ navigation }) => {
         )}
       </View>
       
+      {/* Premium olmayan kullanıcılar için depolama limiti bilgisi */}
+      {!isPremiumUser() && (
+        <View style={styles.storageLimitContainer}>
+          <View style={styles.storageLimitHeader}>
+            <View style={styles.storageLimitTitleContainer}>
+              <Ionicons 
+                name={isStorageLimitReached ? "alert-circle" : "save-outline"} 
+                size={22} 
+                color={isStorageLimitReached ? COLORS.warning : COLORS.primary} 
+              />
+              <Text style={styles.storageLimitTitle}>
+                {isStorageLimitReached ? "Depolama Limiti Aşıldı" : "Depolama Durumu"}
+              </Text>
+            </View>
+            
+            <TouchableOpacity 
+              style={styles.upgradePremiumButton}
+              onPress={() => navigation.navigate('Home', { screen: 'Subscription' })}
+            >
+              <Ionicons name="star" size={16} color={COLORS.premium} />
+              <Text style={styles.upgradePremiumText}>Premium</Text>
+            </TouchableOpacity>
+          </View>
+          
+          <View style={styles.storageLimitContent}>
+            <View style={styles.progressBarContainer}>
+              <View 
+                style={[
+                  styles.progressBar, 
+                  { 
+                    width: `${Math.min(100, (1 - remainingScans / useHistoryStore.getState().maxFreeScans) * 100)}%`,
+                    backgroundColor: isStorageLimitReached ? COLORS.warning : COLORS.primary 
+                  }
+                ]} 
+              />
+            </View>
+            
+            <View style={styles.storageLimitStats}>
+              <Text style={styles.storageLimitText}>
+                {isStorageLimitReached
+                  ? "Yeni taramalar en eski kayıtların üzerine yazılacak"
+                  : `${remainingScans} / ${useHistoryStore.getState().maxFreeScans} tarama hakkınız kaldı`}
+              </Text>
+              
+              <TouchableOpacity 
+                style={styles.unlimitedStorageButton}
+                onPress={() => navigation.navigate('Home', { screen: 'Subscription' })}
+              >
+                <Text style={styles.unlimitedStorageText}>Sınırsız Depolama Al</Text>
+                <Ionicons name="arrow-forward" size={14} color={COLORS.primary} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
+      
       {scans.length > 0 && (
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
@@ -491,7 +727,7 @@ const HistoryScreen = ({ navigation }) => {
       )}
       
       <FlatList
-        data={filteredScans}
+        data={getFilteredAndSortedScans()}
         keyExtractor={(item) => item.id}
         renderItem={renderScanItem}
         ListEmptyComponent={renderEmptyList}
@@ -766,6 +1002,136 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     color: COLORS.text,
     fontSize: 14,
+  },
+  // Depolama limiti stilleri
+  storageLimitContainer: {
+    backgroundColor: COLORS.cardBackground,
+    marginHorizontal: SIZES.screenPadding,
+    marginBottom: SIZES.medium,
+    padding: SIZES.medium,
+    borderRadius: SIZES.cardRadius,
+    ...SHADOWS.medium,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  storageLimitHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  storageLimitTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  storageLimitTitle: {
+    fontSize: SIZES.medium,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginLeft: 8,
+  },
+  storageLimitContent: {
+    marginTop: 4,
+  },
+  progressBarContainer: {
+    height: 8,
+    backgroundColor: COLORS.surface,
+    borderRadius: 4,
+    overflow: 'hidden',
+    marginBottom: 10,
+  },
+  progressBar: {
+    height: '100%',
+    borderRadius: 4,
+  },
+  storageLimitStats: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  storageLimitText: {
+    color: COLORS.textSecondary,
+    fontSize: SIZES.small,
+    flex: 1,
+  },
+  upgradePremiumButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 215, 0, 0.15)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: SIZES.buttonRadius,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 215, 0, 0.3)',
+  },
+  upgradePremiumText: {
+    color: COLORS.premium,
+    fontSize: SIZES.small,
+    fontWeight: 'bold',
+    marginLeft: 4,
+  },
+  unlimitedStorageButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+  },
+  unlimitedStorageText: {
+    color: COLORS.primary,
+    fontSize: SIZES.small,
+    fontWeight: '600',
+    marginRight: 4,
+  },
+  // Yeni stiller
+  sortOptionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 8,
+    gap: 8,
+  },
+  sortOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.surface,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  sortOptionSelected: {
+    backgroundColor: 'rgba(61, 125, 255, 0.1)',
+    borderColor: COLORS.primary,
+  },
+  sortOptionText: {
+    color: COLORS.textSecondary,
+    fontSize: 14,
+    marginLeft: 6,
+  },
+  sortOptionTextSelected: {
+    color: COLORS.primary,
+    fontWeight: 'bold',
+  },
+  categoryOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.surface,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 16,
+    borderWidth: 1,
+    gap: 6,
+  },
+  categoryOptionText: {
+    color: COLORS.textSecondary,
+    fontSize: 14,
+  },
+  modalFooterButtons: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  exportButton: {
+    minWidth: 120,
   },
 });
 

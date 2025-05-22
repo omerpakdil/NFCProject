@@ -24,6 +24,7 @@ export const DATA_TYPES = {
   CONTACT: 'CONTACT',
   CUSTOM: 'CUSTOM',
   PROTECTED: 'PROTECTED', // Şifrelenmiş içerik için yeni tip
+  MERGED: 'MERGED', // Birleştirilmiş veri tipi
 };
 
 class NfcService {
@@ -491,6 +492,62 @@ class NfcService {
     this.stopReading();
     NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
     NfcManager.setEventListener(NfcEvents.SessionClosed, null);
+  }
+
+  // Verileri birleştir
+  mergeData(dataItems) {
+    if (!dataItems || dataItems.length === 0) {
+      return { type: DATA_TYPES.TEXT, value: '' };
+    }
+    
+    // Tek bir veri varsa doğrudan döndür
+    if (dataItems.length === 1) {
+      return dataItems[0];
+    }
+    
+    // Birleştirilmiş veri değeri
+    let mergedValue = '';
+    
+    // Verileri işleme modu
+    const mergeMode = {
+      CONCAT: 'CONCAT', // Basit birleştirme
+      STRUCTURED: 'STRUCTURED', // Yapılandırılmış birleştirme (türler ve değerler)
+    };
+    
+    // Bu örnek için basit birleştirme kullanacağız
+    const mode = mergeMode.STRUCTURED;
+    
+    if (mode === mergeMode.CONCAT) {
+      // Basit metin birleştirme
+      mergedValue = dataItems.map(item => item.value).join('\n\n');
+      return { type: DATA_TYPES.TEXT, value: mergedValue };
+    } else {
+      // Yapılandırılmış birleştirme - veri türlerini ve değerlerini korur
+      const structuredData = dataItems.map(item => {
+        // Şifreli içeriği birleştirmeye izin verme
+        if (item.type === DATA_TYPES.PROTECTED) {
+          return `[ŞİFRELİ İÇERİK]`;
+        }
+        
+        return `[${item.type}]\n${item.value}`;
+      }).join('\n\n---\n\n');
+      
+      return { type: DATA_TYPES.MERGED, value: structuredData };
+    }
+  }
+  
+  // Birleştirilmiş verileri yaz
+  async mergeAndWriteTag(dataItems, callback, errorCallback) {
+    try {
+      // Verileri birleştir
+      const mergedData = this.mergeData(dataItems);
+      
+      // Birleştirilmiş veriyi yaz
+      return this.writeTag(mergedData, callback, errorCallback);
+    } catch (error) {
+      console.log('Veri birleştirme hatası:', error);
+      errorCallback && errorCallback('Veriler birleştirilemedi: ' + error.message);
+    }
   }
 }
 

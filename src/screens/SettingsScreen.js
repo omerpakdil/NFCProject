@@ -3,16 +3,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Application from 'expo-application';
 import React, { useState } from 'react';
 import {
-    Alert,
-    Linking,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Switch,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  Linking,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import Button from '../components/Button';
@@ -191,6 +191,7 @@ const SettingsScreen = ({ navigation }) => {
                 type="premium"
                 onPress={() => navigation.navigate('Subscription')}
                 style={styles.subscribeButton}
+                fullWidth={true}
               />
             </View>
           )}
@@ -386,7 +387,7 @@ const styles = StyleSheet.create({
     marginBottom: SIZES.medium,
   },
   subscribeButton: {
-    alignSelf: 'flex-start',
+    // style artık fullWidth özelliği ile işlenecek
   },
   section: {
     marginBottom: SIZES.medium,

@@ -30,7 +30,8 @@ const ScanResultScreen = ({ navigation, route }) => {
   
   // Store
   const { addScan } = useHistoryStore();
-  const { canUseFeature } = useSubscriptionStore();
+  const { canUseFeature, isPremiumUser } = useSubscriptionStore();
+  const isStorageLimitReached = useHistoryStore(state => state.isStorageLimitReached());
   
   // Tarama sonucu
   const [scanResult, setScanResult] = useState(null);
@@ -41,6 +42,15 @@ const ScanResultScreen = ({ navigation, route }) => {
   const [password, setPassword] = useState('');
   const [decryptedValue, setDecryptedValue] = useState(null);
   const [passwordError, setPasswordError] = useState('');
+
+  // Alert durumu
+  const [alertConfig, setAlertConfig] = useState({
+    visible: false,
+    title: '',
+    message: '',
+    type: 'info',
+    buttons: []
+  });
 
   // Notlar (premium özelliği)
   const [notes, setNotes] = useState('');
@@ -63,6 +73,23 @@ const ScanResultScreen = ({ navigation, route }) => {
       // Animasyonu oynat
       if (animationRef.current) {
         animationRef.current.play(0, 60);
+      }
+      
+      // Premium olmayan kullanıcılar için depolama limiti uyarısı
+      if (!isPremiumUser() && isStorageLimitReached) {
+        setAlertConfig({
+          visible: true,
+          title: 'Depolama Limiti Aşıldı',
+          message: 'Ücretsiz kullanıcılar için depolama limiti doldu. Yeni taramalar en eski kayıtların üzerine yazılacak. Sınırsız depolama için Premium aboneliğe geçin.',
+          type: 'warning',
+          buttons: [
+            { text: 'Tamam' },
+            { 
+              text: 'Premium\'a Geç', 
+              onPress: () => navigation.navigate('Home', { screen: 'Subscription' }) 
+            }
+          ]
+        });
       }
     }
   }, [route.params]);
@@ -353,6 +380,27 @@ const ScanResultScreen = ({ navigation, route }) => {
           />
         </View>
         
+        {/* Premium olmayan kullanıcılar için depolama uyarısı */}
+        {!isPremiumUser() && isStorageLimitReached && (
+          <Card style={styles.warningCard}>
+            <View style={styles.warningContent}>
+              <Ionicons name="alert-circle" size={24} color={COLORS.warning} />
+              <View style={styles.warningTextContainer}>
+                <Text style={styles.warningTitle}>Depolama Limiti Aşıldı</Text>
+                <Text style={styles.warningText}>
+                  Premium abonelikle sınırsız depolama elde edin.
+                </Text>
+              </View>
+            </View>
+            <Button
+              title="Premium'a Geç"
+              onPress={() => navigation.navigate('Home', { screen: 'Subscription' })}
+              icon="star"
+              style={styles.warningButton}
+            />
+          </Card>
+        )}
+        
         {/* Tag tipi bilgisi */}
         <Card style={styles.infoCard}>
           <Text style={styles.infoTitle}>Etiket Türü</Text>
@@ -398,6 +446,16 @@ const ScanResultScreen = ({ navigation, route }) => {
 
       {/* Şifre Giriş Modalı */}
       {renderPasswordModal()}
+      
+      {/* CustomAlert ekleyeceğim */}
+      <CustomAlert
+        visible={alertConfig.visible}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+        buttons={alertConfig.buttons}
+        onClose={() => setAlertConfig(prev => ({ ...prev, visible: false }))}
+      />
     </SafeAreaView>
   );
 };
@@ -615,6 +673,33 @@ const styles = StyleSheet.create({
     fontSize: SIZES.small,
     fontWeight: 'bold',
     marginLeft: 4,
+  },
+  // Depolama limiti uyarı kartı stilleri
+  warningCard: {
+    marginBottom: SIZES.medium,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.warning,
+  },
+  warningContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  warningTextContainer: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  warningTitle: {
+    fontSize: SIZES.medium,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginBottom: 2,
+  },
+  warningText: {
+    fontSize: SIZES.small,
+    color: COLORS.textSecondary,
+  },
+  warningButton: {
+    marginTop: 12,
   },
 });
 
