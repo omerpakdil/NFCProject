@@ -23,6 +23,7 @@ export const DATA_TYPES = {
   WIFI: 'WIFI',
   CONTACT: 'CONTACT',
   CUSTOM: 'CUSTOM',
+  PROTECTED: 'PROTECTED', // Şifrelenmiş içerik için yeni tip
 };
 
 class NfcService {
@@ -52,6 +53,92 @@ class NfcService {
       console.log('NFC başlatılamadı:', error);
       return false;
     }
+  }
+  
+  // Veri şifrele - Basit XOR şifreleme
+  encryptData(data, password) {
+    if (!data || !password) return data;
+    
+    const prefix = "ENCRYPTED:"; // Şifrelenmiş veri ön eki
+    let result = prefix;
+    
+    // Her karakteri şifrele
+    for (let i = 0; i < data.length; i++) {
+      // XOR şifreleme: Her karakter için veri karakteri ile şifre karakterini XOR işlemine tabi tut
+      const charCode = data.charCodeAt(i) ^ password.charCodeAt(i % password.length);
+      result += String.fromCharCode(charCode);
+    }
+    
+    return result;
+  }
+  
+  // Şifrelenmiş veriyi çöz - Basit XOR şifre çözme
+  decryptData(encryptedData, password) {
+    if (!encryptedData || !password) return encryptedData;
+    
+    const prefix = "ENCRYPTED:";
+    
+    // Şifrelenmiş veri kontrolü
+    if (!encryptedData.startsWith(prefix)) {
+      return encryptedData; // Şifreli değilse aynı veriyi döndür
+    }
+    
+    // Ön eki kaldır
+    const data = encryptedData.substring(prefix.length);
+    let result = "";
+    
+    // Her karakteri çöz
+    for (let i = 0; i < data.length; i++) {
+      // XOR geri çözme: Şifrelemede kullanılan işlemin aynısını uygula
+      const charCode = data.charCodeAt(i) ^ password.charCodeAt(i % password.length);
+      result += String.fromCharCode(charCode);
+    }
+    
+    return result;
+  }
+  
+  // Verinin şifreli olup olmadığını kontrol et
+  isEncryptedData(data) {
+    return data && typeof data === 'string' && data.startsWith('ENCRYPTED:');
+  }
+
+  // Şifre ile korumalı NFC tag yaz
+  async writeProtectedTag(data, password, callback, errorCallback) {
+    try {
+      if (!password || password.length < 4) {
+        throw new Error('Şifre en az 4 karakter olmalıdır');
+      }
+      
+      // Veriyi şifrele
+      const encryptedData = this.encryptData(data.value, password);
+      
+      // Şifrelenmiş veriyi yaz
+      return this.writeTag(
+        { type: DATA_TYPES.PROTECTED, value: encryptedData },
+        callback,
+        errorCallback
+      );
+    } catch (error) {
+      console.log('Şifreli tag yazma hatası:', error);
+      errorCallback && errorCallback('Şifreli tag yazılamadı: ' + error.message);
+    }
+  }
+  
+  // Tag içeriğini çöz
+  async decryptTagData(encryptedData, password) {
+    if (!this.isEncryptedData(encryptedData)) {
+      return encryptedData; // Şifreli değilse doğrudan döndür
+    }
+    
+    if (!password) {
+      throw new Error('Bu içerik şifrelenmiş. Görüntülemek için şifre gerekli.');
+    }
+    
+    // Şifreyi çöz
+    const decryptedData = this.decryptData(encryptedData, password);
+    
+    // Çözülmüş veriyi döndür
+    return decryptedData;
   }
   
   // NFC okumayı başlat
@@ -344,14 +431,58 @@ class NfcService {
   // NFC tag'i kilitle (Premium özellik)
   async lockTag(callback, errorCallback) {
     try {
-      // Premium özellikleri içeren kod burada
-      // Öncelikle NFC tag'ine yazmak için bağlanılır
-      // Ardından uygun komutlar ile tag kilitlenir
-      // Bu özellik premium kullanıcılar için
+      // NFC başlat
+      if (!this.isInitialized) {
+        const initialized = await this.init();
+        if (!initialized) {
+          errorCallback && errorCallback('NFC başlatılamadı');
+          return;
+        }
+      }
       
-      callback && callback('Tag başarıyla kilitlendi');
+      // iOS için NFC yazma oturumu başlat
+      if (Platform.OS === 'ios') {
+        await NfcManager.requestTechnology(NfcTech.Ndef, {
+          alertMessage: 'NFC etiketi kilitlemek için telefonu yaklaştırın',
+        });
+      } 
+      // Android için NFC teknolojisini başlat
+      else {
+        await NfcManager.requestTechnology(NfcTech.Ndef);
+      }
+      
+      // Tag formatını kontrol et
+      const tag = await NfcManager.getTag();
+      if (!tag) {
+        throw new Error('NFC tag bulunamadı');
+      }
+      
+      // NFC Tag'in desteklediği teknolojileri kontrol et
+      // Kilitleme sadece belirli tipte etiketlerde çalışır
+      if (!tag.ndefWritable) {
+        throw new Error('Bu NFC etiketi kilitleme özelliğini desteklemiyor');
+      }
+      
+      // Etiketi kilitle
+      if (Platform.OS === 'android') {
+        // Android için kilitleme komutu
+        await NfcManager.ndefHandler.makeReadOnly();
+      } else {
+        // iOS için kilitleme komutu
+        await NfcManager.setNdefPushMessage(null);
+      }
+      
+      callback && callback('NFC etiketi başarıyla kilitlendi');
     } catch (error) {
+      console.log('Tag kilitleme hatası:', error);
       errorCallback && errorCallback('Tag kilitlenemedi: ' + error.message);
+    } finally {
+      // Teknolojiyi serbest bırak
+      try {
+        await NfcManager.cancelTechnologyRequest();
+      } catch (e) {
+        console.log('Teknoloji serbest bırakılırken hata:', e);
+      }
     }
   }
   

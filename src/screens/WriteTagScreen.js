@@ -31,10 +31,15 @@ const WriteTagScreen = ({ navigation, route }) => {
   
   // States
   const [isWriting, setIsWriting] = useState(false);
+  const [isLocking, setIsLocking] = useState(false);
   const [writeStatus, setWriteStatus] = useState(null); // null, 'success', 'error'
   const [dataType, setDataType] = useState(DATA_TYPES.TEXT);
   const [dataValue, setDataValue] = useState('');
   const [hasNfc, setHasNfc] = useState(null);
+  const [shouldLockTag, setShouldLockTag] = useState(false);
+  const [shouldPasswordProtect, setShouldPasswordProtect] = useState(false);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [alertConfig, setAlertConfig] = useState({
     visible: false,
     title: '',
@@ -101,6 +106,46 @@ const WriteTagScreen = ({ navigation, route }) => {
     };
   }, []);
   
+  // Şifre kontrolü
+  const validatePassword = () => {
+    if (!shouldPasswordProtect) return true;
+    
+    if (!password) {
+      setAlertConfig({
+        visible: true,
+        title: 'Şifre Gerekli',
+        message: 'Lütfen bir şifre girin.',
+        type: 'error',
+        buttons: [{ text: 'Tamam' }]
+      });
+      return false;
+    }
+    
+    if (password.length < 4) {
+      setAlertConfig({
+        visible: true,
+        title: 'Şifre Çok Kısa',
+        message: 'Şifre en az 4 karakter uzunluğunda olmalıdır.',
+        type: 'error',
+        buttons: [{ text: 'Tamam' }]
+      });
+      return false;
+    }
+    
+    if (password !== confirmPassword) {
+      setAlertConfig({
+        visible: true,
+        title: 'Şifreler Eşleşmiyor',
+        message: 'Girdiğiniz şifreler birbiriyle eşleşmiyor.',
+        type: 'error',
+        buttons: [{ text: 'Tamam' }]
+      });
+      return false;
+    }
+    
+    return true;
+  };
+  
   // Etiket yazma işlemi başlat
   const handleWrite = async () => {
     if (!dataValue.trim()) {
@@ -114,55 +159,154 @@ const WriteTagScreen = ({ navigation, route }) => {
       return;
     }
     
+    // Şifre kullanılıyorsa doğrula
+    if (shouldPasswordProtect && !validatePassword()) {
+      return;
+    }
+    
     try {
       setIsWriting(true);
       setWriteStatus(null);
       
-      // NFC tag'e yazma işlemi
-      NfcService.writeTag(
-        { type: dataType, value: dataValue },
+      // Şifreli mi yoksa normal mi yazalım?
+      if (shouldPasswordProtect && canUseFeature('password_protection')) {
+        // Şifreli yazma
+        NfcService.writeProtectedTag(
+          { type: dataType, value: dataValue },
+          password,
+          // Başarı callback
+          (message) => {
+            handleWriteSuccess(message);
+          },
+          // Hata callback
+          (error) => {
+            handleWriteError(error);
+          }
+        );
+      } else {
+        // Normal yazma
+        NfcService.writeTag(
+          { type: dataType, value: dataValue },
+          // Başarı callback
+          (message) => {
+            handleWriteSuccess(message);
+          },
+          // Hata callback
+          (error) => {
+            handleWriteError(error);
+          }
+        );
+      }
+    } catch (error) {
+      console.log('Yazma hatası:', error);
+      handleWriteError('NFC etiketi yazılırken bir hata oluştu: ' + error.message);
+    }
+  };
+  
+  // Başarılı yazma
+  const handleWriteSuccess = (message) => {
+    setIsWriting(false);
+    setWriteStatus('success');
+    
+    // Başarılı animasyonu oynat
+    if (animationRef.current) {
+      animationRef.current.play(0, 60);
+    }
+    
+    // Eğer kilitleme seçilmişse, kullanıcıya onay sor
+    if (shouldLockTag && canUseFeature('lock')) {
+      setTimeout(() => {
+        setAlertConfig({
+          visible: true,
+          title: 'Etiketi Kilitle',
+          message: 'NFC etiketi başarıyla yazıldı. Şimdi etiketi kilitlemek istiyor musunuz? Bu işlem geri alınamaz ve etiket bir daha yazılamaz.',
+          type: 'warning',
+          buttons: [
+            { 
+              text: 'İptal', 
+              style: 'cancel',
+              onPress: () => {
+                setAlertConfig({
+                  visible: true,
+                  title: 'Başarılı',
+                  message: message || 'NFC etiketi başarıyla yazıldı.',
+                  type: 'success',
+                  buttons: [{ text: 'Tamam' }]
+                });
+              }
+            },
+            { 
+              text: 'Kilitle', 
+              style: 'destructive',
+              onPress: handleLockTag
+            }
+          ]
+        });
+      }, 1200);
+    } else {
+      // Kilitleme seçilmemişse normal başarı mesajı
+      setTimeout(() => {
+        setAlertConfig({
+          visible: true,
+          title: 'Başarılı',
+          message: message || (shouldPasswordProtect ? 'NFC etiketi başarıyla şifrelendi ve yazıldı.' : 'NFC etiketi başarıyla yazıldı.'),
+          type: 'success',
+          buttons: [{ text: 'Tamam' }]
+        });
+      }, 1200);
+    }
+  };
+  
+  // Yazma hatası
+  const handleWriteError = (error) => {
+    setIsWriting(false);
+    setWriteStatus('error');
+    setAlertConfig({
+      visible: true,
+      title: 'Hata',
+      message: error || 'NFC etiketi yazılırken bir hata oluştu.',
+      type: 'error',
+      buttons: [{ text: 'Tamam' }]
+    });
+  };
+  
+  // Etiket kilitleme işlemi
+  const handleLockTag = async () => {
+    try {
+      setIsLocking(true);
+      
+      // NFC tag'i kilitle
+      NfcService.lockTag(
         // Başarı callback
         (message) => {
-          setIsWriting(false);
-          setWriteStatus('success');
-          
-          // Başarılı animasyonu oynat
-          if (animationRef.current) {
-            animationRef.current.play(0, 60);
-          }
-          
-          // Bildirim
-          setTimeout(() => {
-            setAlertConfig({
-              visible: true,
-              title: 'Başarılı',
-              message: message || 'NFC etiketi başarıyla yazıldı.',
-              type: 'success',
-              buttons: [{ text: 'Tamam' }]
-            });
-          }, 1200);
+          setIsLocking(false);
+          setAlertConfig({
+            visible: true,
+            title: 'Kilitleme Başarılı',
+            message: 'NFC etiketi başarıyla kilitlendi. Artık bu etiket sadece okunabilir ve içeriği değiştirilemez.',
+            type: 'success',
+            buttons: [{ text: 'Tamam' }]
+          });
         },
         // Hata callback
         (error) => {
-          setIsWriting(false);
-          setWriteStatus('error');
+          setIsLocking(false);
           setAlertConfig({
             visible: true,
-            title: 'Hata',
-            message: error || 'NFC etiketi yazılırken bir hata oluştu.',
+            title: 'Kilitleme Hatası',
+            message: error || 'NFC etiketi kilitlenirken bir hata oluştu.',
             type: 'error',
             buttons: [{ text: 'Tamam' }]
           });
         }
       );
     } catch (error) {
-      console.log('Yazma hatası:', error);
-      setIsWriting(false);
-      setWriteStatus('error');
+      console.log('Kilitleme hatası:', error);
+      setIsLocking(false);
       setAlertConfig({
         visible: true,
-        title: 'Hata',
-        message: 'NFC etiketi yazılırken bir hata oluştu: ' + error.message,
+        title: 'Kilitleme Hatası',
+        message: 'NFC etiketi kilitlenirken bir hata oluştu: ' + error.message,
         type: 'error',
         buttons: [{ text: 'Tamam' }]
       });
@@ -338,6 +482,129 @@ const WriteTagScreen = ({ navigation, route }) => {
             />
           </Card>
           
+          {/* Güvenlik Seçenekleri (Premium) */}
+          <Card style={styles.sectionCard}>
+            <Text style={styles.sectionTitle}>Güvenlik Seçenekleri</Text>
+            
+            {/* Şifre Koruma Seçeneği */}
+            <TouchableOpacity 
+              style={[styles.securityOption, { marginBottom: 8 }]}
+              onPress={() => {
+                if (canUseFeature('password_protection')) {
+                  setShouldPasswordProtect(!shouldPasswordProtect);
+                } else {
+                  navigation.navigate('Subscription');
+                }
+              }}
+            >
+              <View style={styles.checkboxContainer}>
+                <View style={[
+                  styles.checkbox,
+                  shouldPasswordProtect && canUseFeature('password_protection') && styles.checkboxChecked
+                ]}>
+                  {shouldPasswordProtect && canUseFeature('password_protection') && (
+                    <Ionicons name="checkmark" size={16} color={COLORS.text} />
+                  )}
+                </View>
+              </View>
+              
+              <View style={styles.securityOptionContent}>
+                <View style={styles.securityOptionHeader}>
+                  <Text style={styles.securityOptionTitle}>Şifre Koruması</Text>
+                  {!canUseFeature('password_protection') && <Ionicons name="star" size={18} color={COLORS.premium} />}
+                </View>
+                
+                <Text style={styles.securityOptionDescription}>
+                  Etiketinizi şifre ile koruyun. Sadece şifreyi bilenler içeriği görebilir.
+                </Text>
+              </View>
+            </TouchableOpacity>
+            
+            {/* Şifre alanı - şifre koruması seçildiyse göster */}
+            {shouldPasswordProtect && canUseFeature('password_protection') && (
+              <View style={styles.passwordContainer}>
+                <Text style={styles.passwordLabel}>Şifre Belirleyin</Text>
+                <TextInput
+                  style={styles.passwordInput}
+                  placeholder="Şifre (en az 4 karakter)"
+                  placeholderTextColor={COLORS.textDisabled}
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                  autoCapitalize="none"
+                />
+                
+                <Text style={[styles.passwordLabel, { marginTop: 12 }]}>Şifre Tekrar</Text>
+                <TextInput
+                  style={styles.passwordInput}
+                  placeholder="Şifreyi tekrar girin"
+                  placeholderTextColor={COLORS.textDisabled}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry
+                  autoCapitalize="none"
+                />
+                
+                <View style={styles.passwordInfo}>
+                  <Ionicons name="information-circle" size={18} color={COLORS.primary} />
+                  <Text style={styles.passwordInfoText}>
+                    Şifreyi unutmayın! Bu şifreye sahip olmayan kişiler etiketteki veriyi göremeyecek.
+                  </Text>
+                </View>
+              </View>
+            )}
+            
+            {/* Etiket Kilitleme Seçeneği */}
+            <TouchableOpacity 
+              style={styles.securityOption}
+              onPress={() => setShouldLockTag(!shouldLockTag)}
+            >
+              <View style={styles.checkboxContainer}>
+                <View style={[
+                  styles.checkbox,
+                  shouldLockTag && styles.checkboxChecked
+                ]}>
+                  {shouldLockTag && (
+                    <Ionicons name="checkmark" size={16} color={COLORS.text} />
+                  )}
+                </View>
+              </View>
+              
+              <View style={styles.securityOptionContent}>
+                <View style={styles.securityOptionHeader}>
+                  <Text style={styles.securityOptionTitle}>Etiketi Kilitle</Text>
+                  <Ionicons name="lock-closed" size={18} color={COLORS.primary} />
+                </View>
+                
+                <Text style={styles.securityOptionDescription}>
+                  Yazma işleminden sonra etiketi kilitle. Bu işlem geri alınamaz ve etiket bir daha değiştirilemez.
+                </Text>
+              </View>
+            </TouchableOpacity>
+            
+            {shouldLockTag && (
+              <View style={styles.helpBox}>
+                <View style={styles.helpIconContainer}>
+                  <Ionicons name="information-circle" size={22} color={COLORS.info} />
+                  <Text style={styles.helpTitle}>Etiket Kilitleme Hakkında</Text>
+                </View>
+                <View style={styles.helpContent}>
+                  <Text style={styles.helpText}>
+                    Kilitleme işlemi etiketin kalıcı olarak 'salt okunur' hale gelmesini sağlar. 
+                    Bu işlem fiziksel değişiklikler yapar ve asla geri alınamaz. Kilitledikten 
+                    sonra, etiket içeriği hiçbir cihaz tarafından bir daha değiştirilemez.
+                  </Text>
+                  <View style={styles.warningContainer}>
+                    <Ionicons name="warning" size={16} color={COLORS.warning} />
+                    <Text style={styles.warningText}>
+                      Devam etmeden önce emin olun.
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            )}
+          </Card>
+          
           {/* Yazma Durumu */}
           {renderWriteStatus()}
           
@@ -345,10 +612,10 @@ const WriteTagScreen = ({ navigation, route }) => {
           <Button
             title="NFC Etiketi Yaz"
             onPress={handleWrite}
-            disabled={!hasNfc || isWriting || !dataValue.trim()}
-            loading={isWriting}
+            disabled={!hasNfc || isWriting || isLocking || !dataValue.trim()}
+            loading={isWriting || isLocking}
             style={styles.writeButton}
-            leftIcon={!isWriting && <Ionicons name="create" size={20} color={COLORS.text} />}
+            leftIcon={!isWriting && !isLocking && <Ionicons name="create" size={20} color={COLORS.text} />}
           />
         </ScrollView>
       </KeyboardAvoidingView>
@@ -471,6 +738,49 @@ const styles = StyleSheet.create({
     minHeight: 100,
     textAlignVertical: 'top',
   },
+  securityOption: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: COLORS.surface,
+    borderRadius: SIZES.borderRadius,
+    padding: SIZES.medium,
+  },
+  checkboxContainer: {
+    marginRight: 12,
+    marginTop: 2,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: COLORS.border,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxChecked: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  securityOptionContent: {
+    flex: 1,
+  },
+  securityOptionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  securityOptionTitle: {
+    fontSize: SIZES.medium,
+    fontWeight: 'bold',
+    color: COLORS.text,
+  },
+  securityOptionDescription: {
+    fontSize: SIZES.small,
+    color: COLORS.textSecondary,
+    lineHeight: 18,
+  },
   statusContainer: {
     alignItems: 'center',
     marginVertical: SIZES.medium,
@@ -500,6 +810,86 @@ const styles = StyleSheet.create({
   writeButton: {
     marginTop: SIZES.medium,
     marginBottom: SIZES.large,
+  },
+  helpBox: {
+    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+    borderRadius: SIZES.borderRadius,
+    padding: SIZES.medium,
+    marginTop: SIZES.medium,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.info,
+  },
+  helpIconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: SIZES.small,
+  },
+  helpContent: {
+    flexDirection: 'column',
+  },
+  helpTitle: {
+    fontSize: SIZES.medium,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginBottom: SIZES.tiny,
+    marginLeft: SIZES.small,
+  },
+  helpText: {
+    color: COLORS.textSecondary,
+    fontSize: SIZES.small,
+    marginBottom: SIZES.medium,
+    lineHeight: 18,
+  },
+  warningContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 152, 0, 0.1)',
+    padding: SIZES.small,
+    borderRadius: SIZES.borderRadius,
+  },
+  warningText: {
+    color: COLORS.warning,
+    fontSize: SIZES.small,
+    marginLeft: SIZES.small,
+    fontWeight: '600',
+  },
+  passwordContainer: {
+    backgroundColor: COLORS.surface,
+    borderRadius: SIZES.borderRadius,
+    padding: SIZES.medium,
+    marginVertical: SIZES.small,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.primary,
+  },
+  passwordLabel: {
+    fontSize: SIZES.medium,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginBottom: 8,
+  },
+  passwordInput: {
+    backgroundColor: COLORS.background,
+    borderRadius: SIZES.borderRadius,
+    paddingHorizontal: SIZES.medium,
+    paddingVertical: 12,
+    color: COLORS.text,
+    fontSize: SIZES.medium,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  passwordInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 16,
+    backgroundColor: 'rgba(61, 125, 255, 0.1)',
+    borderRadius: SIZES.borderRadius,
+    padding: SIZES.small,
+  },
+  passwordInfoText: {
+    color: COLORS.textSecondary,
+    fontSize: SIZES.small,
+    marginLeft: 8,
+    flex: 1,
   },
 });
 
