@@ -13,6 +13,8 @@ import { COLORS, SIZES } from '../constants/theme';
 // Store ve servisler
 import useHistoryStore from '../features/history/historyStore';
 import NfcService, { DATA_TYPES } from '../features/nfc/nfcService';
+import NotificationService from '../features/notifications/notificationService';
+import useSettingsStore from '../features/settings/settingsStore';
 import useSubscriptionStore from '../features/subscription/subscriptionStore';
 
 const StatusCard = ({ icon, title, subtext, onPress }) => (
@@ -365,6 +367,7 @@ const HomeScreen = ({ navigation }) => {
   // Store
   const { scans } = useHistoryStore();
   const { isPremiumUser, canUseFeature } = useSubscriptionStore();
+  const { settings } = useSettingsStore();
   
   // Son taramalar - Premium kullanıcılar için 4, ücretsiz kullanıcılar için 2
   const recentScans = scans.slice(0, isPremiumUser() ? 4 : 2);
@@ -373,22 +376,38 @@ const HomeScreen = ({ navigation }) => {
   const remainingScans = useHistoryStore(state => state.getRemainingScans());
   const isStorageLimitReached = useHistoryStore(state => state.isStorageLimitReached());
   
-  // NFC kontrolünü geçici olarak devre dışı bırakıyorum
-  // useEffect(() => {
-  //   const checkNfc = async () => {
-  //     const nfcAvailable = await NfcService.init();
-  //     setHasNfc(nfcAvailable);
-  //   };
+  // İlk açılışta bildirim örneği
+  useEffect(() => {
+    const showWelcomeNotification = async () => {
+      // Sadece bildirimlerin açık olduğu durumda göster
+      if (settings.notifications) {
+        await NotificationService.sendNotification(
+          'NFC Reader Pro\'ya Hoş Geldiniz',
+          'NFC etiketlerini taramaya başlamak için hazır!',
+          { type: 'welcome' }
+        );
+      }
+    };
     
-  //   checkNfc();
+    showWelcomeNotification();
+  }, []);
+  
+  // NFC kontrolü
+  useEffect(() => {
+    const checkNfc = async () => {
+      const nfcAvailable = await NfcService.init();
+      setHasNfc(nfcAvailable);
+    };
     
-  //   return () => {
-  //     if (isScanning) {
-  //       NfcService.stopReading();
-  //     }
-  //     NfcService.cleanup();
-  //   };
-  // }, []);
+    checkNfc();
+    
+    return () => {
+      if (isScanning) {
+        NfcService.stopReading();
+      }
+      NfcService.cleanup();
+    };
+  }, []);
   
   // Ekran odaklandığında taramayı durdur
   useFocusEffect(

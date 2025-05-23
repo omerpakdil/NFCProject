@@ -870,11 +870,12 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     minHeight: 100,
     textAlignVertical: 'top',
+    marginBottom: 12,
   },
   saveButton: {
     backgroundColor: COLORS.primary,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 8,
     borderRadius: 6,
   },
   favoriteButton: {

@@ -1,12 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    FlatList,
-    Modal,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import { COLORS, SHADOWS, SIZES } from '../constants/theme';
@@ -18,9 +18,17 @@ const CategorySelector = ({
   style,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
-  // Seçili kategori bilgisini al
-  const selectedCategory = categories[selectedCategoryId];
+  // Kategorileri FlatList için diziye dönüştür
+  const categoryList = Object.values(categories);
+
+  // Seçili kategori bilgisini güncelle
+  useEffect(() => {
+    // Kategori ID'si ile eşleşen kategoriyi bul
+    const category = categoryList.find(cat => cat.id === selectedCategoryId);
+    setSelectedCategory(category || null);
+  }, [selectedCategoryId, categories]);
 
   // Modal'ı aç/kapa
   const openModal = () => setModalVisible(true);
@@ -32,9 +40,6 @@ const CategorySelector = ({
     closeModal();
   };
 
-  // Kategorileri FlatList için diziye dönüştür
-  const categoryList = Object.values(categories);
-
   return (
     <View style={[styles.container, style]}>
       <TouchableOpacity style={styles.selector} onPress={openModal}>
@@ -44,7 +49,10 @@ const CategorySelector = ({
             { backgroundColor: selectedCategory?.color || COLORS.border },
           ]}
         />
-        <Text style={styles.categoryName}>
+        <Text style={[
+          styles.categoryName, 
+          selectedCategory && styles.selectedCategoryName
+        ]}>
           {selectedCategory?.name || 'Kategori seç'}
         </Text>
         <Ionicons name="chevron-down" size={16} color={COLORS.textSecondary} />
@@ -84,7 +92,12 @@ const CategorySelector = ({
                     >
                       <Ionicons name={item.icon} size={18} color={COLORS.text} />
                     </View>
-                    <Text style={styles.categoryItemText}>{item.name}</Text>
+                    <Text style={[
+                      styles.categoryItemText,
+                      selectedCategoryId === item.id && styles.selectedCategoryItemText
+                    ]}>
+                      {item.name}
+                    </Text>
                   </View>
                   {selectedCategoryId === item.id && (
                     <Ionicons
@@ -133,7 +146,11 @@ const styles = StyleSheet.create({
   categoryName: {
     flex: 1,
     fontSize: SIZES.medium,
+    color: COLORS.textSecondary,
+  },
+  selectedCategoryName: {
     color: COLORS.text,
+    fontWeight: '500',
   },
   modalOverlay: {
     flex: 1,
@@ -184,6 +201,10 @@ const styles = StyleSheet.create({
   categoryItemText: {
     fontSize: SIZES.medium,
     color: COLORS.text,
+  },
+  selectedCategoryItemText: {
+    fontWeight: 'bold',
+    color: COLORS.primary,
   },
   selectedCategoryItem: {
     backgroundColor: 'rgba(61, 125, 255, 0.1)',

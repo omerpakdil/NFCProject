@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   },
   input: {
     color: COLORS.text,
-    fontSize: SIZES.small,
+    fontSize: SIZES.medium,
     minWidth: 60,
     paddingVertical: 6,
   },

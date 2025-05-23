@@ -1,5 +1,6 @@
-import { Platform } from 'react-native';
+import { Platform, Vibration } from 'react-native';
 import NfcManager, { Ndef, NfcEvents, NfcTech } from 'react-native-nfc-manager';
+import useSettingsStore from '../settings/settingsStore';
 
 // NFC tag tipleri
 export const TAG_TYPES = {
@@ -31,6 +32,20 @@ class NfcService {
   constructor() {
     this.isInitialized = false;
     this.isReading = false;
+  }
+  
+  // Titreşim geri bildirimi
+  vibrate(pattern = 100) {
+    // settingsStore'dan hapticFeedback ayarını kontrol et
+    const hapticFeedbackEnabled = useSettingsStore.getState().settings.hapticFeedback;
+    
+    if (hapticFeedbackEnabled) {
+      if (typeof pattern === 'number') {
+        Vibration.vibrate(pattern);
+      } else {
+        Vibration.vibrate(pattern);
+      }
+    }
   }
   
   // NFC başlatma
@@ -212,6 +227,9 @@ class NfcService {
       
       // Tag içeriğini analiz et
       const processedData = this.parseTagData(tag);
+      
+      // Titreşim geri bildirimi
+      this.vibrate();
       
       // Sonucu callback ile döndür
       callback({
@@ -414,6 +432,9 @@ class NfcService {
         await NfcManager.ndefHandler.writeNdefMessage(bytes);
       }
       
+      // Titreşim geri bildirimi - başarılı yazma için daha uzun titreşim
+      this.vibrate(300);
+      
       // Başarılı yazma
       callback && callback('Tag başarıyla yazıldı');
     } catch (error) {
@@ -472,6 +493,9 @@ class NfcService {
         // iOS için kilitleme komutu
         await NfcManager.setNdefPushMessage(null);
       }
+      
+      // Titreşim geri bildirimi - kilitleme için özel titreşim paterni
+      this.vibrate([0, 100, 100, 100, 300]);
       
       callback && callback('NFC etiketi başarıyla kilitlendi');
     } catch (error) {

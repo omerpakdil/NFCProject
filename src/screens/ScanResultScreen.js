@@ -22,6 +22,7 @@ import { COLORS, SIZES } from '../constants/theme';
 // Store ve servisler
 import useHistoryStore from '../features/history/historyStore';
 import NfcService, { DATA_TYPES } from '../features/nfc/nfcService';
+import useSettingsStore from '../features/settings/settingsStore';
 import useSubscriptionStore from '../features/subscription/subscriptionStore';
 
 const ScanResultScreen = ({ navigation, route }) => {
@@ -31,6 +32,7 @@ const ScanResultScreen = ({ navigation, route }) => {
   // Store
   const { addScan } = useHistoryStore();
   const { canUseFeature, isPremiumUser } = useSubscriptionStore();
+  const { settings } = useSettingsStore();
   const isStorageLimitReached = useHistoryStore(state => state.isStorageLimitReached());
   
   // Tarama sonucu
@@ -60,8 +62,14 @@ const ScanResultScreen = ({ navigation, route }) => {
     const { scanResult: routeScanResult } = route.params || {};
     
     if (routeScanResult) {
-      // Geçmişe ekle
-      const savedScan = addScan(routeScanResult);
+      // Otomatik kaydetme ayarını kontrol et
+      let savedScan = routeScanResult;
+      
+      if (settings.autoSave) {
+        // Geçmişe ekle
+        savedScan = addScan(routeScanResult);
+      }
+      
       setScanResult(savedScan);
       
       // Şifreli içerik kontrolü
@@ -76,7 +84,7 @@ const ScanResultScreen = ({ navigation, route }) => {
       }
       
       // Premium olmayan kullanıcılar için depolama limiti uyarısı
-      if (!isPremiumUser() && isStorageLimitReached) {
+      if (settings.autoSave && !isPremiumUser() && isStorageLimitReached) {
         setAlertConfig({
           visible: true,
           title: 'Depolama Limiti Aşıldı',
@@ -92,7 +100,7 @@ const ScanResultScreen = ({ navigation, route }) => {
         });
       }
     }
-  }, [route.params]);
+  }, [route.params, settings.autoSave]);
 
   // Şifreyi kontrol et ve içeriği çöz
   const handleDecrypt = async () => {

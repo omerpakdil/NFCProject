@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Application from 'expo-application';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Alert,
   Linking,
@@ -22,6 +22,7 @@ import { COLORS, SIZES } from '../constants/theme';
 
 // Store ve servisler
 import useHistoryStore from '../features/history/historyStore';
+import useSettingsStore from '../features/settings/settingsStore';
 import useSubscriptionStore from '../features/subscription/subscriptionStore';
 
 const SettingsScreen = ({ navigation }) => {
@@ -32,22 +33,7 @@ const SettingsScreen = ({ navigation }) => {
     currentPlan, 
     clearSubscription 
   } = useSubscriptionStore();
-  
-  // Settings state
-  const [settings, setSettings] = useState({
-    notifications: true,
-    hapticFeedback: true,
-    darkMode: true,
-    autoSave: true,
-  });
-  
-  // Ayarı değiştir
-  const toggleSetting = (key) => {
-    setSettings(prev => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
+  const { settings, toggleSetting } = useSettingsStore();
   
   // Tüm verileri temizle
   const handleClearData = () => {
@@ -215,15 +201,6 @@ const SettingsScreen = ({ navigation }) => {
             'NFC tarama ve yazma işlemlerinde titreşimli geri bildirim',
             settings.hapticFeedback,
             () => toggleSetting('hapticFeedback')
-          )}
-          
-          {renderSettingItem(
-            'moon', 
-            'Karanlık Mod', 
-            'Koyu tema kullan',
-            settings.darkMode,
-            () => toggleSetting('darkMode'),
-            true
           )}
           
           {renderSettingItem(

@@ -1,36 +1,53 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
+import { EventSubscription } from 'expo-modules-core';
+import { addNotificationReceivedListener, addNotificationResponseReceivedListener, setNotificationHandler } from 'expo-notifications';
+import { hideAsync, preventAutoHideAsync } from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { COLORS } from './src/constants/theme';
+import NotificationService from './src/features/notifications/notificationService';
 import Navigation from './src/navigation/index';
 
 // Splash ekranını göstermeye devam et
-SplashScreen.preventAutoHideAsync();
+preventAutoHideAsync().catch(console.warn);
+
+// Bildirimlerin nasıl gösterileceğini ayarla
+setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const notificationListener = useRef<EventSubscription | null>(null);
+  const responseListener = useRef<EventSubscription | null>(null);
 
   // Uygulama başladığında kaynak yükleme
   useEffect(() => {
     async function prepare() {
       try {
-        // Simule edilmiş kaynak yüklemesi (fontlar, önbellek, vb.)
         // Font ve diğer kaynakları yükle
         await Font.loadAsync({
           ...Ionicons.font,
         });
         
-        // Önemli kaynak dosyaları için mock edilmiş yükleme süresi
-        // Gerçek uygulamada burada gerekli API çağrıları ve veritabanı işlemleri yapılabilir
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Bildirim izinlerini kontrol et
+        await NotificationService.checkPermissions();
+        
+        // Gerekli kaynakların yüklenmesi için kısa bir bekleme
+        await new Promise(resolve => setTimeout(resolve, 500));
       } catch (e) {
-        console.warn(e);
+        console.warn('Kaynak yükleme hatası:', e);
       } finally {
         // İşlem tamamlandı
         setAppIsReady(true);
@@ -40,10 +57,34 @@ export default function App() {
     prepare();
   }, []);
 
+  // Bildirim dinleyicilerini ayarla
+  useEffect(() => {
+    // Bildirim alındığında
+    notificationListener.current = addNotificationReceivedListener(notification => {
+      console.log('Bildirim alındı:', notification);
+    });
+
+    // Bildirime tıklandığında
+    responseListener.current = addNotificationResponseReceivedListener(response => {
+      console.log('Bildirime tıklandı:', response);
+      // Burada bildirime tıklandığında yapılacak işlemler eklenebilir
+    });
+
+    return () => {
+      // Dinleyicileri temizle
+      if (notificationListener.current) {
+        notificationListener.current.remove();
+      }
+      if (responseListener.current) {
+        responseListener.current.remove();
+      }
+    };
+  }, []);
+
   // Layout animasyonu tamamlandığında splash ekranını gizle
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
-      await SplashScreen.hideAsync();
+      await hideAsync().catch(console.warn);
     }
   }, [appIsReady]);
 
