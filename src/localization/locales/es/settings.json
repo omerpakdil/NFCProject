@@ -1,0 +1,45 @@
+{
+  "title": "Ajustes",
+  "sections": {
+    "general": {
+      "title": "General",
+      "language": "Idioma",
+      "theme": "Tema",
+      "hapticFeedback": "Respuesta Háptica",
+      "notifications": "Notificaciones"
+    },
+    "premium": {
+      "title": "Premium",
+      "status": "Estado Premium",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "manageSubscription": "Gestionar Suscripción"
+    },
+    "data": {
+      "title": "Datos y Privacidad",
+      "clearHistory": "Borrar Historial de Escaneos",
+      "clearHistoryDesc": "Elimina todo tu historial de escaneos",
+      "exportData": "Exportar Datos",
+      "exportDataDesc": "Exporta todos tus datos"
+    },
+    "about": {
+      "title": "Acerca de",
+      "version": "Versión de la App",
+      "rateApp": "Calificar App",
+      "contactUs": "Contáctanos",
+      "privacyPolicy": "Política de Privacidad",
+      "termsOfService": "Términos de Servicio"
+    }
+  },
+  "theme": {
+    "system": "Sistema",
+    "light": "Claro",
+    "dark": "Oscuro"
+  },
+  "clearData": {
+    "title": "Borrar Datos",
+    "message": "Todos tus datos serán eliminados. Esta acción no se puede deshacer.",
+    "confirm": "Borrar",
+    "cancel": "Cancelar"
+  }
+} 

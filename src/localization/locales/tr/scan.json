@@ -1,0 +1,48 @@
+{
+  "result": {
+    "title": "Tarama Sonucu",
+    "tagType": "Etiket Tipi",
+    "dataType": "Veri Tipi",
+    "content": "İçerik",
+    "scannedAt": "Tarama Zamanı"
+  },
+  "detail": {
+    "title": "Tarama Detayı",
+    "notes": "Notlar",
+    "notesPlaceholder": "Not eklemek için dokunun...",
+    "category": "Kategori",
+    "categorySelect": "Kategori seç",
+    "tags": "Etiketler",
+    "tagsPlaceholder": "Etiket ekle...",
+    "favorite": "Favorilere Ekle",
+    "unfavorite": "Favorilerden Çıkar"
+  },
+  "write": {
+    "title": "NFC Yaz",
+    "dataType": "Veri Tipi",
+    "content": "İçerik",
+    "contentPlaceholder": "Yazılacak içeriği girin...",
+    "password": "Şifre",
+    "passwordPlaceholder": "Şifre girin (isteğe bağlı)",
+    "confirmPassword": "Şifreyi Onayla",
+    "lock": "Etiketi Kilitle",
+    "lockWarning": "Dikkat: Kilitleme işlemi geri alınamaz!",
+    "writeButton": "Yaz",
+    "success": "NFC etiketi başarıyla yazıldı",
+    "error": "NFC yazma hatası"
+  },
+  "merge": {
+    "title": "Veri Birleştir",
+    "selectScans": "Birleştirilecek taramaları seçin",
+    "selected": "{{count}} tarama seçildi",
+    "writeButton": "Birleştir ve Yaz",
+    "success": "Veriler başarıyla birleştirildi ve yazıldı",
+    "error": "Veri birleştirme hatası"
+  },
+  "protected": {
+    "title": "Korumalı İçerik",
+    "enterPassword": "Şifre Girin",
+    "wrongPassword": "Yanlış şifre",
+    "decrypt": "Şifreyi Çöz"
+  }
+} 

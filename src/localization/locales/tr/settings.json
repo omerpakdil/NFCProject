@@ -1,0 +1,45 @@
+{
+  "title": "Ayarlar",
+  "sections": {
+    "general": {
+      "title": "Genel",
+      "language": "Dil",
+      "theme": "Tema",
+      "hapticFeedback": "Titreşim Geri Bildirimi",
+      "notifications": "Bildirimler"
+    },
+    "premium": {
+      "title": "Premium",
+      "status": "Premium Durumu",
+      "active": "Aktif",
+      "inactive": "Aktif Değil",
+      "manageSubscription": "Aboneliği Yönet"
+    },
+    "data": {
+      "title": "Veri ve Gizlilik",
+      "clearHistory": "Tarama Geçmişini Temizle",
+      "clearHistoryDesc": "Tüm tarama geçmişinizi siler",
+      "exportData": "Verileri Dışa Aktar",
+      "exportDataDesc": "Tüm verilerinizi dışa aktarır"
+    },
+    "about": {
+      "title": "Hakkında",
+      "version": "Uygulama Sürümü",
+      "rateApp": "Uygulamayı Değerlendir",
+      "contactUs": "İletişim",
+      "privacyPolicy": "Gizlilik Politikası",
+      "termsOfService": "Kullanım Koşulları"
+    }
+  },
+  "theme": {
+    "system": "Sistem",
+    "light": "Açık",
+    "dark": "Koyu"
+  },
+  "clearData": {
+    "title": "Verileri Temizle",
+    "message": "Tüm verileriniz silinecek. Bu işlem geri alınamaz.",
+    "confirm": "Temizle",
+    "cancel": "İptal"
+  }
+} 

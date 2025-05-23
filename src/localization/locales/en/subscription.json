@@ -1,0 +1,50 @@
+{
+  "title": "Premium Features",
+  "subtitle": "Unlimited scans, advanced features and more",
+  "features": {
+    "read": "NFC Reading",
+    "write": "NFC Writing",
+    "lock": "Tag Locking",
+    "password": "Password Protection",
+    "storage": "Comprehensive Data Storage",
+    "merge": "Data Merging",
+    "history": "Advanced History Management",
+    "export": "Data Export"
+  },
+  "plans": {
+    "weekly": {
+      "title": "Weekly",
+      "price": "$1.99",
+      "period": "weekly"
+    },
+    "monthly": {
+      "title": "Monthly",
+      "price": "$4.99",
+      "period": "monthly"
+    },
+    "yearly": {
+      "title": "Yearly",
+      "price": "$39.99",
+      "period": "yearly",
+      "discount": "33% off"
+    },
+    "lifetime": {
+      "title": "Lifetime",
+      "price": "$79.99",
+      "period": "one-time"
+    }
+  },
+  "currentPlan": "Current Plan",
+  "buttons": {
+    "subscribe": "Subscribe",
+    "change": "Change Subscription",
+    "restore": "Restore Purchases"
+  },
+  "messages": {
+    "success": "Premium subscription activated. All features are now available.",
+    "restored": "Your subscription has been successfully restored!",
+    "noRestored": "No active subscription found to restore.",
+    "error": "An error occurred during purchase. Please try again."
+  },
+  "disclaimer": "* Subscriptions automatically renew. You can cancel anytime in settings."
+} 

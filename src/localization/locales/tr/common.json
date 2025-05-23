@@ -1,0 +1,42 @@
+{
+  "app": {
+    "name": "NFC Reader Pro",
+    "version": "Sürüm {{version}}"
+  },
+  "navigation": {
+    "home": "Ana Sayfa",
+    "history": "Geçmiş",
+    "settings": "Ayarlar",
+    "subscription": "Premium"
+  },
+  "actions": {
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "share": "Paylaş",
+    "close": "Kapat",
+    "confirm": "Onayla",
+    "back": "Geri",
+    "next": "İleri",
+    "done": "Tamam",
+    "skip": "Geç"
+  },
+  "alerts": {
+    "success": "Başarılı",
+    "error": "Hata",
+    "warning": "Uyarı",
+    "info": "Bilgi"
+  },
+  "errors": {
+    "general": "Bir hata oluştu",
+    "network": "İnternet bağlantısı hatası",
+    "permission": "İzin gerekiyor"
+  },
+  "premium": {
+    "badge": "Premium",
+    "feature": "Premium Özellik",
+    "upgrade": "Premium'a Yükselt",
+    "unlockFeature": "Bu özelliği açın"
+  }
+} 

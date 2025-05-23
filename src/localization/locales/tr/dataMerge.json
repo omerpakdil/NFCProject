@@ -1,0 +1,46 @@
+{
+  "title": "NFC Veri Birleştirme",
+  "description": "Birleştirmek ve yeni etikete yazmak için taramaları seçin",
+  "selection": {
+    "title": "Tarama Seç",
+    "empty": "Birleştirilebilecek tarama bulunamadı",
+    "selected": "{{count}} tarama seçildi",
+    "maxLimit": "En fazla {{count}} tarama seçilebilir"
+  },
+  "filters": {
+    "title": "Taramaları Filtrele",
+    "dataType": "Veri Tipi",
+    "tagType": "Etiket Tipi",
+    "date": "Tarih"
+  },
+  "preview": {
+    "title": "Önizleme",
+    "empty": "Önizleme için tarama seçin",
+    "size": "Birleştirilmiş Veri Boyutu: {{size}}"
+  },
+  "buttons": {
+    "merge": "Birleştir ve Yaz",
+    "cancel": "İptal",
+    "clear": "Seçimi Temizle"
+  },
+  "status": {
+    "merging": "Veriler birleştiriliyor...",
+    "writing": "Etikete yazılıyor...",
+    "success": "Veriler başarıyla birleştirildi ve yazıldı",
+    "error": "Veri birleştirme hatası"
+  },
+  "alerts": {
+    "noSelection": {
+      "title": "Seçim Yok",
+      "message": "Lütfen birleştirmek için en az bir tarama seçin"
+    },
+    "sizeLimit": {
+      "title": "Boyut Sınırı Aşıldı",
+      "message": "Birleştirilmiş veri boyutu etiket kapasitesini aşıyor"
+    },
+    "incompatible": {
+      "title": "Uyumsuz Veriler",
+      "message": "Seçilen taramalar uyumsuz veri tipleri içeriyor"
+    }
+  }
+} 

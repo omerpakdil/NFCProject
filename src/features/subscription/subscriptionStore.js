@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import revenueCatService from './revenuecat';
 
 // Abonelik planları
 export const SUBSCRIPTION_PLANS = {
@@ -92,10 +93,21 @@ const useSubscriptionStore = create(
       subscriptionEndDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString(), // 30 gün sonra
       isLifetime: false,
       
+      // RevenueCat'ten alınan abonelik bilgileri
+      revenueCatCustomerInfo: null,
+      lastSyncTime: null,
+      
       // Abonelik durumu kontrol fonksiyonları
       isPremiumUser: () => {
-        const { currentPlan, subscriptionEndDate, isLifetime } = get();
+        const { currentPlan, subscriptionEndDate, isLifetime, revenueCatCustomerInfo } = get();
         
+        // İlk olarak RevenueCat ile kontrol et (eğer senkronize edilmiş ise)
+        if (revenueCatCustomerInfo) {
+          const hasPremium = revenueCatService.checkPremiumAccessFromInfo(revenueCatCustomerInfo);
+          if (hasPremium) return true;
+        }
+        
+        // RevenueCat bilgisi yoksa veya aktif abonelik yoksa yerel duruma bak
         // Ömür boyu erişim varsa veya abonelik süresi dolmamışsa premium
         if (isLifetime) return true;
         
@@ -109,16 +121,115 @@ const useSubscriptionStore = create(
       },
       
       // Belirli bir özelliğin kullanılabilirliğini kontrol et
-      canUseFeature: (featureId) => {
-        // Özellik premium değilse herkes kullanabilir
-        const feature = Object.values(FEATURES).find(f => f.id === featureId);
-        if (!feature || !feature.isPremium) return true;
-        
-        // Premium özellikse, sadece premium kullanıcılar kullanabilir
-        return get().isPremiumUser();
+      canUseFeature: async (featureId) => {
+        // Önce RevenueCat üzerinden kontrol etmeyi dene
+        try {
+          await revenueCatService.configure();
+          return await revenueCatService.canAccessFeature(featureId);
+        } catch (error) {
+          console.error('RevenueCat özellik erişim kontrolü hatası:', error);
+          
+          // Yerel kontrol - Özellik premium değilse herkes kullanabilir
+          const feature = Object.values(FEATURES).find(f => f.id === featureId);
+          if (!feature || !feature.isPremium) return true;
+          
+          // Premium özellikse, sadece premium kullanıcılar kullanabilir
+          return get().isPremiumUser();
+        }
       },
       
-      // Abonelik ayarla
+      // Abonelik durumunu RevenueCat ile senkronize et
+      syncWithRevenueCat: async () => {
+        try {
+          // RevenueCat'i başlat
+          await revenueCatService.configure();
+          
+          // Kullanıcı bilgilerini al
+          const customerInfo = await revenueCatService.getPurchaserInfo();
+          
+          // Senkronizasyon zamanını güncelle
+          const now = new Date();
+          
+          // RevenueCat'ten alınan bilgileri kaydet
+          set({ 
+            revenueCatCustomerInfo: customerInfo,
+            lastSyncTime: now.toISOString()
+          });
+          
+          // Premium durumunu kontrol et
+          const hasPremium = revenueCatService.checkPremiumAccessFromInfo(customerInfo);
+          
+          // Eğer RevenueCat'te premium varsa, yerelde de ayarla
+          if (hasPremium) {
+            // Eğer entitlement'ın süresini alabilirsek, onunla ayarlayabiliriz
+            const premiumEntitlement = customerInfo?.entitlements?.active?.premium;
+            
+            if (premiumEntitlement) {
+              // Lifetime planı mı kontrol et
+              const isLifetimePlan = premiumEntitlement.productIdentifier === PRICING[SUBSCRIPTION_PLANS.LIFETIME].productId;
+              
+              // Süre bilgisi
+              const expirationDate = premiumEntitlement.expirationDate ? new Date(premiumEntitlement.expirationDate) : null;
+              
+              // Plan tipini belirle
+              let planType = SUBSCRIPTION_PLANS.MONTHLY; // Varsayılan olarak aylık
+              
+              // Ürün tanımlayıcısına göre plan belirle
+              Object.entries(PRICING).forEach(([plan, details]) => {
+                if (premiumEntitlement.productIdentifier === details.productId) {
+                  planType = plan;
+                }
+              });
+              
+              // Aboneliği güncelle
+              set({ 
+                currentPlan: planType, 
+                subscriptionEndDate: expirationDate ? expirationDate.toISOString() : null,
+                isLifetime: isLifetimePlan
+              });
+            }
+          }
+          
+          return customerInfo;
+        } catch (error) {
+          console.error('RevenueCat senkronizasyon hatası:', error);
+          return null;
+        }
+      },
+      
+      // Paket satın al
+      purchasePackage: async (packageToPurchase) => {
+        try {
+          const result = await revenueCatService.purchasePackage(packageToPurchase);
+          if (result) {
+            // Satın alma başarılı, store'u güncelle
+            await get().syncWithRevenueCat();
+            return result;
+          }
+          return null;
+        } catch (error) {
+          console.error('Paket satın alma hatası:', error);
+          return null;
+        }
+      },
+      
+      // Satın almaları geri yükle
+      restorePurchases: async () => {
+        try {
+          const restoredInfo = await revenueCatService.restorePurchases();
+          if (restoredInfo) {
+            // Geri yükleme başarılı, store'u güncelle
+            await get().syncWithRevenueCat();
+            return restoredInfo;
+          }
+          return null;
+        } catch (error) {
+          console.error('Satın almaları geri yükleme hatası:', error);
+          return null;
+        }
+      },
+      
+      // Abonelik ayarla (yerel)
       setSubscription: (plan, endDate = null, isLifetime = false) => {
         set({ 
           currentPlan: plan, 
@@ -142,5 +253,21 @@ const useSubscriptionStore = create(
     }
   )
 );
+
+// RevenueCat için başlangıç işlemleri
+export const initializeRevenueCat = async () => {
+  try {
+    // RevenueCat'i yapılandır
+    await revenueCatService.configure();
+    
+    // Abonelik durumunu senkronize et
+    await useSubscriptionStore.getState().syncWithRevenueCat();
+    
+    return true;
+  } catch (error) {
+    console.error('RevenueCat başlatma hatası:', error);
+    return false;
+  }
+};
 
 export default useSubscriptionStore; 

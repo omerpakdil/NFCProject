@@ -1,0 +1,19 @@
+{
+  "welcome": {
+    "title": "Welcome to NFC Reader Pro",
+    "description": "Your app with powerful NFC reading, writing and management features."
+  },
+  "scan": {
+    "title": "Read NFC Tags",
+    "description": "Easily scan any NFC tag and view its contents."
+  },
+  "premium": {
+    "title": "Discover Premium Features",
+    "description": "Access advanced features like tag writing, locking, and password protection."
+  },
+  "buttons": {
+    "skip": "Skip",
+    "next": "Next",
+    "start": "Get Started"
+  }
+} 

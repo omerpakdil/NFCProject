@@ -1,0 +1,110 @@
+{
+  "title": "Write NFC Tag",
+  "dataType": {
+    "title": "Data Type",
+    "text": "Text",
+    "url": "URL",
+    "phone": "Phone Number",
+    "email": "Email",
+    "wifi": "Wi-Fi",
+    "contact": "Contact"
+  },
+  "content": {
+    "label": "Content",
+    "placeholder": {
+      "text": "Enter text to write...",
+      "url": "Enter URL (https://...)...",
+      "phone": "Enter phone number...",
+      "email": "Enter email address...",
+      "wifi": "Enter Wi-Fi password...",
+      "contact": "Enter contact details...",
+      "default": "Enter data..."
+    },
+    "helper": {
+      "url": "Make sure to include http:// or https:// at the beginning of the URL.",
+      "phone": "International format is recommended (e.g. +1xxx)."
+    }
+  },
+  "protection": {
+    "title": "Security Options",
+    "password": {
+      "title": "Password Protection",
+      "description": "Protect your tag with a password. Only those who know the password can view the content.",
+      "label": "Set Password",
+      "minLength": "Password (minimum 4 characters)",
+      "confirm": "Confirm Password",
+      "confirmPlaceholder": "Re-enter password",
+      "warning": "Don't forget your password! People without this password won't be able to view the tag content.",
+      "placeholder": "Enter password (optional)"
+    },
+    "lock": {
+      "title": "Lock Tag",
+      "description": "Lock the tag after writing. This action cannot be undone and the tag cannot be modified again.",
+      "infoTitle": "About Tag Locking",
+      "infoText": "Locking makes the tag permanently 'read-only'. This process makes physical changes and can never be undone. After locking, the tag content cannot be changed by any device.",
+      "warning": "Make sure before proceeding.",
+      "label": "Lock Tag",
+      "description": "Warning: Tag locking cannot be undone!"
+    }
+  },
+  "buttons": {
+    "write": "Write to Tag",
+    "cancel": "OK"
+  },
+  "status": {
+    "ready": "Ready to write",
+    "writing": "Writing... Place your device near the NFC tag.",
+    "success": "Successfully written to tag",
+    "successProtected": "Successfully encrypted and written to tag",
+    "error": "Error writing to tag",
+    "waiting": "Waiting for tag..."
+  },
+  "nfc": {
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "instructions": "Bring your device close to the tag to write.",
+    "error": "This device doesn't support NFC or NFC is disabled."
+  },
+  "alerts": {
+    "nfcUnavailable": {
+      "title": "NFC Unavailable",
+      "message": "This device doesn't support NFC or NFC is disabled."
+    },
+    "confirmLock": {
+      "title": "Lock Tag",
+      "message": "The NFC tag was successfully written. Do you want to lock the tag now? This action cannot be undone and the tag cannot be written again.",
+      "confirm": "Lock",
+      "cancel": "Cancel"
+    },
+    "passwordMismatch": {
+      "title": "Passwords Don't Match",
+      "message": "The passwords you entered don't match each other."
+    },
+    "passwordRequired": {
+      "title": "Password Required",
+      "message": "Please enter a password."
+    },
+    "passwordTooShort": {
+      "title": "Password Too Short",
+      "message": "Password must be at least 4 characters long."
+    },
+    "invalidContent": {
+      "title": "Error",
+      "message": "Please enter the data you want to write."
+    },
+    "lockSuccess": {
+      "title": "Locking Successful",
+      "message": "The NFC tag has been successfully locked. This tag is now read-only and its content cannot be changed."
+    },
+    "lockError": {
+      "title": "Locking Error",
+      "message": "An error occurred while locking the NFC tag"
+    },
+    "premiumFeature": {
+      "title": "Premium Feature",
+      "message": "This feature requires a premium subscription.",
+      "upgrade": "Upgrade",
+      "cancel": "Cancel"
+    }
+  }
+} 

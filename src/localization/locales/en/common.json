@@ -1,0 +1,52 @@
+{
+  "app": {
+    "name": "NFC Reader Pro",
+    "version": "Version {{version}}"
+  },
+  "navigation": {
+    "home": "Home",
+    "history": "History",
+    "settings": "Settings",
+    "subscription": "Premium"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "share": "Share",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "skip": "Skip",
+    "start": "Start",
+    "continue": "Continue",
+    "retry": "Retry",
+    "apply": "Apply",
+    "reset": "Reset"
+  },
+  "alerts": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info",
+    "confirm": "Are you sure?",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK"
+  },
+  "errors": {
+    "general": "An error occurred",
+    "network": "Network connection error",
+    "notFound": "Not found",
+    "permission": "Permission required"
+  },
+  "premium": {
+    "badge": "Premium",
+    "feature": "Premium Feature",
+    "upgrade": "Upgrade to Premium",
+    "unlockFeature": "Unlock this feature"
+  }
+} 

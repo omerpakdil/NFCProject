@@ -1,0 +1,50 @@
+{
+  "title": "Premium Özellikleri",
+  "subtitle": "Sınırsız tarama, gelişmiş özellikler ve daha fazlası",
+  "features": {
+    "read": "NFC Okuma",
+    "write": "NFC Yazma",
+    "lock": "Etiket Kilitleme",
+    "password": "Şifre Koruması",
+    "storage": "Kapsamlı Veri Depolama",
+    "merge": "Veri Birleştirme",
+    "history": "Gelişmiş Geçmiş Yönetimi",
+    "export": "Veri Dışa Aktarma"
+  },
+  "plans": {
+    "weekly": {
+      "title": "Haftalık",
+      "price": "₺19.99",
+      "period": "haftalık"
+    },
+    "monthly": {
+      "title": "Aylık",
+      "price": "₺49.99",
+      "period": "aylık"
+    },
+    "yearly": {
+      "title": "Yıllık",
+      "price": "₺399.99",
+      "period": "yıllık",
+      "discount": "33% indirim"
+    },
+    "lifetime": {
+      "title": "Ömür Boyu",
+      "price": "₺799.99",
+      "period": "tek seferlik"
+    }
+  },
+  "currentPlan": "Mevcut Plan",
+  "buttons": {
+    "subscribe": "Abone Ol",
+    "change": "Aboneliği Değiştir",
+    "restore": "Satın Almaları Geri Yükle"
+  },
+  "messages": {
+    "success": "Premium aboneliğiniz aktif edildi. Tüm özellikler artık kullanılabilir.",
+    "restored": "Aboneliğiniz başarıyla geri yüklendi!",
+    "noRestored": "Geri yüklenecek aktif bir abonelik bulunamadı.",
+    "error": "Satın alma işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin."
+  },
+  "disclaimer": "* Abonelikler otomatik olarak yenilenir. İstediğiniz zaman ayarlardan iptal edebilirsiniz."
+} 

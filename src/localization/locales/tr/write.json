@@ -1,0 +1,110 @@
+{
+  "title": "NFC Etiketi Yaz",
+  "dataType": {
+    "title": "Veri Tipi",
+    "text": "Metin",
+    "url": "URL",
+    "phone": "Telefon Numarası",
+    "email": "E-posta",
+    "wifi": "Wi-Fi",
+    "contact": "Kişi"
+  },
+  "content": {
+    "label": "İçerik",
+    "placeholder": {
+      "text": "Yazılacak metni girin...",
+      "url": "URL girin (https://...)...",
+      "phone": "Telefon numarası girin...",
+      "email": "E-posta adresi girin...",
+      "wifi": "Wi-Fi şifresini girin...",
+      "contact": "Kişi bilgilerini girin...",
+      "default": "Veri girin..."
+    },
+    "helper": {
+      "url": "URL'nin başına http:// veya https:// eklendiğinden emin olun.",
+      "phone": "Uluslararası format kullanmanız önerilir (ör. +90xxx)."
+    }
+  },
+  "protection": {
+    "title": "Güvenlik Seçenekleri",
+    "password": {
+      "title": "Şifre Koruması",
+      "description": "Etiketinizi şifre ile koruyun. Sadece şifreyi bilenler içeriği görebilir.",
+      "label": "Şifre Belirleyin",
+      "minLength": "Şifre (en az 4 karakter)",
+      "confirm": "Şifre Tekrar",
+      "confirmPlaceholder": "Şifreyi tekrar girin",
+      "warning": "Şifreyi unutmayın! Bu şifreye sahip olmayan kişiler etiketteki veriyi göremeyecek.",
+      "placeholder": "Şifre girin (isteğe bağlı)"
+    },
+    "lock": {
+      "title": "Etiketi Kilitle",
+      "description": "Yazma işleminden sonra etiketi kilitle. Bu işlem geri alınamaz ve etiket bir daha değiştirilemez.",
+      "infoTitle": "Etiket Kilitleme Hakkında",
+      "infoText": "Kilitleme işlemi etiketin kalıcı olarak 'salt okunur' hale gelmesini sağlar. Bu işlem fiziksel değişiklikler yapar ve asla geri alınamaz. Kilitledikten sonra, etiket içeriği hiçbir cihaz tarafından bir daha değiştirilemez.",
+      "warning": "Devam etmeden önce emin olun.",
+      "label": "Etiketi Kilitle",
+      "description": "Uyarı: Etiket kilitleme işlemi geri alınamaz!"
+    }
+  },
+  "buttons": {
+    "write": "Etikete Yaz",
+    "cancel": "Tamam"
+  },
+  "status": {
+    "ready": "Yazmaya hazır",
+    "writing": "Yazılıyor... NFC etiketini cihazınıza yaklaştırın.",
+    "success": "Etikete başarıyla yazıldı",
+    "successProtected": "NFC etiketi başarıyla şifrelendi ve yazıldı.",
+    "error": "Etikete yazma hatası",
+    "waiting": "Etiket bekleniyor..."
+  },
+  "nfc": {
+    "available": "Kullanılabilir",
+    "unavailable": "Kullanılamıyor",
+    "instructions": "Etiketi yazmak için cihazı yaklaştırın.",
+    "error": "Bu cihaz NFC desteklemiyor veya NFC devre dışı bırakılmış."
+  },
+  "alerts": {
+    "nfcUnavailable": {
+      "title": "NFC Kullanılamıyor",
+      "message": "Bu cihaz NFC desteklemiyor veya NFC devre dışı bırakılmış."
+    },
+    "confirmLock": {
+      "title": "Etiketi Kilitle",
+      "message": "NFC etiketi başarıyla yazıldı. Şimdi etiketi kilitlemek istiyor musunuz? Bu işlem geri alınamaz ve etiket bir daha yazılamaz.",
+      "confirm": "Kilitle",
+      "cancel": "İptal"
+    },
+    "passwordMismatch": {
+      "title": "Şifreler Eşleşmiyor",
+      "message": "Girdiğiniz şifreler birbiriyle eşleşmiyor."
+    },
+    "passwordRequired": {
+      "title": "Şifre Gerekli",
+      "message": "Lütfen bir şifre girin."
+    },
+    "passwordTooShort": {
+      "title": "Şifre Çok Kısa",
+      "message": "Şifre en az 4 karakter uzunluğunda olmalıdır."
+    },
+    "invalidContent": {
+      "title": "Hata",
+      "message": "Lütfen yazmak istediğiniz veriyi girin."
+    },
+    "lockSuccess": {
+      "title": "Kilitleme Başarılı",
+      "message": "NFC etiketi başarıyla kilitlendi. Artık bu etiket sadece okunabilir ve içeriği değiştirilemez."
+    },
+    "lockError": {
+      "title": "Kilitleme Hatası",
+      "message": "NFC etiketi kilitlenirken bir hata oluştu"
+    },
+    "premiumFeature": {
+      "title": "Premium Özellik",
+      "message": "Bu özellik premium abonelik gerektirir.",
+      "upgrade": "Yükselt",
+      "cancel": "İptal"
+    }
+  }
+} 

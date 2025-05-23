@@ -1,0 +1,35 @@
+{
+  "title": "Escáner NFC",
+  "subtitle": "Escanea y gestiona etiquetas",
+  "nfcStatus": {
+    "available": "NFC Disponible",
+    "notAvailable": "NFC No Disponible",
+    "availableDesc": "Acerca tu dispositivo para escanear una etiqueta.",
+    "notAvailableDesc": "Este dispositivo no es compatible con NFC o está desactivado."
+  },
+  "scan": {
+    "button": "Escanear Etiqueta NFC",
+    "modalTitle": "Escaneando NFC",
+    "modalText": "Acerca tu teléfono a una etiqueta NFC",
+    "startButton": "Comenzar Escaneo"
+  },
+  "recentScans": {
+    "title": "Escaneos Recientes",
+    "viewAll": "Ver Todo",
+    "empty": {
+      "title": "Historial de Escaneos",
+      "description": "Tus escaneos de etiquetas NFC aparecerán aquí."
+    }
+  },
+  "premium": {
+    "title": "Actualizar a Premium",
+    "subtitle": "Obtén escaneos ilimitados, funciones avanzadas y más con premium.",
+    "button": "Actualizar a Premium"
+  },
+  "storage": {
+    "limitReached": "Límite de Almacenamiento Alcanzado",
+    "remaining": "Escaneos Restantes: {{count}}",
+    "limitReachedDesc": "Los nuevos escaneos sobrescribirán los más antiguos",
+    "premiumDesc": "Los usuarios premium obtienen almacenamiento ilimitado"
+  }
+} 

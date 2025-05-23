@@ -1,0 +1,19 @@
+{
+  "welcome": {
+    "title": "NFC Reader Pro'ya Hoş Geldiniz",
+    "description": "Güçlü NFC okuma, yazma ve yönetim özelliklerine sahip uygulamanız."
+  },
+  "scan": {
+    "title": "NFC Etiketlerini Okuyun",
+    "description": "Herhangi bir NFC etiketini kolayca okuyun ve bilgilerini görüntüleyin."
+  },
+  "premium": {
+    "title": "Premium Özellikleri Keşfedin",
+    "description": "Etiket yazma, kilitleme ve şifre koruması gibi gelişmiş özelliklere erişin."
+  },
+  "buttons": {
+    "skip": "Geç",
+    "next": "İleri",
+    "start": "Başla"
+  }
+} 

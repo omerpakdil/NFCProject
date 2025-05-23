@@ -1,0 +1,48 @@
+{
+  "result": {
+    "title": "Resultado del Escaneo",
+    "tagType": "Tipo de Etiqueta",
+    "dataType": "Tipo de Datos",
+    "content": "Contenido",
+    "scannedAt": "Escaneado el"
+  },
+  "detail": {
+    "title": "Detalles del Escaneo",
+    "notes": "Notas",
+    "notesPlaceholder": "Toca para agregar notas...",
+    "category": "Categoría",
+    "categorySelect": "Seleccionar categoría",
+    "tags": "Etiquetas",
+    "tagsPlaceholder": "Agregar etiqueta...",
+    "favorite": "Agregar a Favoritos",
+    "unfavorite": "Quitar de Favoritos"
+  },
+  "write": {
+    "title": "Escribir NFC",
+    "dataType": "Tipo de Datos",
+    "content": "Contenido",
+    "contentPlaceholder": "Ingresa el contenido a escribir...",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Ingresa contraseña (opcional)",
+    "confirmPassword": "Confirmar Contraseña",
+    "lock": "Bloquear Etiqueta",
+    "lockWarning": "¡Advertencia: El bloqueo de la etiqueta no se puede deshacer!",
+    "writeButton": "Escribir",
+    "success": "Etiqueta NFC escrita con éxito",
+    "error": "Error al escribir NFC"
+  },
+  "merge": {
+    "title": "Fusionar Datos",
+    "selectScans": "Seleccionar escaneos para fusionar",
+    "selected": "{{count}} escaneos seleccionados",
+    "writeButton": "Fusionar y Escribir",
+    "success": "Datos fusionados y escritos con éxito",
+    "error": "Error al fusionar datos"
+  },
+  "protected": {
+    "title": "Contenido Protegido",
+    "enterPassword": "Ingresar Contraseña",
+    "wrongPassword": "Contraseña incorrecta",
+    "decrypt": "Descifrar"
+  }
+} 

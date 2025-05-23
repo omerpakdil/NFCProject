@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   SafeAreaView,
   StyleSheet,
@@ -13,6 +14,7 @@ import Button from '../components/Button';
 import { COLORS, SIZES } from '../constants/theme';
 
 // Store ve abonelik verileri
+import revenueCatService from '../features/subscription/revenuecat';
 import useSubscriptionStore, {
   FEATURES,
   PRICING,
@@ -20,22 +22,100 @@ import useSubscriptionStore, {
 } from '../features/subscription/subscriptionStore';
 
 const SubscriptionScreen = ({ navigation }) => {
+  // State
+  const [loading, setLoading] = useState(true);
+  const [packages, setPackages] = useState([]);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [processingPurchase, setProcessingPurchase] = useState(false);
+  
   // Store
-  const { isPremiumUser, setSubscription, currentPlan } = useSubscriptionStore();
+  const { 
+    isPremiumUser, 
+    currentPlan, 
+    purchasePackage, 
+    restorePurchases,
+    syncWithRevenueCat
+  } = useSubscriptionStore();
   
   // Seçili plan
   const [selectedPlan, setSelectedPlan] = useState(
     currentPlan !== SUBSCRIPTION_PLANS.FREE ? currentPlan : SUBSCRIPTION_PLANS.MONTHLY
   );
   
-  // Satın alma işlemi devam ediyor mu?
-  const [isPurchasing, setPurchasing] = useState(false);
+  // RevenueCat'ten teklifleri yükleme
+  useEffect(() => {
+    const loadOfferings = async () => {
+      setLoading(true);
+      try {
+        // RevenueCat'i başlat
+        await revenueCatService.configure();
+        
+        // Premium durumunu senkronize et
+        await syncWithRevenueCat();
+        
+        // Teklifleri al
+        const offerings = await revenueCatService.getCurrentOffering();
+        
+        if (offerings && offerings.availablePackages) {
+          console.log('RevenueCat teklifleri yüklendi:', offerings.availablePackages);
+          setPackages(offerings.availablePackages);
+          
+          // Varsayılan olarak ilk paketi seç (varsa)
+          if (offerings.availablePackages.length > 0) {
+            setSelectedPackage(offerings.availablePackages[0]);
+            
+            // Eski seçim sistemini de desteklemek için
+            const planType = offerings.availablePackages[0].packageType.toLowerCase();
+            const matchingPlan = Object.values(SUBSCRIPTION_PLANS).find(
+              plan => plan.toLowerCase().includes(planType)
+            );
+            if (matchingPlan) {
+              setSelectedPlan(matchingPlan);
+            }
+          }
+        } else {
+          console.log('RevenueCat teklifleri alınamadı veya boş');
+        }
+      } catch (error) {
+        console.error('RevenueCat teklifleri yüklenirken hata:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadOfferings();
+  }, []);
   
   // Premium satın alma
   const handlePurchase = async () => {
-    // Gerçek satın alma işlemlerini burada entegre edeceğiz
-    // Şimdilik sadece simüle ediyoruz
-    setPurchasing(true);
+    // RevenueCat paketleri varsa, onlarla satın alma yapalım
+    if (packages.length > 0 && selectedPackage) {
+      setProcessingPurchase(true);
+      
+      try {
+        // RevenueCat üzerinden satın alma
+        const result = await purchasePackage(selectedPackage);
+        
+        if (result) {
+          Alert.alert(
+            'Başarılı',
+            'Premium aboneliğiniz aktif edildi. Tüm özellikler artık kullanılabilir.',
+            [{ text: 'Tamam', onPress: () => navigation.goBack() }]
+          );
+        } else {
+          console.log('Satın alma başarısız veya iptal edildi');
+        }
+      } catch (error) {
+        console.error('Satın alma hatası:', error);
+        Alert.alert('Hata', 'Satın alma işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.');
+      } finally {
+        setProcessingPurchase(false);
+      }
+      return;
+    }
+    
+    // RevenueCat paketleri yoksa, eski simülasyon modunu kullan
+    setProcessingPurchase(true);
     
     try {
       setTimeout(() => {
@@ -71,7 +151,11 @@ const SubscriptionScreen = ({ navigation }) => {
         }
         
         // Abonelik bilgisini güncelle
-        setSubscription(selectedPlan, endDate ? endDate.toISOString() : null, isLifetime);
+        useSubscriptionStore.getState().setSubscription(
+          selectedPlan, 
+          endDate ? endDate.toISOString() : null, 
+          isLifetime
+        );
         
         // Başarılı bildirim
         Alert.alert(
@@ -80,18 +164,116 @@ const SubscriptionScreen = ({ navigation }) => {
           [{ text: 'Tamam', onPress: () => navigation.goBack() }]
         );
         
-        setPurchasing(false);
+        setProcessingPurchase(false);
       }, 1500); // Sahte işlem süresi
     } catch (error) {
       console.log('Satın alma hatası:', error);
       Alert.alert('Hata', 'Satın alma işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.');
-      setPurchasing(false);
+      setProcessingPurchase(false);
     }
+  };
+  
+  // Satın almaları geri yükle
+  const handleRestorePurchases = async () => {
+    setProcessingPurchase(true);
+    
+    try {
+      const restoredInfo = await restorePurchases();
+      
+      if (restoredInfo && isPremiumUser()) {
+        Alert.alert(
+          'Başarılı', 
+          'Aboneliğiniz başarıyla geri yüklendi!',
+          [{ text: 'Tamam', onPress: () => navigation.goBack() }]
+        );
+      } else {
+        Alert.alert('Bilgi', 'Geri yüklenecek aktif bir abonelik bulunamadı.');
+      }
+    } catch (error) {
+      console.error('Satın almaları geri yükleme hatası:', error);
+      Alert.alert('Hata', 'Abonelikler geri yüklenirken bir hata oluştu.');
+    } finally {
+      setProcessingPurchase(false);
+    }
+  };
+  
+  // RevenueCat paketi seç
+  const handleSelectPackage = (pkg) => {
+    setSelectedPackage(pkg);
+    
+    // Eski sistem için de seçimi güncelle
+    const planType = pkg.packageType.toLowerCase();
+    if (planType.includes('annual') || planType.includes('yearly')) {
+      setSelectedPlan(SUBSCRIPTION_PLANS.YEARLY);
+    } else if (planType.includes('month')) {
+      setSelectedPlan(SUBSCRIPTION_PLANS.MONTHLY);
+    } else if (planType.includes('week')) {
+      setSelectedPlan(SUBSCRIPTION_PLANS.WEEKLY);
+    } else if (planType.includes('lifetime') || planType.includes('forever')) {
+      setSelectedPlan(SUBSCRIPTION_PLANS.LIFETIME);
+    }
+  };
+  
+  // RevenueCat paketlerini render et
+  const renderRevenueCatPackages = () => {
+    if (loading) {
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+          <Text style={styles.loadingText}>Teklifler yükleniyor...</Text>
+        </View>
+      );
+    }
+    
+    if (packages.length === 0) {
+      return (
+        <View style={styles.plansContainer}>
+          {renderPlanCard(SUBSCRIPTION_PLANS.WEEKLY)}
+          {renderPlanCard(SUBSCRIPTION_PLANS.MONTHLY)}
+          {renderPlanCard(SUBSCRIPTION_PLANS.YEARLY)}
+          {renderPlanCard(SUBSCRIPTION_PLANS.LIFETIME)}
+        </View>
+      );
+    }
+    
+    return (
+      <View style={styles.revenueCatPackages}>
+        {packages.map((pkg) => (
+          <TouchableOpacity
+            key={pkg.identifier}
+            activeOpacity={0.8}
+            onPress={() => handleSelectPackage(pkg)}
+            style={[
+              styles.planCard,
+              selectedPackage?.identifier === pkg.identifier && styles.selectedPlanCard,
+            ]}
+          >
+            <View style={styles.planHeader}>
+              <Text style={styles.planTitle}>
+                {pkg.packageType === 'ANNUAL' ? 'YEARLY' : pkg.packageType}
+              </Text>
+              {pkg.packageType === 'ANNUAL' && (
+                <View style={styles.discountBadge}>
+                  <Text style={styles.discountText}>33% indirim</Text>
+                </View>
+              )}
+            </View>
+            
+            <Text style={styles.planPrice}>{pkg.product.priceString}</Text>
+            <Text style={styles.planPeriod}>
+              /{pkg.packageType === 'ANNUAL' ? 'yıllık' : 
+                pkg.packageType === 'MONTHLY' ? 'aylık' : 
+                pkg.packageType === 'WEEKLY' ? 'haftalık' : 'ömür boyu'}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
   };
   
   // Satın alma butonunu render et
   const renderPurchaseButton = () => {
-    if (isPremiumUser() && currentPlan === selectedPlan) {
+    if (isPremiumUser() && packages.length === 0) {
       return (
         <Button
           title="Mevcut Abonelik"
@@ -103,14 +285,26 @@ const SubscriptionScreen = ({ navigation }) => {
     }
     
     return (
-      <Button
-        title={isPremiumUser() ? "Aboneliği Değiştir" : "Abone Ol"}
-        type="premium"
-        onPress={handlePurchase}
-        loading={isPurchasing}
-        fullWidth
-        style={styles.purchaseButton}
-      />
+      <>
+        <Button
+          title={isPremiumUser() ? "Aboneliği Değiştir" : "Abone Ol"}
+          type="premium"
+          onPress={handlePurchase}
+          loading={processingPurchase}
+          fullWidth
+          style={styles.purchaseButton}
+        />
+        
+        <TouchableOpacity 
+          style={styles.restorePurchasesButton}
+          onPress={handleRestorePurchases}
+          disabled={processingPurchase}
+        >
+          <Text style={styles.restorePurchasesText}>
+            Satın Almaları Geri Yükle
+          </Text>
+        </TouchableOpacity>
+      </>
     );
   };
   
@@ -189,12 +383,7 @@ const SubscriptionScreen = ({ navigation }) => {
           </View>
 
           {/* Abonelik planları */}
-          <View style={styles.plansContainer}>
-            {renderPlanCard(SUBSCRIPTION_PLANS.WEEKLY)}
-            {renderPlanCard(SUBSCRIPTION_PLANS.MONTHLY)}
-            {renderPlanCard(SUBSCRIPTION_PLANS.YEARLY)}
-            {renderPlanCard(SUBSCRIPTION_PLANS.LIFETIME)}
-          </View>
+          {renderRevenueCatPackages()}
         </View>
         
         {/* Satın alma butonu */}
@@ -323,6 +512,34 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexWrap: 'wrap',
     marginBottom: 32,
+  },
+  revenueCatPackages: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    marginBottom: 32,
+    width: '100%',
+  },
+  loadingContainer: {
+    height: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+  loadingText: {
+    marginTop: 10,
+    color: COLORS.textSecondary,
+    fontSize: 14,
+  },
+  restorePurchasesButton: {
+    marginBottom: 15,
+    padding: 8,
+    alignSelf: 'center',
+  },
+  restorePurchasesText: {
+    color: COLORS.primary,
+    textAlign: 'center',
+    fontSize: 14,
   },
 });
 

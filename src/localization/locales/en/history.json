@@ -1,0 +1,38 @@
+{
+  "title": "Scan History",
+  "empty": {
+    "title": "No scans yet",
+    "description": "Your NFC tag scans will appear here."
+  },
+  "filters": {
+    "title": "Filters",
+    "dateRange": "Date Range",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "tagTypes": "Tag Types",
+    "dataTypes": "Data Types",
+    "categories": "Categories",
+    "tags": "Tags",
+    "onlyFavorites": "Only Favorites",
+    "onlySaved": "Only Saved",
+    "apply": "Apply",
+    "reset": "Reset",
+    "activeFilters": "{{count}} active filters"
+  },
+  "export": {
+    "title": "Export",
+    "format": "Select Format",
+    "button": "Export"
+  },
+  "clear": {
+    "title": "Clear History",
+    "message": "All your scan history will be deleted. This action cannot be undone.",
+    "confirm": "Clear",
+    "cancel": "Cancel"
+  },
+  "sort": {
+    "title": "Sort",
+    "newest": "Newest",
+    "oldest": "Oldest"
+  }
+} 

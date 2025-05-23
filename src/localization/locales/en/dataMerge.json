@@ -1,0 +1,46 @@
+{
+  "title": "Merge NFC Data",
+  "description": "Select scans to merge and write to a new tag",
+  "selection": {
+    "title": "Select Scans",
+    "empty": "No scans available for merging",
+    "selected": "{{count}} scans selected",
+    "maxLimit": "Maximum {{count}} scans can be selected"
+  },
+  "filters": {
+    "title": "Filter Scans",
+    "dataType": "Data Type",
+    "tagType": "Tag Type",
+    "date": "Date"
+  },
+  "preview": {
+    "title": "Merge Preview",
+    "empty": "Select scans to see preview",
+    "size": "Merged Data Size: {{size}}"
+  },
+  "buttons": {
+    "merge": "Merge and Write",
+    "cancel": "Cancel",
+    "clear": "Clear Selection"
+  },
+  "status": {
+    "merging": "Merging data...",
+    "writing": "Writing to tag...",
+    "success": "Successfully merged and written to tag",
+    "error": "Error merging data"
+  },
+  "alerts": {
+    "noSelection": {
+      "title": "No Selection",
+      "message": "Please select at least one scan to merge"
+    },
+    "sizeLimit": {
+      "title": "Size Limit Exceeded",
+      "message": "The merged data size exceeds the tag capacity"
+    },
+    "incompatible": {
+      "title": "Incompatible Data",
+      "message": "Selected scans contain incompatible data types"
+    }
+  }
+} 

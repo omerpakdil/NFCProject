@@ -1,0 +1,60 @@
+{
+  "title": "NFC Scanner",
+  "subtitle": "Scan and manage tags",
+  "nfcStatus": {
+    "available": "NFC Available",
+    "notAvailable": "NFC Not Available",
+    "availableDesc": "Bring your device close to scan a tag.",
+    "notAvailableDesc": "This device doesn't support NFC or it's disabled."
+  },
+  "scan": {
+    "button": "Scan NFC Tag",
+    "modalTitle": "NFC Scanning",
+    "modalText": "Bring your phone close to an NFC tag",
+    "startButton": "Start Scanning"
+  },
+  "recentScans": {
+    "title": "Recent Scans",
+    "viewAll": "View All",
+    "empty": {
+      "title": "Scan History",
+      "description": "Your NFC tag scans will appear here."
+    }
+  },
+  "premium": {
+    "title": "Upgrade to Premium",
+    "subtitle": "Get unlimited scans, advanced features and more with premium.",
+    "button": "Upgrade to Premium"
+  },
+  "storage": {
+    "limitReached": "Storage Limit Reached",
+    "remaining": "Remaining Scans: {{count}}",
+    "limitReachedDesc": "New scans will overwrite the oldest ones",
+    "premiumDesc": "Premium users get unlimited scan storage"
+  },
+  "writeButton": "Create New NFC Tag",
+  "mergeButton": "NFC Data Merge",
+  "storageLimit": {
+    "title": "Storage Status",
+    "limitReached": "Storage Limit Reached",
+    "remaining": "Remaining Scans: {{count}}",
+    "description": "Premium users can store unlimited scans",
+    "limitReachedDescription": "New scans will overwrite the oldest records",
+    "getUnlimited": "Get Unlimited Storage"
+  },
+  "scanModal": {
+    "title": "NFC Scan",
+    "description": "Bring your phone close to an NFC tag",
+    "startButton": "Start Scanning"
+  },
+  "noNfc": {
+    "title": "NFC Unavailable",
+    "description": "This device doesn't support NFC technology or NFC is disabled.",
+    "steps": {
+      "title": "What you can do:",
+      "checkSettings": "Make sure NFC is enabled in your settings",
+      "useCompatibleDevice": "Use an NFC compatible device",
+      "getInfo": "Get information about your device's NFC support"
+    }
+  }
+} 

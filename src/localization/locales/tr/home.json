@@ -1,0 +1,35 @@
+{
+  "title": "NFC Tarayıcı",
+  "subtitle": "Etiketleri tarayın ve yönetin",
+  "nfcStatus": {
+    "available": "NFC Kullanılabilir",
+    "notAvailable": "NFC Kullanılamıyor",
+    "availableDesc": "Etiketi taramak için cihazı yaklaştırın.",
+    "notAvailableDesc": "Bu cihaz NFC desteklemiyor veya devre dışı bırakılmış."
+  },
+  "scan": {
+    "button": "NFC Etiketi Tara",
+    "modalTitle": "NFC Tarama",
+    "modalText": "Telefonunuzu NFC etiketine yaklaştırın",
+    "startButton": "Taramayı Başlat"
+  },
+  "recentScans": {
+    "title": "Son Taramalar",
+    "viewAll": "Tümünü Gör",
+    "empty": {
+      "title": "Tarama Geçmişi",
+      "description": "NFC etiketlerini tarayarak geçmişinizi burada görebilirsiniz."
+    }
+  },
+  "premium": {
+    "title": "Premium'a Yükselt",
+    "subtitle": "Sınırsız tarama, gelişmiş özellikler ve daha fazlası için premium'a yükseltin.",
+    "button": "Premium'a Yükselt"
+  },
+  "storage": {
+    "limitReached": "Depolama Limiti Aşıldı",
+    "remaining": "Kalan Tarama: {{count}}",
+    "limitReachedDesc": "Yeni taramalar en eski kayıtların üzerine yazılacak",
+    "premiumDesc": "Premium kullanıcılar sınırsız tarama depolayabilir"
+  }
+}

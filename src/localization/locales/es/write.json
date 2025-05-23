@@ -1,0 +1,110 @@
+{
+  "title": "Escribir Etiqueta NFC",
+  "dataType": {
+    "title": "Tipo de Datos",
+    "text": "Texto",
+    "url": "URL",
+    "phone": "Número de Teléfono",
+    "email": "Correo Electrónico",
+    "wifi": "Wi-Fi",
+    "contact": "Contacto"
+  },
+  "content": {
+    "label": "Contenido",
+    "placeholder": {
+      "text": "Ingrese texto para escribir...",
+      "url": "Ingrese URL (https://...)...",
+      "phone": "Ingrese número de teléfono...",
+      "email": "Ingrese correo electrónico...",
+      "wifi": "Ingrese contraseña Wi-Fi...",
+      "contact": "Ingrese detalles de contacto...",
+      "default": "Ingrese datos..."
+    },
+    "helper": {
+      "url": "Asegúrese de incluir http:// o https:// al principio de la URL.",
+      "phone": "Se recomienda usar formato internacional (ej. +34xxx)."
+    }
+  },
+  "protection": {
+    "title": "Opciones de Seguridad",
+    "password": {
+      "title": "Protección con Contraseña",
+      "description": "Proteja su etiqueta con una contraseña. Solo quienes conozcan la contraseña podrán ver el contenido.",
+      "label": "Establecer Contraseña",
+      "minLength": "Contraseña (mínimo 4 caracteres)",
+      "confirm": "Confirmar Contraseña",
+      "confirmPlaceholder": "Vuelva a ingresar la contraseña",
+      "warning": "¡No olvide su contraseña! Las personas sin esta contraseña no podrán ver el contenido de la etiqueta.",
+      "placeholder": "Ingrese contraseña (opcional)"
+    },
+    "lock": {
+      "title": "Bloquear Etiqueta",
+      "description": "Bloquear la etiqueta después de escribir. Esta acción no se puede deshacer y la etiqueta no se puede modificar nuevamente.",
+      "infoTitle": "Acerca del Bloqueo de Etiquetas",
+      "infoText": "El bloqueo hace que la etiqueta sea permanentemente 'de solo lectura'. Este proceso realiza cambios físicos y nunca se puede deshacer. Después del bloqueo, el contenido de la etiqueta no puede ser cambiado por ningún dispositivo.",
+      "warning": "Asegúrese antes de continuar.",
+      "label": "Bloquear Etiqueta",
+      "description": "¡Advertencia: El bloqueo de etiquetas no se puede deshacer!"
+    }
+  },
+  "buttons": {
+    "write": "Escribir en Etiqueta",
+    "cancel": "Aceptar"
+  },
+  "status": {
+    "ready": "Listo para escribir",
+    "writing": "Escribiendo... Acerque su dispositivo a la etiqueta NFC.",
+    "success": "Escrito exitosamente en la etiqueta",
+    "successProtected": "Encriptado y escrito exitosamente en la etiqueta",
+    "error": "Error al escribir en la etiqueta",
+    "waiting": "Esperando etiqueta..."
+  },
+  "nfc": {
+    "available": "Disponible",
+    "unavailable": "No Disponible",
+    "instructions": "Acerque su dispositivo a la etiqueta para escribir.",
+    "error": "Este dispositivo no admite NFC o NFC está desactivado."
+  },
+  "alerts": {
+    "nfcUnavailable": {
+      "title": "NFC No Disponible",
+      "message": "Este dispositivo no admite NFC o NFC está desactivado."
+    },
+    "confirmLock": {
+      "title": "Bloquear Etiqueta",
+      "message": "La etiqueta NFC se escribió correctamente. ¿Desea bloquear la etiqueta ahora? Esta acción no se puede deshacer y la etiqueta no se puede volver a escribir.",
+      "confirm": "Bloquear",
+      "cancel": "Cancelar"
+    },
+    "passwordMismatch": {
+      "title": "Las Contraseñas No Coinciden",
+      "message": "Las contraseñas que ingresó no coinciden entre sí."
+    },
+    "passwordRequired": {
+      "title": "Contraseña Requerida",
+      "message": "Por favor ingrese una contraseña."
+    },
+    "passwordTooShort": {
+      "title": "Contraseña Demasiado Corta",
+      "message": "La contraseña debe tener al menos 4 caracteres."
+    },
+    "invalidContent": {
+      "title": "Error",
+      "message": "Por favor ingrese los datos que desea escribir."
+    },
+    "lockSuccess": {
+      "title": "Bloqueo Exitoso",
+      "message": "La etiqueta NFC ha sido bloqueada exitosamente. Esta etiqueta ahora es de solo lectura y su contenido no se puede cambiar."
+    },
+    "lockError": {
+      "title": "Error de Bloqueo",
+      "message": "Ocurrió un error al bloquear la etiqueta NFC"
+    },
+    "premiumFeature": {
+      "title": "Función Premium",
+      "message": "Esta función requiere una suscripción premium.",
+      "upgrade": "Actualizar",
+      "cancel": "Cancelar"
+    }
+  }
+} 

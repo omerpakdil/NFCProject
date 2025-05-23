@@ -1,0 +1,38 @@
+{
+  "title": "Tarama Geçmişi",
+  "empty": {
+    "title": "Henüz tarama yok",
+    "description": "NFC etiketlerini taradıkça burada görüntülenecekler."
+  },
+  "filters": {
+    "title": "Filtreler",
+    "dateRange": "Tarih Aralığı",
+    "startDate": "Başlangıç Tarihi",
+    "endDate": "Bitiş Tarihi",
+    "tagTypes": "Etiket Tipleri",
+    "dataTypes": "Veri Tipleri",
+    "categories": "Kategoriler",
+    "tags": "Etiketler",
+    "onlyFavorites": "Sadece Favoriler",
+    "onlySaved": "Sadece Kaydedilenler",
+    "apply": "Uygula",
+    "reset": "Sıfırla",
+    "activeFilters": "{{count}} aktif filtre"
+  },
+  "export": {
+    "title": "Dışa Aktar",
+    "format": "Format Seç",
+    "button": "Dışa Aktar"
+  },
+  "clear": {
+    "title": "Geçmişi Temizle",
+    "message": "Tüm tarama geçmişiniz silinecek. Bu işlem geri alınamaz.",
+    "confirm": "Temizle",
+    "cancel": "İptal"
+  },
+  "sort": {
+    "title": "Sıralama",
+    "newest": "En Yeni",
+    "oldest": "En Eski"
+  }
+} 

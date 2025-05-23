@@ -11,6 +11,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { COLORS } from './src/constants/theme';
 import NotificationService from './src/features/notifications/notificationService';
+import { initializeRevenueCat } from './src/features/subscription/subscriptionStore';
 import Navigation from './src/navigation/index';
 
 // Splash ekranını göstermeye devam et
@@ -43,6 +44,10 @@ export default function App() {
         
         // Bildirim izinlerini kontrol et
         await NotificationService.checkPermissions();
+        
+        // RevenueCat'i başlat
+        await initializeRevenueCat()
+          .catch(err => console.warn('RevenueCat başlatılamadı:', err));
         
         // Gerekli kaynakların yüklenmesi için kısa bir bekleme
         await new Promise(resolve => setTimeout(resolve, 500));

@@ -1,0 +1,45 @@
+{
+  "title": "Settings",
+  "sections": {
+    "general": {
+      "title": "General",
+      "language": "Language",
+      "theme": "Theme",
+      "hapticFeedback": "Haptic Feedback",
+      "notifications": "Notifications"
+    },
+    "premium": {
+      "title": "Premium",
+      "status": "Premium Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "manageSubscription": "Manage Subscription"
+    },
+    "data": {
+      "title": "Data & Privacy",
+      "clearHistory": "Clear Scan History",
+      "clearHistoryDesc": "Deletes all your scan history",
+      "exportData": "Export Data",
+      "exportDataDesc": "Export all your data"
+    },
+    "about": {
+      "title": "About",
+      "version": "App Version",
+      "rateApp": "Rate App",
+      "contactUs": "Contact Us",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service"
+    }
+  },
+  "theme": {
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "clearData": {
+    "title": "Clear Data",
+    "message": "All your data will be deleted. This action cannot be undone.",
+    "confirm": "Clear",
+    "cancel": "Cancel"
+  }
+} 

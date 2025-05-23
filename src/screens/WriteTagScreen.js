@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import LottieView from 'lottie-react-native';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -23,6 +24,9 @@ import NfcService, { DATA_TYPES } from '../features/nfc/nfcService';
 import useSubscriptionStore from '../features/subscription/subscriptionStore';
 
 const WriteTagScreen = ({ navigation, route }) => {
+  // Translation hook
+  const { t } = useTranslation('write');
+  
   // Animation ref
   const animationRef = useRef(null);
   
@@ -53,16 +57,16 @@ const WriteTagScreen = ({ navigation, route }) => {
     if (!canUseFeature('write')) {
       setAlertConfig({
         visible: true,
-        title: 'Premium Özellik',
-        message: 'NFC yazma özelliği sadece premium aboneler için kullanılabilir.',
+        title: t('alerts.premiumFeature.title'),
+        message: t('alerts.premiumFeature.message'),
         type: 'info',
         buttons: [
           { 
-            text: 'Premium\'a Geç', 
+            text: t('alerts.premiumFeature.upgrade'), 
             onPress: () => navigation.navigate('Subscription') 
           },
           { 
-            text: 'Geri Dön', 
+            text: t('alerts.premiumFeature.cancel'), 
             style: 'cancel',
             onPress: () => navigation.goBack() 
           },
@@ -79,12 +83,12 @@ const WriteTagScreen = ({ navigation, route }) => {
       if (!nfcAvailable) {
         setAlertConfig({
           visible: true,
-          title: 'NFC Kullanılamıyor',
-          message: 'Bu cihaz NFC desteklemiyor veya NFC devre dışı bırakılmış.',
+          title: t('alerts.nfcUnavailable.title'),
+          message: t('alerts.nfcUnavailable.message'),
           type: 'error',
           buttons: [
             { 
-              text: 'Tamam', 
+              text: t('buttons.cancel'), 
               onPress: () => navigation.goBack() 
             }
           ]
@@ -104,7 +108,7 @@ const WriteTagScreen = ({ navigation, route }) => {
     return () => {
       NfcService.cleanup();
     };
-  }, []);
+  }, [t]);
   
   // Şifre kontrolü
   const validatePassword = () => {
@@ -113,10 +117,10 @@ const WriteTagScreen = ({ navigation, route }) => {
     if (!password) {
       setAlertConfig({
         visible: true,
-        title: 'Şifre Gerekli',
-        message: 'Lütfen bir şifre girin.',
+        title: t('alerts.passwordRequired.title'),
+        message: t('alerts.passwordRequired.message'),
         type: 'error',
-        buttons: [{ text: 'Tamam' }]
+        buttons: [{ text: t('buttons.cancel') }]
       });
       return false;
     }
@@ -124,10 +128,10 @@ const WriteTagScreen = ({ navigation, route }) => {
     if (password.length < 4) {
       setAlertConfig({
         visible: true,
-        title: 'Şifre Çok Kısa',
-        message: 'Şifre en az 4 karakter uzunluğunda olmalıdır.',
+        title: t('alerts.passwordTooShort.title'),
+        message: t('alerts.passwordTooShort.message'),
         type: 'error',
-        buttons: [{ text: 'Tamam' }]
+        buttons: [{ text: t('buttons.cancel') }]
       });
       return false;
     }
@@ -135,10 +139,10 @@ const WriteTagScreen = ({ navigation, route }) => {
     if (password !== confirmPassword) {
       setAlertConfig({
         visible: true,
-        title: 'Şifreler Eşleşmiyor',
-        message: 'Girdiğiniz şifreler birbiriyle eşleşmiyor.',
+        title: t('alerts.passwordMismatch.title'),
+        message: t('alerts.passwordMismatch.message'),
         type: 'error',
-        buttons: [{ text: 'Tamam' }]
+        buttons: [{ text: t('buttons.cancel') }]
       });
       return false;
     }
@@ -151,10 +155,10 @@ const WriteTagScreen = ({ navigation, route }) => {
     if (!dataValue.trim()) {
       setAlertConfig({
         visible: true,
-        title: 'Hata',
-        message: 'Lütfen yazmak istediğiniz veriyi girin.',
+        title: t('alerts.invalidContent.title'),
+        message: t('alerts.invalidContent.message'),
         type: 'error',
-        buttons: [{ text: 'Tamam' }]
+        buttons: [{ text: t('buttons.cancel') }]
       });
       return;
     }
@@ -218,25 +222,25 @@ const WriteTagScreen = ({ navigation, route }) => {
       setTimeout(() => {
         setAlertConfig({
           visible: true,
-          title: 'Etiketi Kilitle',
-          message: 'NFC etiketi başarıyla yazıldı. Şimdi etiketi kilitlemek istiyor musunuz? Bu işlem geri alınamaz ve etiket bir daha yazılamaz.',
+          title: t('alerts.confirmLock.title'),
+          message: t('alerts.confirmLock.message'),
           type: 'warning',
           buttons: [
             { 
-              text: 'İptal', 
+              text: t('buttons.cancel'), 
               style: 'cancel',
               onPress: () => {
                 setAlertConfig({
                   visible: true,
-                  title: 'Başarılı',
-                  message: message || 'NFC etiketi başarıyla yazıldı.',
+                  title: t('status.success'),
+                  message: message || t('status.success'),
                   type: 'success',
-                  buttons: [{ text: 'Tamam' }]
+                  buttons: [{ text: t('buttons.cancel') }]
                 });
               }
             },
             { 
-              text: 'Kilitle', 
+              text: t('alerts.confirmLock.confirm'), 
               style: 'destructive',
               onPress: handleLockTag
             }
@@ -248,10 +252,10 @@ const WriteTagScreen = ({ navigation, route }) => {
       setTimeout(() => {
         setAlertConfig({
           visible: true,
-          title: 'Başarılı',
-          message: message || (shouldPasswordProtect ? 'NFC etiketi başarıyla şifrelendi ve yazıldı.' : 'NFC etiketi başarıyla yazıldı.'),
+          title: t('status.success'),
+          message: message || (shouldPasswordProtect ? t('status.successProtected') : t('status.success')),
           type: 'success',
-          buttons: [{ text: 'Tamam' }]
+          buttons: [{ text: t('buttons.cancel') }]
         });
       }, 1200);
     }
@@ -263,10 +267,10 @@ const WriteTagScreen = ({ navigation, route }) => {
     setWriteStatus('error');
     setAlertConfig({
       visible: true,
-      title: 'Hata',
-      message: error || 'NFC etiketi yazılırken bir hata oluştu.',
+      title: t('status.error'),
+      message: error || t('status.error'),
       type: 'error',
-      buttons: [{ text: 'Tamam' }]
+      buttons: [{ text: t('buttons.cancel') }]
     });
   };
   
@@ -282,10 +286,10 @@ const WriteTagScreen = ({ navigation, route }) => {
           setIsLocking(false);
           setAlertConfig({
             visible: true,
-            title: 'Kilitleme Başarılı',
-            message: 'NFC etiketi başarıyla kilitlendi. Artık bu etiket sadece okunabilir ve içeriği değiştirilemez.',
+            title: t('alerts.lockSuccess.title'),
+            message: t('alerts.lockSuccess.message'),
             type: 'success',
-            buttons: [{ text: 'Tamam' }]
+            buttons: [{ text: t('buttons.cancel') }]
           });
         },
         // Hata callback
@@ -293,10 +297,10 @@ const WriteTagScreen = ({ navigation, route }) => {
           setIsLocking(false);
           setAlertConfig({
             visible: true,
-            title: 'Kilitleme Hatası',
-            message: error || 'NFC etiketi kilitlenirken bir hata oluştu.',
+            title: t('alerts.lockError.title'),
+            message: error || t('alerts.lockError.message'),
             type: 'error',
-            buttons: [{ text: 'Tamam' }]
+            buttons: [{ text: t('buttons.cancel') }]
           });
         }
       );
@@ -305,10 +309,10 @@ const WriteTagScreen = ({ navigation, route }) => {
       setIsLocking(false);
       setAlertConfig({
         visible: true,
-        title: 'Kilitleme Hatası',
-        message: 'NFC etiketi kilitlenirken bir hata oluştu: ' + error.message,
+        title: t('alerts.lockError.title'),
+        message: t('alerts.lockError.message') + ': ' + error.message,
         type: 'error',
-        buttons: [{ text: 'Tamam' }]
+        buttons: [{ text: t('buttons.cancel') }]
       });
     }
   };
@@ -359,7 +363,7 @@ const WriteTagScreen = ({ navigation, route }) => {
               style={styles.statusAnimation}
             />
             <Text style={styles.statusText}>
-              Yazılıyor... NFC etiketini cihazınıza yaklaştırın.
+              {t('status.writing')}
             </Text>
           </>
         ) : writeStatus === 'success' ? (
@@ -370,7 +374,7 @@ const WriteTagScreen = ({ navigation, route }) => {
               loop={false}
               style={styles.statusAnimation}
             />
-            <Text style={styles.successText}>Yazma Başarılı!</Text>
+            <Text style={styles.successText}>{t('status.success')}</Text>
           </>
         ) : (
           <>
@@ -380,7 +384,7 @@ const WriteTagScreen = ({ navigation, route }) => {
               loop={false}
               style={styles.statusAnimation}
             />
-            <Text style={styles.errorText}>Yazma Hatası</Text>
+            <Text style={styles.errorText}>{t('status.error')}</Text>
           </>
         )}
       </View>
@@ -396,7 +400,7 @@ const WriteTagScreen = ({ navigation, route }) => {
         >
           <Ionicons name="arrow-back" size={24} color={COLORS.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>NFC Etiketi Yaz</Text>
+        <Text style={styles.headerTitle}>{t('title')}</Text>
         <View style={styles.emptySpace} />
       </View>
       
@@ -417,12 +421,12 @@ const WriteTagScreen = ({ navigation, route }) => {
               </View>
               <View>
                 <Text style={styles.infoTitle}>
-                  NFC {hasNfc ? 'Kullanılabilir' : 'Kullanılamıyor'}
+                  NFC {hasNfc ? t('nfc.available') : t('nfc.unavailable')}
                 </Text>
                 <Text style={styles.infoText}>
                   {hasNfc 
-                    ? 'Etiketi yazmak için cihazı yaklaştırın.' 
-                    : 'Bu cihaz NFC desteklemiyor veya devre dışı bırakılmış.'}
+                    ? t('nfc.instructions') 
+                    : t('nfc.error')}
                 </Text>
               </View>
             </View>
@@ -430,40 +434,40 @@ const WriteTagScreen = ({ navigation, route }) => {
           
           {/* Veri Tipi Seçimi */}
           <Card style={styles.sectionCard}>
-            <Text style={styles.sectionTitle}>Veri Tipi</Text>
+            <Text style={styles.sectionTitle}>{t('dataType.title')}</Text>
             
             <View style={styles.typeButtonsContainer}>
-              {renderDataTypeButton(DATA_TYPES.TEXT, 'text', 'Metin')}
-              {renderDataTypeButton(DATA_TYPES.URL, 'link', 'URL')}
-              {renderDataTypeButton(DATA_TYPES.PHONE, 'call', 'Telefon')}
-              {renderDataTypeButton(DATA_TYPES.EMAIL, 'mail', 'E-posta')}
+              {renderDataTypeButton(DATA_TYPES.TEXT, 'text', t('dataType.text'))}
+              {renderDataTypeButton(DATA_TYPES.URL, 'link', t('dataType.url'))}
+              {renderDataTypeButton(DATA_TYPES.PHONE, 'call', t('dataType.phone'))}
+              {renderDataTypeButton(DATA_TYPES.EMAIL, 'mail', t('dataType.email'))}
             </View>
           </Card>
           
           {/* Veri İçeriği */}
           <Card style={styles.sectionCard}>
-            <Text style={styles.sectionTitle}>Veri İçeriği</Text>
+            <Text style={styles.sectionTitle}>{t('content.label')}</Text>
             
             {dataType === DATA_TYPES.URL && (
               <Text style={styles.helperText}>
-                URL'nin başına http:// veya https:// eklendiğinden emin olun.
+                {t('content.helper.url')}
               </Text>
             )}
             
             {dataType === DATA_TYPES.PHONE && (
               <Text style={styles.helperText}>
-                Uluslararası format kullanmanız önerilir (ör. +90xxx).
+                {t('content.helper.phone')}
               </Text>
             )}
             
             <TextInput
               style={styles.dataInput}
               placeholder={
-                dataType === DATA_TYPES.TEXT ? "Metin girin..." :
-                dataType === DATA_TYPES.URL ? "URL girin (https://...)" :
-                dataType === DATA_TYPES.PHONE ? "Telefon numarası girin" :
-                dataType === DATA_TYPES.EMAIL ? "E-posta adresi girin" :
-                "Veri girin..."
+                dataType === DATA_TYPES.TEXT ? t('content.placeholder.text') :
+                dataType === DATA_TYPES.URL ? t('content.placeholder.url') :
+                dataType === DATA_TYPES.PHONE ? t('content.placeholder.phone') :
+                dataType === DATA_TYPES.EMAIL ? t('content.placeholder.email') :
+                t('content.placeholder.default')
               }
               placeholderTextColor={COLORS.textDisabled}
               value={dataValue}
@@ -484,7 +488,7 @@ const WriteTagScreen = ({ navigation, route }) => {
           
           {/* Güvenlik Seçenekleri (Premium) */}
           <Card style={styles.sectionCard}>
-            <Text style={styles.sectionTitle}>Güvenlik Seçenekleri</Text>
+            <Text style={styles.sectionTitle}>{t('protection.title')}</Text>
             
             {/* Şifre Koruma Seçeneği */}
             <TouchableOpacity 
@@ -510,12 +514,12 @@ const WriteTagScreen = ({ navigation, route }) => {
               
               <View style={styles.securityOptionContent}>
                 <View style={styles.securityOptionHeader}>
-                  <Text style={styles.securityOptionTitle}>Şifre Koruması</Text>
+                  <Text style={styles.securityOptionTitle}>{t('protection.password.title')}</Text>
                   {!canUseFeature('password_protection') && <Ionicons name="star" size={18} color={COLORS.premium} />}
                 </View>
                 
                 <Text style={styles.securityOptionDescription}>
-                  Etiketinizi şifre ile koruyun. Sadece şifreyi bilenler içeriği görebilir.
+                  {t('protection.password.description')}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -523,10 +527,10 @@ const WriteTagScreen = ({ navigation, route }) => {
             {/* Şifre alanı - şifre koruması seçildiyse göster */}
             {shouldPasswordProtect && canUseFeature('password_protection') && (
               <View style={styles.passwordContainer}>
-                <Text style={styles.passwordLabel}>Şifre Belirleyin</Text>
+                <Text style={styles.passwordLabel}>{t('protection.password.label')}</Text>
                 <TextInput
                   style={styles.passwordInput}
-                  placeholder="Şifre (en az 4 karakter)"
+                  placeholder={t('protection.password.minLength')}
                   placeholderTextColor={COLORS.textDisabled}
                   value={password}
                   onChangeText={setPassword}
@@ -534,10 +538,10 @@ const WriteTagScreen = ({ navigation, route }) => {
                   autoCapitalize="none"
                 />
                 
-                <Text style={[styles.passwordLabel, { marginTop: 12 }]}>Şifre Tekrar</Text>
+                <Text style={[styles.passwordLabel, { marginTop: 12 }]}>{t('protection.password.confirm')}</Text>
                 <TextInput
                   style={styles.passwordInput}
-                  placeholder="Şifreyi tekrar girin"
+                  placeholder={t('protection.password.confirmPlaceholder')}
                   placeholderTextColor={COLORS.textDisabled}
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
@@ -548,7 +552,7 @@ const WriteTagScreen = ({ navigation, route }) => {
                 <View style={styles.passwordInfo}>
                   <Ionicons name="information-circle" size={18} color={COLORS.primary} />
                   <Text style={styles.passwordInfoText}>
-                    Şifreyi unutmayın! Bu şifreye sahip olmayan kişiler etiketteki veriyi göremeyecek.
+                    {t('protection.password.warning')}
                   </Text>
                 </View>
               </View>
@@ -572,12 +576,12 @@ const WriteTagScreen = ({ navigation, route }) => {
               
               <View style={styles.securityOptionContent}>
                 <View style={styles.securityOptionHeader}>
-                  <Text style={styles.securityOptionTitle}>Etiketi Kilitle</Text>
+                  <Text style={styles.securityOptionTitle}>{t('protection.lock.title')}</Text>
                   <Ionicons name="lock-closed" size={18} color={COLORS.primary} />
                 </View>
                 
                 <Text style={styles.securityOptionDescription}>
-                  Yazma işleminden sonra etiketi kilitle. Bu işlem geri alınamaz ve etiket bir daha değiştirilemez.
+                  {t('protection.lock.description')}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -586,18 +590,16 @@ const WriteTagScreen = ({ navigation, route }) => {
               <View style={styles.helpBox}>
                 <View style={styles.helpIconContainer}>
                   <Ionicons name="information-circle" size={22} color={COLORS.info} />
-                  <Text style={styles.helpTitle}>Etiket Kilitleme Hakkında</Text>
+                  <Text style={styles.helpTitle}>{t('protection.lock.infoTitle')}</Text>
                 </View>
                 <View style={styles.helpContent}>
                   <Text style={styles.helpText}>
-                    Kilitleme işlemi etiketin kalıcı olarak 'salt okunur' hale gelmesini sağlar. 
-                    Bu işlem fiziksel değişiklikler yapar ve asla geri alınamaz. Kilitledikten 
-                    sonra, etiket içeriği hiçbir cihaz tarafından bir daha değiştirilemez.
+                    {t('protection.lock.infoText')}
                   </Text>
                   <View style={styles.warningContainer}>
                     <Ionicons name="warning" size={16} color={COLORS.warning} />
                     <Text style={styles.warningText}>
-                      Devam etmeden önce emin olun.
+                      {t('protection.lock.warning')}
                     </Text>
                   </View>
                 </View>
@@ -610,7 +612,7 @@ const WriteTagScreen = ({ navigation, route }) => {
           
           {/* Yazma Butonu */}
           <Button
-            title="NFC Etiketi Yaz"
+            title={t('buttons.write')}
             onPress={handleWrite}
             disabled={!hasNfc || isWriting || isLocking || !dataValue.trim()}
             loading={isWriting || isLocking}

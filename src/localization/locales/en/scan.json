@@ -1,0 +1,48 @@
+{
+  "result": {
+    "title": "Scan Result",
+    "tagType": "Tag Type",
+    "dataType": "Data Type",
+    "content": "Content",
+    "scannedAt": "Scanned At"
+  },
+  "detail": {
+    "title": "Scan Detail",
+    "notes": "Notes",
+    "notesPlaceholder": "Tap to add notes...",
+    "category": "Category",
+    "categorySelect": "Select category",
+    "tags": "Tags",
+    "tagsPlaceholder": "Add tag...",
+    "favorite": "Add to Favorites",
+    "unfavorite": "Remove from Favorites"
+  },
+  "write": {
+    "title": "Write NFC",
+    "dataType": "Data Type",
+    "content": "Content",
+    "contentPlaceholder": "Enter content to write...",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password (optional)",
+    "confirmPassword": "Confirm Password",
+    "lock": "Lock Tag",
+    "lockWarning": "Warning: Tag locking cannot be undone!",
+    "writeButton": "Write",
+    "success": "NFC tag written successfully",
+    "error": "NFC write error"
+  },
+  "merge": {
+    "title": "Merge Data",
+    "selectScans": "Select scans to merge",
+    "selected": "{{count}} scans selected",
+    "writeButton": "Merge and Write",
+    "success": "Data merged and written successfully",
+    "error": "Data merge error"
+  },
+  "protected": {
+    "title": "Protected Content",
+    "enterPassword": "Enter Password",
+    "wrongPassword": "Wrong password",
+    "decrypt": "Decrypt"
+  }
+} 
