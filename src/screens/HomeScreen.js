@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Animated, Modal, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // Bileşenler ve sabitler
@@ -33,26 +34,31 @@ const StatusCard = ({ icon, title, subtext, onPress }) => (
   </TouchableOpacity>
 );
 
-const PremiumCard = ({ onPress }) => (
-  <Card style={styles.premiumCard}>
-    <View style={styles.premiumTop}>
-      <Ionicons name="star" size={24} color={COLORS.premium} />
-      <Text style={styles.premiumTitle}>Premium'a Yükselt</Text>
-    </View>
-    <Text style={styles.premiumText}>
-      Sınırsız tarama, gelişmiş özellikler ve daha fazlası için premium'a yükseltin.
-    </Text>
-    <Button 
-      mode="contained"
-      title="Premium'a Yükselt"
-      onPress={onPress}
-      style={styles.premiumButton}
-      icon="star"
-    />
-  </Card>
-);
+const PremiumCard = ({ onPress }) => {
+  const { t } = useTranslation('home');
+  
+  return (
+    <Card style={styles.premiumCard}>
+      <View style={styles.premiumTop}>
+        <Ionicons name="star" size={24} color={COLORS.premium} />
+        <Text style={styles.premiumTitle}>{t('premium.title')}</Text>
+      </View>
+      <Text style={styles.premiumText}>
+        {t('premium.subtitle')}
+      </Text>
+      <Button 
+        mode="contained"
+        title={t('premium.button')}
+        onPress={onPress}
+        style={styles.premiumButton}
+        icon="star"
+      />
+    </Card>
+  );
+};
 
 const NoNfcView = () => {
+  const { t } = useTranslation('home');
   const [fadeAnim] = useState(new Animated.Value(0));
   const [slideAnim] = useState(new Animated.Value(50));
 
@@ -101,12 +107,12 @@ const NoNfcView = () => {
             <Ionicons name="warning" size={64} color={COLORS.error} />
           </Animated.View>
         </View>
-        <Text style={styles.noNfcTitle}>NFC Kullanılamıyor</Text>
+        <Text style={styles.noNfcTitle}>{t('noNfc.title')}</Text>
         <Text style={styles.noNfcText}>
-          Bu cihaz NFC teknolojisini desteklemiyor veya NFC devre dışı bırakılmış.
+          {t('noNfc.description')}
         </Text>
         <View style={styles.noNfcSteps}>
-          <Text style={styles.noNfcStepsTitle}>Yapabilecekleriniz:</Text>
+          <Text style={styles.noNfcStepsTitle}>{t('noNfc.steps.title')}</Text>
           <Animated.View 
             style={[
               styles.noNfcStep,
@@ -120,7 +126,7 @@ const NoNfcView = () => {
               <Ionicons name="settings-outline" size={20} color={COLORS.primary} />
             </View>
             <Text style={styles.noNfcStepText}>
-              Ayarlar'dan NFC'nin açık olduğundan emin olun
+              {t('noNfc.steps.checkSettings')}
             </Text>
           </Animated.View>
           <Animated.View 
@@ -136,7 +142,7 @@ const NoNfcView = () => {
               <Ionicons name="phone-portrait-outline" size={20} color={COLORS.primary} />
             </View>
             <Text style={styles.noNfcStepText}>
-              NFC destekleyen bir cihaz kullanın
+              {t('noNfc.steps.useCompatibleDevice')}
             </Text>
           </Animated.View>
           <Animated.View 
@@ -152,7 +158,7 @@ const NoNfcView = () => {
               <Ionicons name="information-circle-outline" size={20} color={COLORS.primary} />
             </View>
             <Text style={styles.noNfcStepText}>
-              Cihazınızın NFC desteği hakkında bilgi alın
+              {t('noNfc.steps.getInfo')}
             </Text>
           </Animated.View>
         </View>
@@ -162,6 +168,7 @@ const NoNfcView = () => {
 };
 
 const ScanModal = ({ visible, onClose, onStartScan }) => {
+  const { t } = useTranslation('home');
   const [fadeAnim] = useState(new Animated.Value(0));
   const [slideAnim] = useState(new Animated.Value(100));
   const [pulseAnim] = useState(new Animated.Value(0));
@@ -252,7 +259,7 @@ const ScanModal = ({ visible, onClose, onStartScan }) => {
           ]}
         >
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>NFC Tarama</Text>
+            <Text style={styles.modalTitle}>{t('scanModal.title')}</Text>
             <IconButton
               icon="close"
               size={24}
@@ -335,11 +342,11 @@ const ScanModal = ({ visible, onClose, onStartScan }) => {
             </View>
             
             <Text style={styles.modalText}>
-              Telefonunuzu NFC etiketine yaklaştırın
+              {t('scanModal.description')}
             </Text>
             
             <Button
-              title="Taramayı Başlat"
+              title={t('scanModal.startButton')}
               onPress={onStartScan}
               icon="scan"
               style={styles.startScanButton}
@@ -352,6 +359,8 @@ const ScanModal = ({ visible, onClose, onStartScan }) => {
 };
 
 const HomeScreen = ({ navigation }) => {
+  const { t } = useTranslation('home');
+  
   // State
   const [isScanning, setIsScanning] = useState(false);
   const [hasNfc, setHasNfc] = useState(true);
@@ -372,7 +381,7 @@ const HomeScreen = ({ navigation }) => {
   // Son taramalar - Premium kullanıcılar için 4, ücretsiz kullanıcılar için 2
   const recentScans = scans.slice(0, isPremiumUser() ? 4 : 2);
   
-  // Kalan tarama hakkı bilgisi - Yeni eklenen
+  // Kalan tarama hakkı bilgisi
   const remainingScans = useHistoryStore(state => state.getRemainingScans());
   const isStorageLimitReached = useHistoryStore(state => state.isStorageLimitReached());
   
@@ -426,10 +435,10 @@ const HomeScreen = ({ navigation }) => {
     if (!hasNfc) {
       setAlertConfig({
         visible: true,
-        title: 'NFC Kullanılamıyor',
-        message: 'Bu cihaz NFC desteklemiyor veya NFC devre dışı bırakılmış.',
+        title: t('noNfc.title'),
+        message: t('noNfc.description'),
         type: 'error',
-        buttons: [{ text: 'Tamam' }]
+        buttons: [{ text: t('common:alerts.ok') }]
       });
       return;
     }
@@ -463,10 +472,10 @@ const HomeScreen = ({ navigation }) => {
           setIsScanning(false);
           setAlertConfig({
             visible: true,
-            title: 'Hata',
-            message: error || 'NFC tarama sırasında bir hata oluştu.',
+            title: t('common:alerts.error'),
+            message: error || t('common:errors.general'),
             type: 'error',
-            buttons: [{ text: 'Tamam' }]
+            buttons: [{ text: t('common:alerts.ok') }]
           });
         }
       );
@@ -474,10 +483,10 @@ const HomeScreen = ({ navigation }) => {
       setIsScanning(false);
       setAlertConfig({
         visible: true,
-        title: 'Hata',
-        message: 'NFC tarama başlatılamadı: ' + error.message,
+        title: t('common:alerts.error'),
+        message: t('common:errors.general') + ': ' + error.message,
         type: 'error',
-        buttons: [{ text: 'Tamam' }]
+        buttons: [{ text: t('common:alerts.ok') }]
       });
     }
   };
@@ -515,11 +524,11 @@ const HomeScreen = ({ navigation }) => {
   };
   
   const getDisplayValue = (scan) => {
-    if (!scan || !scan.data) return "NFC Etiketi";
+    if (!scan || !scan.data) return t('scan.button');
     
     const value = scan.data.value;
     if (!value || value.trim() === "") {
-      return scan.tagType || "NFC Etiketi";
+      return scan.tagType || t('scan.button');
     }
     
     // URL, telefon ve email'i kısalt
@@ -536,20 +545,22 @@ const HomeScreen = ({ navigation }) => {
     const date = new Date(timestamp);
     return date.toLocaleDateString('tr-TR');
   };
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
           <View>
-            <Text style={styles.title}>NFC Tarayıcı</Text>
-            <Text style={styles.subtitle}>Etiketleri tarayın ve yönetin</Text>
+            <Text style={styles.title}>{t('title')}</Text>
+            <Text style={styles.subtitle}>{t('subtitle')}</Text>
           </View>
-          <IconButton
-            icon="cog"
-            size={24}
-            onPress={() => navigation.navigate('Settings')}
-          />
+          <View style={styles.headerButtons}>
+            <IconButton
+              icon="cog"
+              size={24}
+              onPress={() => navigation.navigate('Settings')}
+            />
+          </View>
         </View>
 
         {hasNfc === false ? (
@@ -565,10 +576,8 @@ const HomeScreen = ({ navigation }) => {
                   color={hasNfc ? COLORS.success : COLORS.error} 
                 />
               }
-              title={`NFC ${hasNfc ? 'Kullanılabilir' : 'Kullanılamıyor'}`}
-              subtext={hasNfc 
-                ? 'Etiketi taramak için cihazı yaklaştırın.' 
-                : 'Bu cihaz NFC desteklemiyor veya devre dışı bırakılmış.'}
+              title={hasNfc ? t('nfcStatus.available') : t('nfcStatus.notAvailable')}
+              subtext={hasNfc ? t('nfcStatus.availableDesc') : t('nfcStatus.notAvailableDesc')}
               onPress={handleScan}
             />
             
@@ -577,7 +586,7 @@ const HomeScreen = ({ navigation }) => {
               <>
                 <PremiumCard onPress={handleGetPremium} />
                 
-                {/* Kalan tarama bilgisi - Yeni eklenen */}
+                {/* Kalan tarama bilgisi */}
                 <Card style={styles.storageLimitCard}>
                   <View style={styles.storageLimitContent}>
                     <View style={styles.storageLimitIconContainer}>
@@ -590,19 +599,19 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.storageLimitInfo}>
                       <Text style={styles.storageLimitTitle}>
                         {isStorageLimitReached 
-                          ? "Depolama Limiti Aşıldı" 
-                          : `Kalan Tarama: ${remainingScans}`}
+                          ? t('storage.limitReached')
+                          : t('storage.remaining', { count: remainingScans })}
                       </Text>
                       <Text style={styles.storageLimitText}>
                         {isStorageLimitReached
-                          ? "Yeni taramalar en eski kayıtların üzerine yazılacak"
-                          : "Premium kullanıcılar sınırsız tarama depolayabilir"}
+                          ? t('storage.limitReachedDesc')
+                          : t('storage.premiumDesc')}
                       </Text>
                     </View>
                   </View>
                   {isStorageLimitReached && (
                     <Button
-                      title="Premium'a Yükselt"
+                      title={t('premium.button')}
                       onPress={handleGetPremium}
                       icon="star"
                       style={styles.storageLimitButton}
@@ -612,38 +621,39 @@ const HomeScreen = ({ navigation }) => {
               </>
             )}
 
-            {/* Yazma butonu */}
-            {canUseFeature('write') && (
-              <Button
-                mode="contained"
-                icon="pencil"
-                onPress={() => navigation.navigate('WriteTag')}
-                style={styles.writeButton}
-                title="Yeni NFC Etiketi Oluştur"
-              />
-            )}
+            {/* Premium özellikler - sadece premium kullanıcılara gösterilir */}
+            {isPremiumUser() && (
+              <View style={styles.premiumFeatures}>
+                {/* Yazma butonu */}
+                <Button
+                  mode="contained"
+                  icon="pencil"
+                  onPress={() => navigation.navigate('WriteTag')}
+                  style={styles.writeButton}
+                  title={t('writeButton')}
+                />
 
-            {/* Veri Birleştirme butonu */}
-            {canUseFeature('data_merge') && (
-              <Button
-                mode="contained"
-                icon="git-merge"
-                onPress={() => navigation.navigate('DataMerge')}
-                style={styles.mergeButton}
-                title="NFC Veri Birleştirme"
-              />
+                {/* Veri Birleştirme butonu */}
+                <Button
+                  mode="contained"
+                  icon="git-merge"
+                  onPress={() => navigation.navigate('DataMerge')}
+                  style={styles.mergeButton}
+                  title={t('mergeButton')}
+                />
+              </View>
             )}
 
             {/* Son taramalar */}
             <View style={styles.recentScans}>
               <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Son Taramalar</Text>
+                <Text style={styles.sectionTitle}>{t('recentScans.title')}</Text>
                 {recentScans.length > 0 && (
                   <TouchableOpacity 
                     onPress={() => navigation.navigate('History')}
                     style={styles.viewAllButton}
                   >
-                    <Text style={styles.viewAllText}>Tümünü Gör</Text>
+                    <Text style={styles.viewAllText}>{t('recentScans.viewAll')}</Text>
                     <Ionicons name="chevron-forward" size={16} color={COLORS.primary} />
                   </TouchableOpacity>
                 )}
@@ -676,7 +686,7 @@ const HomeScreen = ({ navigation }) => {
                         <Ionicons 
                           name="chevron-forward" 
                           size={20} 
-                          color={COLORS.textSecondary}
+                          color={COLORS.primary}
                           style={styles.scanArrow}
                         />
                       </View>
@@ -686,9 +696,9 @@ const HomeScreen = ({ navigation }) => {
               ) : (
                 <View style={styles.emptyStateContainer}>
                   <View style={styles.emptyStateContent}>
-                    <Text style={styles.emptyStateTitle}>Tarama Geçmişi</Text>
+                    <Text style={styles.emptyStateTitle}>{t('recentScans.empty.title')}</Text>
                     <Text style={styles.emptyStateText}>
-                      NFC etiketlerini tarayarak geçmişinizi burada görebilirsiniz.
+                      {t('recentScans.empty.description')}
                     </Text>
                   </View>
                 </View>
@@ -706,7 +716,7 @@ const HomeScreen = ({ navigation }) => {
             icon="scan"
             onPress={handleScan}
             style={styles.scanButton}
-            title="NFC Etiketi Tara"
+            title={t('scan.button')}
           />
         </View>
       )}
@@ -805,13 +815,13 @@ const styles = StyleSheet.create({
   premiumText: {
     fontSize: 13,
     color: COLORS.textSecondary,
-    marginBottom: 12,
+    marginBottom: 8,
   },
   writeButton: {
     marginBottom: 0,
   },
   recentScans: {
-    marginTop: 8,
+    marginTop: 2,
     marginBottom: 24,
   },
   sectionHeader: {
@@ -1120,6 +1130,16 @@ const styles = StyleSheet.create({
   },
   mergeButton: {
     marginBottom: 0,
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  premiumFeatures: {
+    marginTop: 4,
+    marginBottom: 4,
+    gap: 10,
   },
 });
 

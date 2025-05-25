@@ -1,10 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Application from 'expo-application';
-import React from 'react';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Alert,
   Linking,
+  Modal,
   Platform,
   SafeAreaView,
   ScrollView,
@@ -24,26 +26,65 @@ import { COLORS, SIZES } from '../constants/theme';
 import useHistoryStore from '../features/history/historyStore';
 import useSettingsStore from '../features/settings/settingsStore';
 import useSubscriptionStore from '../features/subscription/subscriptionStore';
+import useLanguageStore from '../localization/languageStore';
 
 const SettingsScreen = ({ navigation }) => {
+  const { t } = useTranslation('settings');
+  const [languageModalVisible, setLanguageModalVisible] = useState(false);
+  
   // Stores
   const { clearAllHistory } = useHistoryStore();
   const { 
     isPremiumUser, 
     currentPlan, 
-    clearSubscription 
+    clearSubscription,
+    restorePurchases 
   } = useSubscriptionStore();
   const { settings, toggleSetting } = useSettingsStore();
+  const { currentLanguage, setLanguage, getSupportedLanguages } = useLanguageStore();
+  
+  // Dil değiştirme işleyicisi
+  const handleLanguageChange = () => {
+    setLanguageModalVisible(true);
+  };
+  
+  const handleLanguageSelect = async (langCode) => {
+    setLanguageModalVisible(false);
+    setLanguage(langCode);
+  };
+  
+  const closeLanguageModal = () => {
+    setLanguageModalVisible(false);
+  };
+  
+  // Satın almaları geri yükle
+  const handleRestorePurchases = async () => {
+    try {
+      const restoredInfo = await restorePurchases();
+      
+      if (restoredInfo && isPremiumUser()) {
+        Alert.alert(
+          t('common:alerts.success'), 
+          t('subscription.restoreSuccess')
+        );
+      } else {
+        Alert.alert(t('common:alerts.info'), t('subscription.noSubscriptionFound'));
+      }
+    } catch (error) {
+      console.error('Satın almaları geri yükleme hatası:', error);
+      Alert.alert(t('common:alerts.error'), t('subscription.restoreError'));
+    }
+  };
   
   // Tüm verileri temizle
   const handleClearData = () => {
     Alert.alert(
-      'Tüm Verileri Sil',
-      'Tüm tarama geçmişiniz ve ayarlarınız silinecek. Bu işlem geri alınamaz.',
+      t('clearData.title'),
+      t('clearData.message'),
       [
-        { text: 'İptal', style: 'cancel' },
+        { text: t('common:actions.cancel'), style: 'cancel' },
         { 
-          text: 'Sil', 
+          text: t('clearData.confirm'), 
           style: 'destructive',
           onPress: async () => {
             // Geçmişi temizle
@@ -52,10 +93,10 @@ const SettingsScreen = ({ navigation }) => {
             // Ayarları temizle
             try {
               await AsyncStorage.clear();
-              Alert.alert('Başarılı', 'Tüm veriler temizlendi.');
+              Alert.alert(t('common:alerts.success'), t('clearData.success'));
             } catch (error) {
               console.log('Veri temizleme hatası:', error);
-              Alert.alert('Hata', 'Veriler temizlenirken bir hata oluştu.');
+              Alert.alert(t('common:alerts.error'), t('clearData.error'));
             }
           }
         }
@@ -65,6 +106,83 @@ const SettingsScreen = ({ navigation }) => {
   
   // Uygulama versiyonu
   const appVersion = Application.nativeApplicationVersion || '1.0.0';
+  
+  // Dil seçim modalı
+  const renderLanguageModal = () => {
+    const languages = getSupportedLanguages();
+    
+    return (
+      <Modal
+        transparent={true}
+        visible={languageModalVisible}
+        animationType="fade"
+        onRequestClose={closeLanguageModal}
+      >
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity 
+            style={styles.modalBackground}
+            activeOpacity={1}
+            onPress={closeLanguageModal}
+          >
+            <View style={styles.modalContainer}>
+              <TouchableOpacity 
+                activeOpacity={1}
+                onPress={(e) => e.stopPropagation()}
+              >
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>
+                    {t('sections.general.language')}
+                  </Text>
+                  <TouchableOpacity 
+                    onPress={closeLanguageModal}
+                    style={styles.closeButton}
+                  >
+                    <Ionicons name="close" size={24} color={COLORS.text} />
+                  </TouchableOpacity>
+                </View>
+                
+                <View style={styles.modalContent}>
+                  <Text style={styles.modalSubtitle}>
+                    {t('sections.general.selectLanguage')}
+                  </Text>
+                  
+                  {Object.values(languages).map((lang) => (
+                    <TouchableOpacity
+                      key={lang.code}
+                      style={[
+                        styles.languageOption,
+                        currentLanguage === lang.code && styles.languageOptionSelected
+                      ]}
+                      onPress={() => handleLanguageSelect(lang.code)}
+                    >
+                      <Text style={styles.languageFlag}>
+                        {lang.flag}
+                      </Text>
+                      <Text style={[
+                        styles.languageName,
+                        currentLanguage === lang.code && styles.languageNameSelected
+                      ]}>
+                        {lang.name}
+                      </Text>
+                      
+                      {currentLanguage === lang.code && (
+                        <Ionicons 
+                          name="checkmark-circle" 
+                          size={24} 
+                          color={COLORS.primary} 
+                          style={styles.checkIcon}
+                        />
+                      )}
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    );
+  };
   
   // Ayar öğesi
   const renderSettingItem = (icon, title, description, value, onChange, isPremiumSetting = false) => {
@@ -143,8 +261,10 @@ const SettingsScreen = ({ navigation }) => {
   
   return (
     <SafeAreaView style={styles.container}>
+      {renderLanguageModal()}
+      
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Ayarlar</Text>
+        <Text style={styles.headerTitle}>{t('title')}</Text>
       </View>
       
       <ScrollView contentContainerStyle={styles.content}>
@@ -153,9 +273,9 @@ const SettingsScreen = ({ navigation }) => {
           {isPremiumUser() ? (
             <View style={styles.premiumStatus}>
               <View style={styles.premiumInfo}>
-                <Text style={styles.premiumTitle}>Premium Üyeliğiniz Aktif</Text>
+                <Text style={styles.premiumTitle}>{t('sections.premium.active')}</Text>
                 <Text style={styles.premiumPlan}>
-                  {currentPlan} plan
+                  {currentPlan} {t('sections.premium.plan')}
                 </Text>
               </View>
               
@@ -165,15 +285,15 @@ const SettingsScreen = ({ navigation }) => {
             <View>
               <View style={styles.premiumPromo}>
                 <Ionicons name="star" size={24} color={COLORS.premium} />
-                <Text style={styles.premiumPromoTitle}>Premium'a Yükseltin</Text>
+                <Text style={styles.premiumPromoTitle}>{t('premium.upgrade')}</Text>
               </View>
               
               <Text style={styles.premiumPromoText}>
-                Yazma, etiket kilitleme ve şifreleme gibi premium özelliklere erişin.
+                {t('premium.description')}
               </Text>
               
               <Button
-                title="Premium'a Yükseltin"
+                title={t('premium.upgradeButton')}
                 type="premium"
                 onPress={() => navigation.navigate('Subscription')}
                 style={styles.subscribeButton}
@@ -185,28 +305,53 @@ const SettingsScreen = ({ navigation }) => {
         
         {/* Uygulamada Ayarlar */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Uygulama</Text>
+          <Text style={styles.sectionTitle}>{t('sections.general.title')}</Text>
+          
+          {/* Dil seçimi */}
+          <TouchableOpacity 
+            style={styles.actionItem} 
+            onPress={handleLanguageChange}
+          >
+            <View style={styles.actionIconContainer}>
+              <Ionicons name="language" size={22} color={COLORS.primary} />
+            </View>
+            
+            <View style={styles.settingInfo}>
+              <Text style={styles.actionTitle}>
+                {t('sections.general.language')}
+              </Text>
+              <Text style={styles.settingSubtext}>
+                {getSupportedLanguages()[currentLanguage]?.name || 'English'}
+              </Text>
+            </View>
+            
+            <Ionicons
+              name="chevron-forward"
+              size={18}
+              color={COLORS.textSecondary}
+            />
+          </TouchableOpacity>
           
           {renderSettingItem(
             'notifications', 
-            'Bildirimler', 
-            'Yeni özellikler ve güncellemeler hakkında bildirimler alın',
+            t('sections.general.notifications'), 
+            t('sections.general.notificationsDesc'),
             settings.notifications,
             () => toggleSetting('notifications')
           )}
           
           {renderSettingItem(
             'vibrate', 
-            'Titreşim Geri Bildirimi', 
-            'NFC tarama ve yazma işlemlerinde titreşimli geri bildirim',
+            t('sections.general.hapticFeedback'), 
+            t('sections.general.hapticFeedbackDesc'),
             settings.hapticFeedback,
             () => toggleSetting('hapticFeedback')
           )}
           
           {renderSettingItem(
             'save', 
-            'Otomatik Kaydetme', 
-            'Taramaları otomatik olarak geçmişe kaydet',
+            t('sections.general.autoSave'), 
+            t('sections.general.autoSaveDesc'),
             settings.autoSave,
             () => toggleSetting('autoSave')
           )}
@@ -214,11 +359,11 @@ const SettingsScreen = ({ navigation }) => {
         
         {/* Hesap Ayarları */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Hesabım</Text>
+          <Text style={styles.sectionTitle}>{t('sections.account.title')}</Text>
           
           {renderActionItem(
             'card',
-            'Abonelik Yönetimi',
+            t('sections.account.manageSubscription'),
             () => {
               if (Platform.OS === 'ios') {
                 Linking.openURL('itms-apps://apps.apple.com/account/subscriptions');
@@ -230,8 +375,14 @@ const SettingsScreen = ({ navigation }) => {
           
           {renderActionItem(
             'star',
-            'Premium Özellikler',
+            t('sections.account.premiumFeatures'),
             () => navigation.navigate('Subscription')
+          )}
+          
+          {renderActionItem(
+            'refresh',
+            t('sections.account.restorePurchases'),
+            handleRestorePurchases
           )}
           
           {/* Sadece geliştirme amaçlı, gerçek uygulamada kaldırılacak */}
@@ -240,11 +391,11 @@ const SettingsScreen = ({ navigation }) => {
               style={styles.devButton}
               onPress={() => {
                 clearSubscription();
-                Alert.alert('Bilgi', 'Premium aboneliğiniz kaldırıldı (geliştirici modu).');
+                Alert.alert(t('common:alerts.info'), t('developer.removePremium'));
               }}
             >
               <Text style={styles.devButtonText}>
-                Premium Aboneliği Kaldır (Geliştirici)
+                {t('developer.removePremiumButton')}
               </Text>
             </TouchableOpacity>
           )}
@@ -252,17 +403,17 @@ const SettingsScreen = ({ navigation }) => {
         
         {/* Destek */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Destek</Text>
+          <Text style={styles.sectionTitle}>{t('sections.support.title')}</Text>
           
           {renderActionItem(
             'help-circle',
-            'Yardım & Destek',
+            t('sections.support.help'),
             () => Linking.openURL('https://nfcreaderpro.com/help')
           )}
           
           {renderActionItem(
             'star',
-            'Uygulamamızı Değerlendirin',
+            t('sections.support.rateApp'),
             () => {
               if (Platform.OS === 'ios') {
                 Linking.openURL('itms-apps://itunes.apple.com/app/id000000000?action=write-review');
@@ -274,18 +425,18 @@ const SettingsScreen = ({ navigation }) => {
           
           {renderActionItem(
             'document-text',
-            'Gizlilik Politikası',
+            t('sections.support.privacyPolicy'),
             () => Linking.openURL('https://nfcreaderpro.com/privacy')
           )}
         </View>
         
         {/* Veri */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Veri</Text>
+          <Text style={styles.sectionTitle}>{t('sections.data.title')}</Text>
           
           {renderActionItem(
             'trash',
-            'Tüm Verileri Sil',
+            t('sections.data.clearData'),
             handleClearData,
             true
           )}
@@ -294,7 +445,7 @@ const SettingsScreen = ({ navigation }) => {
         {/* Sürüm Bilgisi */}
         <View style={styles.versionContainer}>
           <Text style={styles.versionText}>
-            NFC Reader Pro v{appVersion}
+            {t('appName')} v{appVersion}
           </Text>
         </View>
       </ScrollView>
@@ -466,6 +617,93 @@ const styles = StyleSheet.create({
     fontSize: SIZES.small,
     color: COLORS.textSecondary,
   },
+  settingInfo: {
+    flex: 1,
+  },
+  settingSubtext: {
+    fontSize: SIZES.small,
+    color: COLORS.textSecondary,
+  },
+  
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalBackground: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '85%',
+    backgroundColor: COLORS.surface,
+    borderRadius: SIZES.borderRadius * 2,
+    overflow: 'hidden',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: SIZES.medium,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+  },
+  modalTitle: {
+    fontSize: SIZES.large,
+    fontWeight: 'bold',
+    color: COLORS.text,
+  },
+  closeButton: {
+    padding: 4,
+  },
+  modalContent: {
+    padding: SIZES.medium,
+  },
+  modalSubtitle: {
+    fontSize: SIZES.medium,
+    color: COLORS.textSecondary,
+    marginBottom: SIZES.medium,
+  },
+  languageOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 10,
+    marginBottom: 8,
+    borderRadius: SIZES.borderRadius,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  languageOptionSelected: {
+    backgroundColor: 'rgba(61, 125, 255, 0.08)',
+    borderColor: COLORS.primary,
+  },
+  languageFlag: {
+    fontSize: 22,
+    marginRight: 12,
+  },
+  languageName: {
+    fontSize: SIZES.medium,
+    color: COLORS.text,
+    fontWeight: '500',
+    flex: 1,
+  },
+  languageNameSelected: {
+    color: COLORS.primary,
+    fontWeight: '600',
+  },
+  checkIcon: {
+    marginLeft: 8,
+  }
 });
 
 export default SettingsScreen; 

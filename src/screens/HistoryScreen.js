@@ -1,19 +1,20 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-  Alert,
-  FlatList,
-  Modal,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  Share,
-  StyleSheet,
-  Switch,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    Alert,
+    FlatList,
+    Modal,
+    Platform,
+    SafeAreaView,
+    ScrollView,
+    Share,
+    StyleSheet,
+    Switch,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
 
 import Button from '../components/Button';
@@ -32,6 +33,8 @@ const TAG_TYPE_OPTIONS = Object.values(TAG_TYPES);
 const DATA_TYPE_OPTIONS = Object.values(DATA_TYPES);
 
 const HistoryScreen = ({ navigation }) => {
+  const { t } = useTranslation('history');
+  
   // Search ve filtreleme state'leri
   const [searchQuery, setSearchQuery] = useState('');
   const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -69,10 +72,10 @@ const HistoryScreen = ({ navigation }) => {
   
   // Sıralama seçenekleri
   const SORT_OPTIONS = [
-    { id: 'date_desc', label: 'En Yeni', icon: 'time' },
-    { id: 'date_asc', label: 'En Eski', icon: 'time-outline' },
-    { id: 'type', label: 'Etiket Tipi', icon: 'pricetag' },
-    { id: 'data_type', label: 'Veri Tipi', icon: 'document-text' },
+    { id: 'date_desc', label: t('sort.newest'), icon: 'time' },
+    { id: 'date_asc', label: t('sort.oldest'), icon: 'time-outline' },
+    { id: 'type', label: t('sort.tagType'), icon: 'pricetag' },
+    { id: 'data_type', label: t('sort.dataType'), icon: 'document-text' },
   ];
 
   // Filtrelenmiş ve sıralanmış tarama listesi
@@ -120,16 +123,16 @@ const HistoryScreen = ({ navigation }) => {
   const handleClearHistory = () => {
     setAlertConfig({
       visible: true,
-      title: 'Geçmişi Temizle',
-      message: 'Tüm tarama geçmişiniz silinecek. Bu işlem geri alınamaz.',
+      title: t('clearHistory.title'),
+      message: t('clearHistory.message'),
       type: 'warning',
       buttons: [
         { 
-          text: 'İptal', 
+          text: t('common:actions.cancel'), 
           style: 'cancel' 
         },
         { 
-          text: 'Temizle', 
+          text: t('clearHistory.button'), 
           style: 'destructive', 
           onPress: () => clearAllHistory() 
         }
@@ -171,7 +174,7 @@ const HistoryScreen = ({ navigation }) => {
         }
       }
     } catch (error) {
-      Alert.alert('Hata', 'Geçersiz tarih formatı. Lütfen GG.AA.YYYY formatında girin.');
+      Alert.alert(t('common:alerts.error'), t('filters.dateFormatError'));
       return;
     }
     
@@ -290,7 +293,7 @@ const HistoryScreen = ({ navigation }) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Gelişmiş Filtreler</Text>
+              <Text style={styles.modalTitle}>{t('filters.title')}</Text>
               <TouchableOpacity onPress={() => setFilterModalVisible(false)}>
                 <Ionicons name="close" size={24} color={COLORS.text} />
               </TouchableOpacity>
@@ -299,7 +302,7 @@ const HistoryScreen = ({ navigation }) => {
             <ScrollView style={styles.modalBody}>
               {/* Sıralama seçenekleri */}
               <View style={styles.filterSection}>
-                <Text style={styles.filterSectionTitle}>Sıralama</Text>
+                <Text style={styles.filterSectionTitle}>{t('filters.sort')}</Text>
                 <View style={styles.sortOptionsContainer}>
                   {SORT_OPTIONS.map((option) => (
                     <TouchableOpacity
@@ -330,7 +333,7 @@ const HistoryScreen = ({ navigation }) => {
 
               {/* Tag tipleri filtreleme */}
               <View style={styles.filterSection}>
-                <Text style={styles.filterSectionTitle}>Etiket Tipi</Text>
+                <Text style={styles.filterSectionTitle}>{t('filters.tagType')}</Text>
                 <View style={styles.tagOptionsContainer}>
                   {TAG_TYPE_OPTIONS.map((tagType) => (
                     <TouchableOpacity
@@ -356,7 +359,7 @@ const HistoryScreen = ({ navigation }) => {
               
               {/* Veri tipi filtreleme */}
               <View style={styles.filterSection}>
-                <Text style={styles.filterSectionTitle}>Veri Tipi</Text>
+                <Text style={styles.filterSectionTitle}>{t('filters.dataType')}</Text>
                 <View style={styles.tagOptionsContainer}>
                   {DATA_TYPE_OPTIONS.map((dataType) => (
                     <TouchableOpacity
@@ -382,19 +385,19 @@ const HistoryScreen = ({ navigation }) => {
               
               {/* Tarih aralığı */}
               <View style={styles.filterSection}>
-                <Text style={styles.filterSectionTitle}>Tarih Aralığı</Text>
+                <Text style={styles.filterSectionTitle}>{t('filters.dateRange')}</Text>
                 <Text style={styles.filterSectionSubtitle}>
-                  Tarihleri GG.AA.YYYY formatında girin
+                  {t('filters.dateFormatHelp')}
                 </Text>
                 
                 <View style={styles.dateInputsContainer}>
                   <View style={styles.dateInputWrapper}>
-                    <Text style={styles.dateInputLabel}>Başlangıç</Text>
+                    <Text style={styles.dateInputLabel}>{t('filters.startDate')}</Text>
                     <View style={styles.dateInput}>
                       <Ionicons name="calendar-outline" size={18} color={COLORS.textSecondary} />
                       <TextInput
                         style={styles.dateInputText}
-                        placeholder="GG.AA.YYYY"
+                        placeholder="DD.MM.YYYY"
                         placeholderTextColor={COLORS.textDisabled}
                         value={startDateText}
                         onChangeText={setStartDateText}
@@ -405,12 +408,12 @@ const HistoryScreen = ({ navigation }) => {
                   </View>
                   
                   <View style={styles.dateInputWrapper}>
-                    <Text style={styles.dateInputLabel}>Bitiş</Text>
+                    <Text style={styles.dateInputLabel}>{t('filters.endDate')}</Text>
                     <View style={styles.dateInput}>
                       <Ionicons name="calendar-outline" size={18} color={COLORS.textSecondary} />
                       <TextInput
                         style={styles.dateInputText}
-                        placeholder="GG.AA.YYYY"
+                        placeholder="DD.MM.YYYY"
                         placeholderTextColor={COLORS.textDisabled}
                         value={endDateText}
                         onChangeText={setEndDateText}
@@ -425,7 +428,7 @@ const HistoryScreen = ({ navigation }) => {
               {/* Notları olan taramalar */}
               <View style={styles.filterSection}>
                 <View style={styles.switchRow}>
-                  <Text style={styles.filterSectionTitle}>Sadece Notlar</Text>
+                  <Text style={styles.filterSectionTitle}>{t('filters.notesOnly')}</Text>
                   <Switch
                     value={filters.savedOnly}
                     onValueChange={(value) => setFilters(prev => ({ ...prev, savedOnly: value }))}
@@ -434,14 +437,14 @@ const HistoryScreen = ({ navigation }) => {
                   />
                 </View>
                 <Text style={styles.filterSectionSubtitle}>
-                  Sadece notları olan taramaları göster
+                  {t('filters.notesOnlyHelp')}
                 </Text>
               </View>
 
               {/* Favoriler filtresi */}
               <View style={styles.filterSection}>
                 <View style={styles.switchRow}>
-                  <Text style={styles.filterSectionTitle}>Sadece Favoriler</Text>
+                  <Text style={styles.filterSectionTitle}>{t('filters.favoritesOnly')}</Text>
                   <Switch
                     value={filters.favoritesOnly}
                     onValueChange={(value) => setFilters(prev => ({ ...prev, favoritesOnly: value }))}
@@ -453,7 +456,7 @@ const HistoryScreen = ({ navigation }) => {
 
               {/* Kategori filtresi */}
               <View style={styles.filterSection}>
-                <Text style={styles.filterSectionTitle}>Kategoriler</Text>
+                <Text style={styles.filterSectionTitle}>{t('filters.categories')}</Text>
                 <View style={styles.tagOptionsContainer}>
                   {Object.values(DEFAULT_CATEGORIES).map((category) => (
                     <TouchableOpacity
@@ -492,7 +495,7 @@ const HistoryScreen = ({ navigation }) => {
 
               {/* Etiket filtresi */}
               <View style={styles.filterSection}>
-                <Text style={styles.filterSectionTitle}>Etiketler</Text>
+                <Text style={styles.filterSectionTitle}>{t('filters.tags')}</Text>
                 <TagInput
                   tags={filters.tags}
                   availableTags={useHistoryStore.getState().allTags}
@@ -511,7 +514,7 @@ const HistoryScreen = ({ navigation }) => {
             
             <View style={styles.modalFooter}>
               <Button
-                title="Sıfırla"
+                title={t('common:actions.reset')}
                 mode="text"
                 onPress={resetFilters}
                 style={styles.resetButton}
@@ -519,14 +522,14 @@ const HistoryScreen = ({ navigation }) => {
               />
               <View style={styles.modalFooterButtons}>
                 <Button
-                  title="Dışa Aktar"
+                  title={t('actions.export')}
                   mode="outlined"
                   onPress={handleExport}
                   icon="download"
                   style={styles.exportButton}
                 />
                 <Button
-                  title="Uygula"
+                  title={t('common:actions.apply')}
                   onPress={applyFilters}
                   style={styles.applyButton}
                 />
@@ -542,9 +545,9 @@ const HistoryScreen = ({ navigation }) => {
   const renderEmptyList = () => (
     <View style={styles.emptyContainer}>
       <Ionicons name="time-outline" size={64} color={COLORS.textSecondary} />
-      <Text style={styles.emptyTitle}>Henüz Tarama Yok</Text>
+      <Text style={styles.emptyTitle}>{t('empty.title')}</Text>
       <Text style={styles.emptyText}>
-        Tarama geçmişiniz burada görüntülenecek.
+        {t('empty.description')}
       </Text>
     </View>
   );
@@ -604,12 +607,12 @@ const HistoryScreen = ({ navigation }) => {
             <Ionicons 
               name={getIconName(item)} 
               size={24} 
-              color={COLORS.text} 
+              color={COLORS.primary} 
             />
           </View>
           <View style={styles.scanInfo}>
             <Text style={styles.scanTitle} numberOfLines={1}>
-              {item.data.value || 'NFC Etiket'}
+              {item.data.value || t('nfcTag')}
             </Text>
             <Text style={styles.scanSubtext}>
               {item.tagType} • {formattedDate} {formattedTime}
@@ -617,11 +620,11 @@ const HistoryScreen = ({ navigation }) => {
             {item.notes && (
               <View style={styles.noteIndicator}>
                 <Ionicons name="chatbubble" size={12} color={COLORS.primary} />
-                <Text style={styles.noteIndicatorText}>Not</Text>
+                <Text style={styles.noteIndicatorText}>{t('item.note')}</Text>
               </View>
             )}
           </View>
-          <Ionicons name="chevron-forward" size={20} color={COLORS.textSecondary} />
+          <Ionicons name="chevron-forward" size={20} color={COLORS.primary} />
         </View>
       </Card>
     );
@@ -630,13 +633,18 @@ const HistoryScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Geçmiş</Text>
+        <Text style={styles.headerTitle}>{t('title')}</Text>
         
-        {scans.length > 0 && (
-          <TouchableOpacity onPress={handleClearHistory}>
-            <Ionicons name="trash-outline" size={24} color={COLORS.secondary} />
-          </TouchableOpacity>
-        )}
+        <View style={styles.headerActions}>
+          {scans.length > 0 && (
+            <TouchableOpacity 
+              style={styles.headerButton}
+              onPress={handleClearHistory}
+            >
+              <Ionicons name="trash-outline" size={24} color={COLORS.secondary} />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
       
       {/* Premium olmayan kullanıcılar için depolama limiti bilgisi */}
@@ -650,7 +658,7 @@ const HistoryScreen = ({ navigation }) => {
                 color={isStorageLimitReached ? COLORS.warning : COLORS.primary} 
               />
               <Text style={styles.storageLimitTitle}>
-                {isStorageLimitReached ? "Depolama Limiti Aşıldı" : "Depolama Durumu"}
+                {isStorageLimitReached ? t('storage.limitReached') : t('storage.status')}
               </Text>
             </View>
             
@@ -659,7 +667,7 @@ const HistoryScreen = ({ navigation }) => {
               onPress={() => navigation.navigate('Home', { screen: 'Subscription' })}
             >
               <Ionicons name="star" size={16} color={COLORS.premium} />
-              <Text style={styles.upgradePremiumText}>Premium</Text>
+              <Text style={styles.upgradePremiumText}>{t('common:premium.badge')}</Text>
             </TouchableOpacity>
           </View>
           
@@ -679,15 +687,15 @@ const HistoryScreen = ({ navigation }) => {
             <View style={styles.storageLimitStats}>
               <Text style={styles.storageLimitText}>
                 {isStorageLimitReached
-                  ? "Yeni taramalar en eski kayıtların üzerine yazılacak"
-                  : `${remainingScans} / ${useHistoryStore.getState().maxFreeScans} tarama hakkınız kaldı`}
+                  ? t('storage.limitReachedDesc')
+                  : t('storage.remaining', { count: remainingScans, max: useHistoryStore.getState().maxFreeScans })}
               </Text>
               
               <TouchableOpacity 
                 style={styles.unlimitedStorageButton}
                 onPress={() => navigation.navigate('Home', { screen: 'Subscription' })}
               >
-                <Text style={styles.unlimitedStorageText}>Sınırsız Depolama Al</Text>
+                <Text style={styles.unlimitedStorageText}>{t('storage.getUnlimited')}</Text>
                 <Ionicons name="arrow-forward" size={14} color={COLORS.primary} />
               </TouchableOpacity>
             </View>
@@ -701,7 +709,7 @@ const HistoryScreen = ({ navigation }) => {
             <Ionicons name="search" size={20} color={COLORS.textSecondary} />
             <TextInput
               style={styles.searchInput}
-              placeholder="Ara..."
+              placeholder={t('search.placeholder')}
               placeholderTextColor={COLORS.textSecondary}
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -757,9 +765,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 15,
+    paddingHorizontal: SIZES.screenPadding,
     paddingTop: 60,
     paddingBottom: 15,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  headerButton: {
+    padding: 8,
+    marginLeft: 4,
   },
   headerTitle: {
     fontSize: 28,
@@ -779,13 +796,15 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surface,
     borderRadius: SIZES.borderRadius,
     paddingHorizontal: SIZES.medium,
-    paddingVertical: 10,
+    paddingVertical: 8,
+    height: 45,
   },
   searchInput: {
     flex: 1,
     marginLeft: 10,
     color: COLORS.text,
     fontSize: SIZES.medium,
+    height: 40,
   },
   filterButton: {
     marginLeft: 10,
@@ -935,7 +954,7 @@ const styles = StyleSheet.create({
   tagOptionsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 8,
+    gap: 8,
   },
   tagOption: {
     backgroundColor: COLORS.surface,
@@ -1132,6 +1151,32 @@ const styles = StyleSheet.create({
   },
   exportButton: {
     minWidth: 120,
+  },
+  deleteButton: {
+    backgroundColor: 'rgba(244, 67, 54, 0.08)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(244, 67, 54, 0.2)',
+  },
+  deleteButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  deleteButtonIcon: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: COLORS.secondary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 6,
+  },
+  deleteButtonText: {
+    color: COLORS.secondary,
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 

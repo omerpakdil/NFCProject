@@ -12,6 +12,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { COLORS } from './src/constants/theme';
 import NotificationService from './src/features/notifications/notificationService';
 import { initializeRevenueCat } from './src/features/subscription/subscriptionStore';
+import initI18n from './src/localization/i18n';
 import Navigation from './src/navigation/index';
 
 // Splash ekranını göstermeye devam et
@@ -41,6 +42,9 @@ export default function App() {
         await Font.loadAsync({
           ...Ionicons.font,
         });
+        
+        // i18n'i başlat
+        await initI18n();
         
         // Bildirim izinlerini kontrol et
         await NotificationService.checkPermissions();

@@ -1,26 +1,38 @@
 {
   "title": "Premium Özellikleri",
   "subtitle": "Sınırsız tarama, gelişmiş özellikler ve daha fazlası",
+  "loading": "Teklifler yükleniyor...",
+  "subscribe": "Abone Ol",
+  "changeSubscription": "Aboneliği Değiştir",
+  "currentSubscription": "Mevcut Abonelik",
+  "currentPlan": "Mevcut Plan",
+  "disclaimer": "* Abonelikler otomatik olarak yenilenir. İstediğiniz zaman ayarlardan iptal edebilirsiniz.",
+  "purchase": {
+    "success": "Premium aboneliğiniz aktif edildi. Tüm özellikler artık kullanılabilir.",
+    "error": "Satın alma işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin."
+  },
   "features": {
     "read": "NFC Okuma",
+    "history_view": "Geçmiş Görüntüleme",
     "write": "NFC Yazma",
     "lock": "Etiket Kilitleme",
-    "password": "Şifre Koruması",
-    "storage": "Kapsamlı Veri Depolama",
-    "merge": "Veri Birleştirme",
-    "history": "Gelişmiş Geçmiş Yönetimi",
-    "export": "Veri Dışa Aktarma"
+    "password_protection": "Şifre Koruması",
+    "data_storage": "Kapsamlı Veri Depolama",
+    "data_merge": "Veri Birleştirme",
+    "advanced_history": "Gelişmiş Geçmiş Yönetimi"
   },
   "plans": {
     "weekly": {
       "title": "Haftalık",
       "price": "₺19.99",
-      "period": "haftalık"
+      "period": "haftalık",
+      "discount": "10% indirim"
     },
     "monthly": {
       "title": "Aylık",
       "price": "₺49.99",
-      "period": "aylık"
+      "period": "aylık",
+      "discount": "20% indirim"
     },
     "yearly": {
       "title": "Yıllık",
@@ -31,10 +43,16 @@
     "lifetime": {
       "title": "Ömür Boyu",
       "price": "₺799.99",
-      "period": "tek seferlik"
+      "period": "tek seferlik",
+      "discount": "En iyi değer"
     }
   },
-  "currentPlan": "Mevcut Plan",
+  "period": {
+    "weekly": "haftalık",
+    "monthly": "aylık",
+    "yearly": "yıllık",
+    "lifetime": "ömür boyu"
+  },
   "buttons": {
     "subscribe": "Abone Ol",
     "change": "Aboneliği Değiştir",
@@ -45,6 +63,5 @@
     "restored": "Aboneliğiniz başarıyla geri yüklendi!",
     "noRestored": "Geri yüklenecek aktif bir abonelik bulunamadı.",
     "error": "Satın alma işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin."
-  },
-  "disclaimer": "* Abonelikler otomatik olarak yenilenir. İstediğiniz zaman ayarlardan iptal edebilirsiniz."
+  }
 } 

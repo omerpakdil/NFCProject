@@ -1,38 +1,51 @@
 {
-  "title": "Tarama Geçmişi",
+  "title": "Geçmiş",
+  "nfcTag": "NFC Etiket",
+  "item": {
+    "note": "Not"
+  },
   "empty": {
-    "title": "Henüz tarama yok",
-    "description": "NFC etiketlerini taradıkça burada görüntülenecekler."
+    "title": "Henüz Tarama Yok",
+    "description": "Tarama geçmişiniz burada görüntülenecek."
   },
-  "filters": {
-    "title": "Filtreler",
-    "dateRange": "Tarih Aralığı",
-    "startDate": "Başlangıç Tarihi",
-    "endDate": "Bitiş Tarihi",
-    "tagTypes": "Etiket Tipleri",
-    "dataTypes": "Veri Tipleri",
-    "categories": "Kategoriler",
-    "tags": "Etiketler",
-    "onlyFavorites": "Sadece Favoriler",
-    "onlySaved": "Sadece Kaydedilenler",
-    "apply": "Uygula",
-    "reset": "Sıfırla",
-    "activeFilters": "{{count}} aktif filtre"
-  },
-  "export": {
-    "title": "Dışa Aktar",
-    "format": "Format Seç",
-    "button": "Dışa Aktar"
-  },
-  "clear": {
+  "clearHistory": {
     "title": "Geçmişi Temizle",
     "message": "Tüm tarama geçmişiniz silinecek. Bu işlem geri alınamaz.",
-    "confirm": "Temizle",
-    "cancel": "İptal"
+    "button": "Temizle"
+  },
+  "filters": {
+    "title": "Gelişmiş Filtreler",
+    "sort": "Sıralama",
+    "tagType": "Etiket Tipi",
+    "dataType": "Veri Tipi",
+    "dateRange": "Tarih Aralığı",
+    "dateFormatHelp": "Tarihleri GG.AA.YYYY formatında girin",
+    "dateFormatError": "Geçersiz tarih formatı. Lütfen GG.AA.YYYY formatında girin.",
+    "startDate": "Başlangıç",
+    "endDate": "Bitiş",
+    "notesOnly": "Sadece Notlar",
+    "notesOnlyHelp": "Sadece notları olan taramaları göster",
+    "favoritesOnly": "Sadece Favoriler",
+    "categories": "Kategoriler",
+    "tags": "Etiketler"
   },
   "sort": {
-    "title": "Sıralama",
     "newest": "En Yeni",
-    "oldest": "En Eski"
+    "oldest": "En Eski",
+    "tagType": "Etiket Tipi",
+    "dataType": "Veri Tipi"
+  },
+  "search": {
+    "placeholder": "Ara..."
+  },
+  "actions": {
+    "export": "Dışa Aktar"
+  },
+  "storage": {
+    "status": "Depolama Durumu",
+    "limitReached": "Depolama Limiti Aşıldı",
+    "remaining": "{{count}} / {{max}} tarama hakkınız kaldı",
+    "limitReachedDesc": "Yeni taramalar en eski kayıtların üzerine yazılacak",
+    "getUnlimited": "Sınırsız Depolama Al"
   }
 } 

@@ -1,0 +1,63 @@
+{
+  "title": "Scan Result",
+  "loading": "Loading...",
+  "tagType": {
+    "title": "Tag Type",
+    "passwordProtected": "Password Protected"
+  },
+  "content": {
+    "protected": {
+      "title": "Protected Content",
+      "description": "This content is password protected. A password is required to view it.",
+      "enterPassword": "Enter Password"
+    },
+    "decrypted": {
+      "title": "Decrypted Content",
+      "badge": "Decrypted"
+    },
+    "types": {
+      "text": "Text",
+      "url": "URL",
+      "phone": "Phone Number",
+      "email": "Email Address",
+      "data": "Data"
+    }
+  },
+  "actions": {
+    "openUrl": "Open URL",
+    "call": "Call",
+    "sendMessage": "Send Message",
+    "sendEmail": "Send Email"
+  },
+  "share": {
+    "encryptedTitle": "Encrypted Content",
+    "encryptedMessage": "Content is encrypted. You need to decrypt it before sharing.",
+    "message": "Scanned with NFC Reader Pro: {{content}}"
+  },
+  "password": {
+    "enterPassword": "Enter Password",
+    "errors": {
+      "empty": "Please enter a password",
+      "noEncryptedContent": "No encrypted content found",
+      "incorrect": "Incorrect password. Please try again.",
+      "decryptFailed": "Failed to decrypt content"
+    },
+    "modal": {
+      "title": "Protected Content",
+      "description": "This content is password protected. Enter the password to view it.",
+      "placeholder": "Password",
+      "decrypt": "Decrypt"
+    }
+  },
+  "writeTag": {
+    "title": "Write NFC Tag",
+    "description": "Use the button below to write this data to a new NFC tag.",
+    "button": "Write NFC Tag"
+  },
+  "storageLimit": {
+    "title": "Storage Limit Reached",
+    "message": "Free users have reached the storage limit. New scans will overwrite the oldest records. Upgrade to Premium for unlimited storage.",
+    "subtitle": "Get unlimited storage with Premium subscription.",
+    "upgradeButton": "Upgrade to Premium"
+  }
+} 

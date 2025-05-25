@@ -1,46 +1,25 @@
 {
-  "title": "Combinar Datos NFC",
-  "description": "Seleccione escaneos para combinar y escribir en una nueva etiqueta",
+  "title": "Fusión de Datos",
+  "infoText": "Seleccione los datos que desea fusionar. Los datos seleccionados se escribirán en una nueva etiqueta NFC.",
+  "nfcTag": "Etiqueta NFC",
+  "encryptedContent": "El contenido cifrado no puede fusionarse",
+  "empty": {
+    "title": "No se encontraron escaneos",
+    "description": "Puede utilizar datos de su historial de escaneos para fusionar.",
+    "scanButton": "Nuevo Escaneo"
+  },
   "selection": {
-    "title": "Seleccionar Escaneos",
-    "empty": "No hay escaneos disponibles para combinar",
-    "selected": "{{count}} escaneos seleccionados",
-    "maxLimit": "Se pueden seleccionar máximo {{count}} escaneos"
-  },
-  "filters": {
-    "title": "Filtrar Escaneos",
-    "dataType": "Tipo de Datos",
-    "tagType": "Tipo de Etiqueta",
-    "date": "Fecha"
-  },
-  "preview": {
-    "title": "Vista Previa",
-    "empty": "Seleccione escaneos para ver la vista previa",
-    "size": "Tamaño de Datos Combinados: {{size}}"
-  },
-  "buttons": {
-    "merge": "Combinar y Escribir",
-    "cancel": "Cancelar",
-    "clear": "Limpiar Selección"
-  },
-  "status": {
-    "merging": "Combinando datos...",
-    "writing": "Escribiendo en etiqueta...",
-    "success": "Datos combinados y escritos exitosamente",
-    "error": "Error al combinar datos"
+    "count": "{{count}} Elementos Seleccionados",
+    "clear": "Limpiar",
+    "mergeButton": "Fusionar Seleccionados y Escribir"
   },
   "alerts": {
-    "noSelection": {
-      "title": "Sin Selección",
-      "message": "Por favor, seleccione al menos un escaneo para combinar"
-    },
-    "sizeLimit": {
-      "title": "Límite de Tamaño Excedido",
-      "message": "El tamaño de los datos combinados excede la capacidad de la etiqueta"
-    },
-    "incompatible": {
-      "title": "Datos Incompatibles",
-      "message": "Los escaneos seleccionados contienen tipos de datos incompatibles"
-    }
+    "error": "Error",
+    "success": "Éxito",
+    "selectData": "Por favor, seleccione al menos un elemento de datos",
+    "writingTag": "Escribiendo Etiqueta NFC",
+    "bringPhoneNear": "Por favor, acerque su teléfono a la etiqueta NFC",
+    "mergeSuccess": "Datos fusionados y escritos con éxito en la etiqueta NFC",
+    "writeFailed": "La operación de escritura de datos falló"
   }
 } 

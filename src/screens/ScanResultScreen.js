@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import LottieView from 'lottie-react-native';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Linking,
   Modal,
@@ -26,6 +27,8 @@ import useSettingsStore from '../features/settings/settingsStore';
 import useSubscriptionStore from '../features/subscription/subscriptionStore';
 
 const ScanResultScreen = ({ navigation, route }) => {
+  const { t } = useTranslation('scanResult');
+  
   // Lottie animasyonu referansı
   const animationRef = useRef(null);
   
@@ -87,13 +90,13 @@ const ScanResultScreen = ({ navigation, route }) => {
       if (settings.autoSave && !isPremiumUser() && isStorageLimitReached) {
         setAlertConfig({
           visible: true,
-          title: 'Depolama Limiti Aşıldı',
-          message: 'Ücretsiz kullanıcılar için depolama limiti doldu. Yeni taramalar en eski kayıtların üzerine yazılacak. Sınırsız depolama için Premium aboneliğe geçin.',
+          title: t('storageLimit.title'),
+          message: t('storageLimit.message'),
           type: 'warning',
           buttons: [
-            { text: 'Tamam' },
+            { text: t('common:actions.ok') },
             { 
-              text: 'Premium\'a Geç', 
+              text: t('storageLimit.upgradeButton'), 
               onPress: () => navigation.navigate('Home', { screen: 'Subscription' }) 
             }
           ]
@@ -106,12 +109,12 @@ const ScanResultScreen = ({ navigation, route }) => {
   const handleDecrypt = async () => {
     try {
       if (!password) {
-        setPasswordError('Lütfen bir şifre girin');
+        setPasswordError(t('password.errors.empty'));
         return;
       }
       
       if (!scanResult || !scanResult.data || !scanResult.data.value) {
-        setPasswordError('Şifreli içerik bulunamadı');
+        setPasswordError(t('password.errors.noEncryptedContent'));
         return;
       }
       
@@ -120,7 +123,7 @@ const ScanResultScreen = ({ navigation, route }) => {
       
       // Çözme başarılı mı kontrol et - değişiklik yoksa muhtemelen yanlış şifre
       if (decrypted === scanResult.data.value || !decrypted) {
-        setPasswordError('Yanlış şifre. Lütfen tekrar deneyin.');
+        setPasswordError(t('password.errors.incorrect'));
         return;
       }
       
@@ -130,7 +133,7 @@ const ScanResultScreen = ({ navigation, route }) => {
       setPasswordError('');
     } catch (error) {
       console.log('Şifre çözme hatası:', error);
-      setPasswordError(error.message || 'Şifre çözme işlemi başarısız oldu');
+      setPasswordError(error.message || t('password.errors.decryptFailed'));
     }
   };
   
@@ -139,7 +142,7 @@ const ScanResultScreen = ({ navigation, route }) => {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Yükleniyor...</Text>
+          <Text style={styles.loadingText}>{t('loading')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -153,14 +156,14 @@ const ScanResultScreen = ({ navigation, route }) => {
     if (data.type === DATA_TYPES.PROTECTED && !decryptedValue) {
       return (
         <Card style={styles.contentCard}>
-          <Text style={styles.contentTitle}>Şifreli İçerik</Text>
+          <Text style={styles.contentTitle}>{t('content.protected.title')}</Text>
           <View style={styles.encryptedContent}>
             <Ionicons name="lock-closed" size={32} color={COLORS.primary} />
             <Text style={styles.encryptedText}>
-              Bu içerik şifre korumalıdır. Görüntülemek için şifre gereklidir.
+              {t('content.protected.description')}
             </Text>
             <Button
-              title="Şifre Girin"
+              title={t('content.protected.enterPassword')}
               onPress={() => setShowPasswordModal(true)}
               icon="key"
               style={styles.unlockButton}
@@ -175,10 +178,10 @@ const ScanResultScreen = ({ navigation, route }) => {
       return (
         <Card style={styles.contentCard}>
           <View style={styles.decryptedHeader}>
-            <Text style={styles.contentTitle}>Çözülmüş İçerik</Text>
+            <Text style={styles.contentTitle}>{t('content.decrypted.title')}</Text>
             <View style={styles.decryptedBadge}>
               <Ionicons name="shield-checkmark" size={16} color={COLORS.success} />
-              <Text style={styles.decryptedBadgeText}>Çözüldü</Text>
+              <Text style={styles.decryptedBadgeText}>{t('content.decrypted.badge')}</Text>
             </View>
           </View>
           <Text style={styles.contentText} selectable>{decryptedValue}</Text>
@@ -190,7 +193,7 @@ const ScanResultScreen = ({ navigation, route }) => {
       case DATA_TYPES.TEXT:
         return (
           <Card style={styles.contentCard}>
-            <Text style={styles.contentTitle}>Metin</Text>
+            <Text style={styles.contentTitle}>{t('content.types.text')}</Text>
             <Text style={styles.contentText}>{data.value}</Text>
           </Card>
         );
@@ -198,10 +201,10 @@ const ScanResultScreen = ({ navigation, route }) => {
       case DATA_TYPES.URL:
         return (
           <Card style={styles.contentCard}>
-            <Text style={styles.contentTitle}>URL</Text>
+            <Text style={styles.contentTitle}>{t('content.types.url')}</Text>
             <Text style={styles.contentText} selectable>{data.value}</Text>
             <Button
-              title="URL'yi Aç"
+              title={t('actions.openUrl')}
               onPress={() => Linking.openURL(data.value)}
               leftIcon={<Ionicons name="open" size={18} color={COLORS.text} />}
               style={styles.actionButton}
@@ -212,17 +215,17 @@ const ScanResultScreen = ({ navigation, route }) => {
       case DATA_TYPES.PHONE:
         return (
           <Card style={styles.contentCard}>
-            <Text style={styles.contentTitle}>Telefon Numarası</Text>
+            <Text style={styles.contentTitle}>{t('content.types.phone')}</Text>
             <Text style={styles.contentText} selectable>{data.value}</Text>
             <View style={styles.actionRow}>
               <Button
-                title="Ara"
+                title={t('actions.call')}
                 onPress={() => Linking.openURL(`tel:${data.value}`)}
                 leftIcon={<Ionicons name="call" size={18} color={COLORS.text} />}
                 style={styles.actionButton}
               />
               <Button
-                title="Mesaj Gönder"
+                title={t('actions.sendMessage')}
                 type="outline"
                 onPress={() => Linking.openURL(`sms:${data.value}`)}
                 leftIcon={<Ionicons name="chatbubble" size={18} color={COLORS.primary} />}
@@ -235,10 +238,10 @@ const ScanResultScreen = ({ navigation, route }) => {
       case DATA_TYPES.EMAIL:
         return (
           <Card style={styles.contentCard}>
-            <Text style={styles.contentTitle}>E-posta Adresi</Text>
+            <Text style={styles.contentTitle}>{t('content.types.email')}</Text>
             <Text style={styles.contentText} selectable>{data.value}</Text>
             <Button
-              title="E-posta Gönder"
+              title={t('actions.sendEmail')}
               onPress={() => Linking.openURL(`mailto:${data.value}`)}
               leftIcon={<Ionicons name="mail" size={18} color={COLORS.text} />}
               style={styles.actionButton}
@@ -249,7 +252,7 @@ const ScanResultScreen = ({ navigation, route }) => {
       default:
         return (
           <Card style={styles.contentCard}>
-            <Text style={styles.contentTitle}>Veri</Text>
+            <Text style={styles.contentTitle}>{t('content.types.data')}</Text>
             <Text style={styles.contentText} selectable>{JSON.stringify(data.value)}</Text>
           </Card>
         );
@@ -269,17 +272,17 @@ const ScanResultScreen = ({ navigation, route }) => {
       // Şifreli ve çözülmemişse kullanıcıya uyarı ver
       else if (data.type === DATA_TYPES.PROTECTED && !decryptedValue) {
         Alert.alert(
-          'Şifreli İçerik',
-          'İçerik şifrelenmiş. Paylaşmadan önce şifreyi çözmeniz gerekiyor.',
+          t('share.encryptedTitle'),
+          t('share.encryptedMessage'),
           [
-            { text: 'Şifre Gir', onPress: () => setShowPasswordModal(true) },
-            { text: 'İptal', style: 'cancel' }
+            { text: t('password.enterPassword'), onPress: () => setShowPasswordModal(true) },
+            { text: t('common:actions.cancel'), style: 'cancel' }
           ]
         );
         return;
       }
       
-      const message = `NFC Reader Pro ile tarandı: ${shareValue}`;
+      const message = t('share.message', { content: shareValue });
       
       await Share.share({
         message,
@@ -315,16 +318,16 @@ const ScanResultScreen = ({ navigation, route }) => {
           <View style={styles.passwordModalContainer}>
             <View style={styles.passwordModalHeader}>
               <Ionicons name="shield-outline" size={28} color={COLORS.primary} />
-              <Text style={styles.passwordModalTitle}>Şifreli İçerik</Text>
+              <Text style={styles.passwordModalTitle}>{t('password.modal.title')}</Text>
             </View>
             
             <Text style={styles.passwordModalText}>
-              Bu içerik şifre korumalıdır. Görüntülemek için şifreyi girin.
+              {t('password.modal.description')}
             </Text>
             
             <TextInput
               style={styles.passwordModalInput}
-              placeholder="Şifre"
+              placeholder={t('password.modal.placeholder')}
               placeholderTextColor={COLORS.textDisabled}
               secureTextEntry
               value={password}
@@ -339,7 +342,7 @@ const ScanResultScreen = ({ navigation, route }) => {
             
             <View style={styles.passwordModalButtons}>
               <Button
-                title="İptal"
+                title={t('common:actions.cancel')}
                 mode="text"
                 onPress={() => {
                   setShowPasswordModal(false);
@@ -350,7 +353,7 @@ const ScanResultScreen = ({ navigation, route }) => {
                 textStyle={styles.passwordModalCancelButtonText}
               />
               <Button
-                title="Şifreyi Çöz"
+                title={t('password.modal.decrypt')}
                 onPress={handleDecrypt}
                 style={styles.passwordModalDecryptButton}
               />
@@ -370,7 +373,7 @@ const ScanResultScreen = ({ navigation, route }) => {
         >
           <Ionicons name="arrow-back" size={24} color={COLORS.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Tarama Sonucu</Text>
+        <Text style={styles.headerTitle}>{t('title')}</Text>
         <TouchableOpacity onPress={handleShare}>
           <Ionicons name="share-outline" size={24} color={COLORS.text} />
         </TouchableOpacity>
@@ -394,14 +397,14 @@ const ScanResultScreen = ({ navigation, route }) => {
             <View style={styles.warningContent}>
               <Ionicons name="alert-circle" size={24} color={COLORS.warning} />
               <View style={styles.warningTextContainer}>
-                <Text style={styles.warningTitle}>Depolama Limiti Aşıldı</Text>
+                <Text style={styles.warningTitle}>{t('storageLimit.title')}</Text>
                 <Text style={styles.warningText}>
-                  Premium abonelikle sınırsız depolama elde edin.
+                  {t('storageLimit.subtitle')}
                 </Text>
               </View>
             </View>
             <Button
-              title="Premium'a Geç"
+              title={t('storageLimit.upgradeButton')}
               onPress={() => navigation.navigate('Home', { screen: 'Subscription' })}
               icon="star"
               style={styles.warningButton}
@@ -411,13 +414,13 @@ const ScanResultScreen = ({ navigation, route }) => {
         
         {/* Tag tipi bilgisi */}
         <Card style={styles.infoCard}>
-          <Text style={styles.infoTitle}>Etiket Türü</Text>
+          <Text style={styles.infoTitle}>{t('tagType.title')}</Text>
           <Text style={styles.infoText}>{scanResult.tagType}</Text>
           
           {isEncrypted && (
             <View style={styles.securityInfo}>
               <Ionicons name="lock-closed" size={16} color={COLORS.primary} />
-              <Text style={styles.securityText}>Şifre Korumalı</Text>
+              <Text style={styles.securityText}>{t('tagType.passwordProtected')}</Text>
             </View>
           )}
         </Card>
@@ -428,16 +431,16 @@ const ScanResultScreen = ({ navigation, route }) => {
         {/* Yazma özelliği */}
         <Card style={styles.writeCard}>
           <View style={styles.writeCardHeader}>
-            <Text style={styles.writeCardTitle}>NFC Etiketi Yaz</Text>
+            <Text style={styles.writeCardTitle}>{t('writeTag.title')}</Text>
             {!canUseFeature('write') && <PremiumBadge small />}
           </View>
           
           <Text style={styles.writeCardText}>
-            Bu veriyi yeni bir NFC etiketine yazmak için aşağıdaki butonu kullanın.
+            {t('writeTag.description')}
           </Text>
           
           <Button
-            title="NFC Etiketi Yaz"
+            title={t('writeTag.button')}
             type={canUseFeature('write') ? 'primary' : 'outline'}
             onPress={handleWriteTag}
             leftIcon={

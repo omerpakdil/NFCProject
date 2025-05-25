@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import LottieView from 'lottie-react-native';
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dimensions,
   FlatList,
@@ -16,31 +17,32 @@ import { COLORS, SIZES } from '../constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
-// Onboarding sayfaları
-const onboardingData = [
-  {
-    id: '1',
-    title: "NFC Reader Pro'ya Hoş Geldiniz",
-    description: "Güçlü NFC okuma, yazma ve yönetim özelliklerine sahip uygulamanız.",
-    animation: require('../assets/animations/welcome.json'), // Bu dosyaları daha sonra ekleyeceğiz
-  },
-  {
-    id: '2',
-    title: 'NFC Etiketlerini Okuyun',
-    description: 'Herhangi bir NFC etiketini kolayca okuyun ve bilgilerini görüntüleyin.',
-    animation: require('../assets/animations/scan.json'),
-  },
-  {
-    id: '3',
-    title: 'Premium Özellikleri Keşfedin',
-    description: 'Etiket yazma, kilitleme ve şifre koruması gibi gelişmiş özelliklere erişin.',
-    animation: require('../assets/animations/premium.json'),
-  },
-];
-
 const OnboardingScreen = ({ navigation }) => {
+  const { t } = useTranslation('onboarding');
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef(null);
+
+  // Onboarding sayfaları
+  const onboardingData = [
+    {
+      id: '1',
+      title: t('slides.welcome.title'),
+      description: t('slides.welcome.description'),
+      animation: require('../assets/animations/welcome.json'),
+    },
+    {
+      id: '2',
+      title: t('slides.scan.title'),
+      description: t('slides.scan.description'),
+      animation: require('../assets/animations/scan.json'),
+    },
+    {
+      id: '3',
+      title: t('slides.premium.title'),
+      description: t('slides.premium.description'),
+      animation: require('../assets/animations/premium.json'),
+    },
+  ];
 
   // Bir sonraki sayfaya git
   const goToNextSlide = () => {
@@ -114,7 +116,7 @@ const OnboardingScreen = ({ navigation }) => {
               });
             }}
           >
-            <Text style={styles.skipText}>Geç</Text>
+            <Text style={styles.skipText}>{t('actions.skip')}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -138,7 +140,7 @@ const OnboardingScreen = ({ navigation }) => {
         </View>
 
         <Button
-          title={currentIndex === onboardingData.length - 1 ? "Başla" : "İleri"}
+          title={currentIndex === onboardingData.length - 1 ? t('actions.start') : t('actions.next')}
           onPress={goToNextSlide}
           style={styles.button}
           rightIcon={

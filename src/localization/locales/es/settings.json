@@ -1,23 +1,48 @@
 {
   "title": "Ajustes",
+  "appName": "NFC Reader Pro",
+  "premium": {
+    "upgrade": "Actualizar a Premium",
+    "upgradeButton": "Actualizar a Premium",
+    "description": "Accede a funciones premium como escritura, bloqueo de etiquetas y encriptación."
+  },
   "sections": {
     "general": {
-      "title": "General",
+      "title": "Aplicación",
       "language": "Idioma",
+      "selectLanguage": "Seleccione su idioma preferido",
       "theme": "Tema",
       "hapticFeedback": "Respuesta Háptica",
-      "notifications": "Notificaciones"
+      "hapticFeedbackDesc": "Retroalimentación vibratoria para operaciones de escaneo y escritura NFC",
+      "notifications": "Notificaciones",
+      "notificationsDesc": "Recibe notificaciones sobre nuevas funciones y actualizaciones",
+      "autoSave": "Guardado Automático",
+      "autoSaveDesc": "Guardar automáticamente escaneos en el historial"
     },
     "premium": {
       "title": "Premium",
       "status": "Estado Premium",
-      "active": "Activo",
+      "active": "Tu Suscripción Premium está Activa",
       "inactive": "Inactivo",
-      "manageSubscription": "Gestionar Suscripción"
+      "manageSubscription": "Gestionar Suscripción",
+      "plan": "plan"
+    },
+    "account": {
+      "title": "Mi Cuenta",
+      "manageSubscription": "Gestionar Suscripción",
+      "premiumFeatures": "Funciones Premium",
+      "restorePurchases": "Restaurar Compras"
+    },
+    "support": {
+      "title": "Soporte",
+      "help": "Ayuda y Soporte",
+      "rateApp": "Califica Nuestra App",
+      "privacyPolicy": "Política de Privacidad",
+      "termsOfService": "Términos de Servicio"
     },
     "data": {
-      "title": "Datos y Privacidad",
-      "clearHistory": "Borrar Historial de Escaneos",
+      "title": "Datos",
+      "clearData": "Borrar Todos los Datos",
       "clearHistoryDesc": "Elimina todo tu historial de escaneos",
       "exportData": "Exportar Datos",
       "exportDataDesc": "Exporta todos tus datos"
@@ -25,10 +50,7 @@
     "about": {
       "title": "Acerca de",
       "version": "Versión de la App",
-      "rateApp": "Calificar App",
-      "contactUs": "Contáctanos",
-      "privacyPolicy": "Política de Privacidad",
-      "termsOfService": "Términos de Servicio"
+      "contactUs": "Contáctanos"
     }
   },
   "theme": {
@@ -37,9 +59,19 @@
     "dark": "Oscuro"
   },
   "clearData": {
-    "title": "Borrar Datos",
-    "message": "Todos tus datos serán eliminados. Esta acción no se puede deshacer.",
-    "confirm": "Borrar",
-    "cancel": "Cancelar"
+    "title": "Borrar Todos los Datos",
+    "message": "Todo tu historial de escaneos y ajustes serán eliminados. Esta acción no se puede deshacer.",
+    "confirm": "Eliminar",
+    "success": "Todos los datos han sido borrados.",
+    "error": "Ocurrió un error al borrar los datos."
+  },
+  "subscription": {
+    "restoreSuccess": "¡Tu suscripción ha sido restaurada con éxito!",
+    "noSubscriptionFound": "No se encontró ninguna suscripción activa para restaurar.",
+    "restoreError": "Ocurrió un error al restaurar las suscripciones."
+  },
+  "developer": {
+    "removePremium": "Suscripción premium eliminada (modo desarrollador).",
+    "removePremiumButton": "Eliminar Suscripción Premium (Desarrollador)"
   }
 } 

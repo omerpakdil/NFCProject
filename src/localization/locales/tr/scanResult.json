@@ -1,0 +1,63 @@
+{
+  "title": "Tarama Sonucu",
+  "loading": "Yükleniyor...",
+  "tagType": {
+    "title": "Etiket Türü",
+    "passwordProtected": "Şifre Korumalı"
+  },
+  "content": {
+    "protected": {
+      "title": "Şifreli İçerik",
+      "description": "Bu içerik şifre korumalıdır. Görüntülemek için şifre gereklidir.",
+      "enterPassword": "Şifre Girin"
+    },
+    "decrypted": {
+      "title": "Çözülmüş İçerik",
+      "badge": "Çözüldü"
+    },
+    "types": {
+      "text": "Metin",
+      "url": "URL",
+      "phone": "Telefon Numarası",
+      "email": "E-posta Adresi",
+      "data": "Veri"
+    }
+  },
+  "actions": {
+    "openUrl": "URL'yi Aç",
+    "call": "Ara",
+    "sendMessage": "Mesaj Gönder",
+    "sendEmail": "E-posta Gönder"
+  },
+  "share": {
+    "encryptedTitle": "Şifreli İçerik",
+    "encryptedMessage": "İçerik şifrelenmiş. Paylaşmadan önce şifreyi çözmeniz gerekiyor.",
+    "message": "NFC Reader Pro ile tarandı: {{content}}"
+  },
+  "password": {
+    "enterPassword": "Şifre Gir",
+    "errors": {
+      "empty": "Lütfen bir şifre girin",
+      "noEncryptedContent": "Şifreli içerik bulunamadı",
+      "incorrect": "Yanlış şifre. Lütfen tekrar deneyin.",
+      "decryptFailed": "Şifre çözme işlemi başarısız oldu"
+    },
+    "modal": {
+      "title": "Şifreli İçerik",
+      "description": "Bu içerik şifre korumalıdır. Görüntülemek için şifreyi girin.",
+      "placeholder": "Şifre",
+      "decrypt": "Şifreyi Çöz"
+    }
+  },
+  "writeTag": {
+    "title": "NFC Etiketi Yaz",
+    "description": "Bu veriyi yeni bir NFC etiketine yazmak için aşağıdaki butonu kullanın.",
+    "button": "NFC Etiketi Yaz"
+  },
+  "storageLimit": {
+    "title": "Depolama Limiti Aşıldı",
+    "message": "Ücretsiz kullanıcılar için depolama limiti doldu. Yeni taramalar en eski kayıtların üzerine yazılacak. Sınırsız depolama için Premium aboneliğe geçin.",
+    "subtitle": "Premium abonelikle sınırsız depolama elde edin.",
+    "upgradeButton": "Premium'a Geç"
+  }
+} 

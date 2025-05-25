@@ -1,46 +1,25 @@
 {
-  "title": "Merge NFC Data",
-  "description": "Select scans to merge and write to a new tag",
+  "title": "Data Merge",
+  "infoText": "Select the data you want to merge. The selected data will be written to a new NFC tag.",
+  "nfcTag": "NFC Tag",
+  "encryptedContent": "Encrypted content cannot be merged",
+  "empty": {
+    "title": "No Scans Found",
+    "description": "You can use data from your scan history for merging.",
+    "scanButton": "New Scan"
+  },
   "selection": {
-    "title": "Select Scans",
-    "empty": "No scans available for merging",
-    "selected": "{{count}} scans selected",
-    "maxLimit": "Maximum {{count}} scans can be selected"
-  },
-  "filters": {
-    "title": "Filter Scans",
-    "dataType": "Data Type",
-    "tagType": "Tag Type",
-    "date": "Date"
-  },
-  "preview": {
-    "title": "Merge Preview",
-    "empty": "Select scans to see preview",
-    "size": "Merged Data Size: {{size}}"
-  },
-  "buttons": {
-    "merge": "Merge and Write",
-    "cancel": "Cancel",
-    "clear": "Clear Selection"
-  },
-  "status": {
-    "merging": "Merging data...",
-    "writing": "Writing to tag...",
-    "success": "Successfully merged and written to tag",
-    "error": "Error merging data"
+    "count": "{{count}} Items Selected",
+    "clear": "Clear",
+    "mergeButton": "Merge Selected and Write"
   },
   "alerts": {
-    "noSelection": {
-      "title": "No Selection",
-      "message": "Please select at least one scan to merge"
-    },
-    "sizeLimit": {
-      "title": "Size Limit Exceeded",
-      "message": "The merged data size exceeds the tag capacity"
-    },
-    "incompatible": {
-      "title": "Incompatible Data",
-      "message": "Selected scans contain incompatible data types"
-    }
+    "error": "Error",
+    "success": "Success",
+    "selectData": "Please select at least one data item",
+    "writingTag": "Writing NFC Tag",
+    "bringPhoneNear": "Please bring your phone close to the NFC tag",
+    "mergeSuccess": "Data successfully merged and written to NFC tag",
+    "writeFailed": "Data writing operation failed"
   }
 } 

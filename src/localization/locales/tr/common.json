@@ -7,7 +7,16 @@
     "home": "Ana Sayfa",
     "history": "Geçmiş",
     "settings": "Ayarlar",
-    "subscription": "Premium"
+    "subscription": "Premium",
+    "tabs": {
+      "home": "Ana Sayfa",
+      "history": "Geçmiş",
+      "settings": "Ayarlar"
+    },
+    "screens": {
+      "appName": "NFC Reader Pro",
+      "subscription": "Premium Abonelik"
+    }
   },
   "actions": {
     "save": "Kaydet",
@@ -20,17 +29,28 @@
     "back": "Geri",
     "next": "İleri",
     "done": "Tamam",
-    "skip": "Geç"
+    "skip": "Geç",
+    "start": "Başla",
+    "continue": "Devam Et",
+    "retry": "Tekrar Dene",
+    "apply": "Uygula",
+    "reset": "Sıfırla",
+    "ok": "Tamam"
   },
   "alerts": {
     "success": "Başarılı",
     "error": "Hata",
     "warning": "Uyarı",
-    "info": "Bilgi"
+    "info": "Bilgi",
+    "confirm": "Emin misiniz?",
+    "yes": "Evet",
+    "no": "Hayır",
+    "ok": "Tamam"
   },
   "errors": {
     "general": "Bir hata oluştu",
     "network": "İnternet bağlantısı hatası",
+    "notFound": "Bulunamadı",
     "permission": "İzin gerekiyor"
   },
   "premium": {

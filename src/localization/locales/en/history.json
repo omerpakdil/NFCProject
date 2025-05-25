@@ -1,38 +1,51 @@
 {
-  "title": "Scan History",
+  "title": "History",
+  "nfcTag": "NFC Tag",
+  "item": {
+    "note": "Note"
+  },
   "empty": {
-    "title": "No scans yet",
-    "description": "Your NFC tag scans will appear here."
+    "title": "No Scans Yet",
+    "description": "Your scan history will appear here."
   },
-  "filters": {
-    "title": "Filters",
-    "dateRange": "Date Range",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "tagTypes": "Tag Types",
-    "dataTypes": "Data Types",
-    "categories": "Categories",
-    "tags": "Tags",
-    "onlyFavorites": "Only Favorites",
-    "onlySaved": "Only Saved",
-    "apply": "Apply",
-    "reset": "Reset",
-    "activeFilters": "{{count}} active filters"
-  },
-  "export": {
-    "title": "Export",
-    "format": "Select Format",
-    "button": "Export"
-  },
-  "clear": {
+  "clearHistory": {
     "title": "Clear History",
     "message": "All your scan history will be deleted. This action cannot be undone.",
-    "confirm": "Clear",
-    "cancel": "Cancel"
+    "button": "Clear"
+  },
+  "filters": {
+    "title": "Advanced Filters",
+    "sort": "Sort",
+    "tagType": "Tag Type",
+    "dataType": "Data Type",
+    "dateRange": "Date Range",
+    "dateFormatHelp": "Enter dates in DD.MM.YYYY format",
+    "dateFormatError": "Invalid date format. Please enter in DD.MM.YYYY format.",
+    "startDate": "Start",
+    "endDate": "End",
+    "notesOnly": "Notes Only",
+    "notesOnlyHelp": "Show only scans with notes",
+    "favoritesOnly": "Favorites Only",
+    "categories": "Categories",
+    "tags": "Tags"
   },
   "sort": {
-    "title": "Sort",
     "newest": "Newest",
-    "oldest": "Oldest"
+    "oldest": "Oldest",
+    "tagType": "Tag Type",
+    "dataType": "Data Type"
+  },
+  "search": {
+    "placeholder": "Search..."
+  },
+  "actions": {
+    "export": "Export"
+  },
+  "storage": {
+    "status": "Storage Status",
+    "limitReached": "Storage Limit Reached",
+    "remaining": "{{count}} / {{max}} scans remaining",
+    "limitReachedDesc": "New scans will overwrite oldest records",
+    "getUnlimited": "Get Unlimited Storage"
   }
 } 

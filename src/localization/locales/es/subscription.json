@@ -1,26 +1,38 @@
 {
   "title": "Funciones Premium",
   "subtitle": "Escaneos ilimitados, funciones avanzadas y más",
+  "loading": "Cargando ofertas...",
+  "subscribe": "Suscribirse",
+  "changeSubscription": "Cambiar Suscripción",
+  "currentSubscription": "Suscripción Actual",
+  "currentPlan": "Plan Actual",
+  "disclaimer": "* Las suscripciones se renuevan automáticamente. Puedes cancelar en cualquier momento en ajustes.",
+  "purchase": {
+    "success": "Suscripción premium activada. Todas las funciones están ahora disponibles.",
+    "error": "Ocurrió un error durante la compra. Por favor, inténtalo de nuevo."
+  },
   "features": {
     "read": "Lectura NFC",
+    "history_view": "Visualización del Historial",
     "write": "Escritura NFC",
     "lock": "Bloqueo de Etiquetas",
-    "password": "Protección con Contraseña",
-    "storage": "Almacenamiento Integral de Datos",
-    "merge": "Fusión de Datos",
-    "history": "Gestión Avanzada del Historial",
-    "export": "Exportación de Datos"
+    "password_protection": "Protección con Contraseña",
+    "data_storage": "Almacenamiento Integral de Datos",
+    "data_merge": "Fusión de Datos",
+    "advanced_history": "Gestión Avanzada del Historial"
   },
   "plans": {
     "weekly": {
       "title": "Semanal",
       "price": "$1.99",
-      "period": "semanal"
+      "period": "semanal",
+      "discount": "10% descuento"
     },
     "monthly": {
       "title": "Mensual",
       "price": "$4.99",
-      "period": "mensual"
+      "period": "mensual",
+      "discount": "20% descuento"
     },
     "yearly": {
       "title": "Anual",
@@ -31,10 +43,16 @@
     "lifetime": {
       "title": "De por Vida",
       "price": "$79.99",
-      "period": "único pago"
+      "period": "único pago",
+      "discount": "Mejor valor"
     }
   },
-  "currentPlan": "Plan Actual",
+  "period": {
+    "weekly": "semanal",
+    "monthly": "mensual",
+    "yearly": "anual",
+    "lifetime": "de por vida"
+  },
   "buttons": {
     "subscribe": "Suscribirse",
     "change": "Cambiar Suscripción",
@@ -45,6 +63,5 @@
     "restored": "¡Tu suscripción ha sido restaurada con éxito!",
     "noRestored": "No se encontró ninguna suscripción activa para restaurar.",
     "error": "Ocurrió un error durante la compra. Por favor, inténtalo de nuevo."
-  },
-  "disclaimer": "* Las suscripciones se renuevan automáticamente. Puedes cancelar en cualquier momento en ajustes."
+  }
 } 

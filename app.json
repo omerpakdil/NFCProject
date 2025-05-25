@@ -41,6 +41,23 @@
         "projectId": "nfc-reader-pro"
       }
     },
-    "scheme": "nfc-reader-pro"
+    "scheme": "nfc-reader-pro",
+    "fonts": [
+      {
+        "asset": "assets/fonts/Inter-Regular.woff2",
+        "family": "Inter",
+        "weight": "400"
+      },
+      {
+        "asset": "assets/fonts/Inter-Medium.woff2",
+        "family": "Inter",
+        "weight": "500"
+      },
+      {
+        "asset": "assets/fonts/Inter-SemiBold.woff2",
+        "family": "Inter",
+        "weight": "600"
+      }
+    ]
   }
 }

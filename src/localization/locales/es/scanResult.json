@@ -1,0 +1,63 @@
+{
+  "title": "Resultado del Escaneo",
+  "loading": "Cargando...",
+  "tagType": {
+    "title": "Tipo de Etiqueta",
+    "passwordProtected": "Protegido con Contraseña"
+  },
+  "content": {
+    "protected": {
+      "title": "Contenido Protegido",
+      "description": "Este contenido está protegido con contraseña. Se requiere una contraseña para verlo.",
+      "enterPassword": "Introducir Contraseña"
+    },
+    "decrypted": {
+      "title": "Contenido Descifrado",
+      "badge": "Descifrado"
+    },
+    "types": {
+      "text": "Texto",
+      "url": "URL",
+      "phone": "Número de Teléfono",
+      "email": "Dirección de Correo",
+      "data": "Datos"
+    }
+  },
+  "actions": {
+    "openUrl": "Abrir URL",
+    "call": "Llamar",
+    "sendMessage": "Enviar Mensaje",
+    "sendEmail": "Enviar Correo"
+  },
+  "share": {
+    "encryptedTitle": "Contenido Cifrado",
+    "encryptedMessage": "El contenido está cifrado. Necesita descifrarlo antes de compartirlo.",
+    "message": "Escaneado con NFC Reader Pro: {{content}}"
+  },
+  "password": {
+    "enterPassword": "Introducir Contraseña",
+    "errors": {
+      "empty": "Por favor, introduzca una contraseña",
+      "noEncryptedContent": "No se encontró contenido cifrado",
+      "incorrect": "Contraseña incorrecta. Por favor, inténtelo de nuevo.",
+      "decryptFailed": "No se pudo descifrar el contenido"
+    },
+    "modal": {
+      "title": "Contenido Protegido",
+      "description": "Este contenido está protegido con contraseña. Introduzca la contraseña para verlo.",
+      "placeholder": "Contraseña",
+      "decrypt": "Descifrar"
+    }
+  },
+  "writeTag": {
+    "title": "Escribir Etiqueta NFC",
+    "description": "Utilice el botón de abajo para escribir estos datos en una nueva etiqueta NFC.",
+    "button": "Escribir Etiqueta NFC"
+  },
+  "storageLimit": {
+    "title": "Límite de Almacenamiento Alcanzado",
+    "message": "Los usuarios gratuitos han alcanzado el límite de almacenamiento. Los nuevos escaneos sobrescribirán los registros más antiguos. Actualice a Premium para obtener almacenamiento ilimitado.",
+    "subtitle": "Obtenga almacenamiento ilimitado con la suscripción Premium.",
+    "upgradeButton": "Actualizar a Premium"
+  }
+} 

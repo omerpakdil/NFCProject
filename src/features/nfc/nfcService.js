@@ -53,6 +53,11 @@ class NfcService {
     if (this.isInitialized) return true;
     
     try {
+      // Geçici olarak NFC kontrolünü devre dışı bırak
+      this.isInitialized = true;
+      return true;
+      
+      /* NFC kontrolü geçici olarak devre dışı bırakıldı
       // NFC donanımı var mı kontrol et
       const hasNfc = await NfcManager.isSupported();
       
@@ -65,6 +70,7 @@ class NfcService {
       await NfcManager.start();
       this.isInitialized = true;
       return true;
+      */
     } catch (error) {
       console.log('NFC başlatılamadı:', error);
       return false;

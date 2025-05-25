@@ -1,0 +1,113 @@
+{
+  "title": "Detalle de Escaneo",
+  "loading": "Cargando...",
+  "errors": {
+    "scanNotFound": "Registro de escaneo no encontrado."
+  },
+  "content": {
+    "encrypted": {
+      "title": "Contenido Cifrado",
+      "description": "Este contenido está protegido con contraseña. Se requiere una contraseña para verlo.",
+      "enterPassword": "Introducir Contraseña",
+      "status": "Protegido con Contraseña"
+    },
+    "decrypted": {
+      "title": "Contenido Descifrado",
+      "badge": "Descifrado"
+    },
+    "types": {
+      "text": "Texto",
+      "url": "URL",
+      "phone": "Número de Teléfono",
+      "email": "Dirección de Correo",
+      "data": "Datos"
+    }
+  },
+  "actions": {
+    "openUrl": "Abrir URL",
+    "call": "Llamar",
+    "sendMessage": "Enviar Mensaje",
+    "sendEmail": "Enviar Correo"
+  },
+  "share": {
+    "message": "Escaneado con NFC Reader Pro: {{value}}"
+  },
+  "delete": {
+    "title": "Eliminar Escaneo",
+    "message": "¿Estás seguro de que quieres eliminar este registro de escaneo?",
+    "button": "Eliminar"
+  },
+  "favorite": {
+    "add": "Añadir a Favoritos",
+    "active": "En Favoritos"
+  },
+  "category": {
+    "title": "Categoría"
+  },
+  "tags": {
+    "title": "Etiquetas"
+  },
+  "notes": {
+    "title": "Notas",
+    "placeholder": "Añadir notas...",
+    "saveButton": "Guardar Notas",
+    "saveSuccess": "Notas guardadas."
+  },
+  "write": {
+    "title": "Escribir Etiqueta NFC",
+    "description": "Usa el botón de abajo para escribir estos datos en una nueva etiqueta NFC.",
+    "button": "Escribir Etiqueta NFC"
+  },
+  "lock": {
+    "title": "Bloquear Etiqueta",
+    "cardTitle": "Bloquear Etiqueta NFC",
+    "description": "Bloquea permanentemente la etiqueta NFC para proteger su contenido.",
+    "confirmMessage": "¿Confirmas bloquear esta etiqueta NFC? Esta acción no se puede deshacer y la etiqueta ya no será modificable.",
+    "button": "Bloquear Etiqueta NFC",
+    "process": {
+      "title": "Proceso en Curso",
+      "message": "Acerca tu teléfono a la etiqueta NFC..."
+    },
+    "success": {
+      "title": "Bloqueo Exitoso",
+      "message": "Etiqueta NFC bloqueada con éxito. Esta etiqueta ahora es de solo lectura y su contenido no se puede cambiar."
+    },
+    "error": {
+      "title": "Error de Bloqueo",
+      "message": "Ocurrió un error al bloquear la etiqueta NFC"
+    }
+  },
+  "merge": {
+    "title": "Fusionar Datos",
+    "description": "Añadir este escaneo a la operación de fusión de datos.",
+    "button": "Añadir a Fusión de Datos"
+  },
+  "password": {
+    "enterPassword": "Introducir Contraseña",
+    "error": {
+      "empty": "Por favor, introduce una contraseña",
+      "noEncryptedContent": "Contenido cifrado no encontrado",
+      "incorrect": "Contraseña incorrecta. Por favor, inténtalo de nuevo.",
+      "decryptFailed": "Falló el descifrado"
+    },
+    "modal": {
+      "title": "Contenido Cifrado",
+      "description": "Este contenido está protegido con contraseña. Introduce la contraseña para verlo.",
+      "placeholder": "Contraseña",
+      "decrypt": "Descifrar"
+    }
+  },
+  "alerts": {
+    "encryptedContent": {
+      "title": "Contenido Cifrado",
+      "message": "El contenido está cifrado. Necesitas descifrarlo antes de compartir."
+    }
+  },
+  "premium": {
+    "advancedHistory": {
+      "title": "Gestión Avanzada de Historial",
+      "description": "Categoriza escaneos, etiqueta, filtra y más"
+    },
+    "upgradeButton": "Actualizar a Premium"
+  }
+} 

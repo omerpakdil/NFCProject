@@ -1,23 +1,48 @@
 {
   "title": "Ayarlar",
+  "appName": "NFC Reader Pro",
+  "premium": {
+    "upgrade": "Premium'a Yükseltin",
+    "upgradeButton": "Premium'a Yükseltin",
+    "description": "Yazma, etiket kilitleme ve şifreleme gibi premium özelliklere erişin."
+  },
   "sections": {
     "general": {
-      "title": "Genel",
+      "title": "Uygulama",
       "language": "Dil",
+      "selectLanguage": "Tercih ettiğiniz dili seçin",
       "theme": "Tema",
       "hapticFeedback": "Titreşim Geri Bildirimi",
-      "notifications": "Bildirimler"
+      "hapticFeedbackDesc": "NFC tarama ve yazma işlemlerinde titreşimli geri bildirim",
+      "notifications": "Bildirimler",
+      "notificationsDesc": "Yeni özellikler ve güncellemeler hakkında bildirimler alın",
+      "autoSave": "Otomatik Kaydetme",
+      "autoSaveDesc": "Taramaları otomatik olarak geçmişe kaydet"
     },
     "premium": {
       "title": "Premium",
       "status": "Premium Durumu",
-      "active": "Aktif",
+      "active": "Premium Üyeliğiniz Aktif",
       "inactive": "Aktif Değil",
-      "manageSubscription": "Aboneliği Yönet"
+      "manageSubscription": "Aboneliği Yönet",
+      "plan": "plan"
+    },
+    "account": {
+      "title": "Hesabım",
+      "manageSubscription": "Abonelik Yönetimi",
+      "premiumFeatures": "Premium Özellikler",
+      "restorePurchases": "Satın Almaları Geri Yükle"
+    },
+    "support": {
+      "title": "Destek",
+      "help": "Yardım & Destek",
+      "rateApp": "Uygulamamızı Değerlendirin",
+      "privacyPolicy": "Gizlilik Politikası",
+      "termsOfService": "Kullanım Koşulları"
     },
     "data": {
-      "title": "Veri ve Gizlilik",
-      "clearHistory": "Tarama Geçmişini Temizle",
+      "title": "Veri",
+      "clearData": "Tüm Verileri Sil",
       "clearHistoryDesc": "Tüm tarama geçmişinizi siler",
       "exportData": "Verileri Dışa Aktar",
       "exportDataDesc": "Tüm verilerinizi dışa aktarır"
@@ -25,10 +50,7 @@
     "about": {
       "title": "Hakkında",
       "version": "Uygulama Sürümü",
-      "rateApp": "Uygulamayı Değerlendir",
-      "contactUs": "İletişim",
-      "privacyPolicy": "Gizlilik Politikası",
-      "termsOfService": "Kullanım Koşulları"
+      "contactUs": "İletişim"
     }
   },
   "theme": {
@@ -37,9 +59,19 @@
     "dark": "Koyu"
   },
   "clearData": {
-    "title": "Verileri Temizle",
-    "message": "Tüm verileriniz silinecek. Bu işlem geri alınamaz.",
-    "confirm": "Temizle",
-    "cancel": "İptal"
+    "title": "Tüm Verileri Sil",
+    "message": "Tüm tarama geçmişiniz ve ayarlarınız silinecek. Bu işlem geri alınamaz.",
+    "confirm": "Sil",
+    "success": "Tüm veriler temizlendi.",
+    "error": "Veriler temizlenirken bir hata oluştu."
+  },
+  "subscription": {
+    "restoreSuccess": "Aboneliğiniz başarıyla geri yüklendi!",
+    "noSubscriptionFound": "Geri yüklenecek aktif bir abonelik bulunamadı.",
+    "restoreError": "Abonelikler geri yüklenirken bir hata oluştu."
+  },
+  "developer": {
+    "removePremium": "Premium aboneliğiniz kaldırıldı (geliştirici modu).",
+    "removePremiumButton": "Premium Aboneliği Kaldır (Geliştirici)"
   }
 } 

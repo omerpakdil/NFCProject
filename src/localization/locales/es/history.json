@@ -1,38 +1,51 @@
 {
-  "title": "Historial de Escaneos",
+  "title": "Historial",
+  "nfcTag": "Etiqueta NFC",
+  "item": {
+    "note": "Nota"
+  },
   "empty": {
-    "title": "Sin escaneos aún",
-    "description": "Tus escaneos de etiquetas NFC aparecerán aquí."
+    "title": "Aún No Hay Escaneos",
+    "description": "Tu historial de escaneos aparecerá aquí."
   },
-  "filters": {
-    "title": "Filtros",
-    "dateRange": "Rango de Fechas",
-    "startDate": "Fecha de Inicio",
-    "endDate": "Fecha Final",
-    "tagTypes": "Tipos de Etiqueta",
-    "dataTypes": "Tipos de Datos",
-    "categories": "Categorías",
-    "tags": "Etiquetas",
-    "onlyFavorites": "Solo Favoritos",
-    "onlySaved": "Solo Guardados",
-    "apply": "Aplicar",
-    "reset": "Restablecer",
-    "activeFilters": "{{count}} filtros activos"
-  },
-  "export": {
-    "title": "Exportar",
-    "format": "Seleccionar Formato",
-    "button": "Exportar"
-  },
-  "clear": {
+  "clearHistory": {
     "title": "Borrar Historial",
     "message": "Todo tu historial de escaneos será eliminado. Esta acción no se puede deshacer.",
-    "confirm": "Borrar",
-    "cancel": "Cancelar"
+    "button": "Borrar"
+  },
+  "filters": {
+    "title": "Filtros Avanzados",
+    "sort": "Ordenar",
+    "tagType": "Tipo de Etiqueta",
+    "dataType": "Tipo de Datos",
+    "dateRange": "Rango de Fechas",
+    "dateFormatHelp": "Introduce fechas en formato DD.MM.AAAA",
+    "dateFormatError": "Formato de fecha inválido. Por favor, introduce en formato DD.MM.AAAA.",
+    "startDate": "Inicio",
+    "endDate": "Fin",
+    "notesOnly": "Solo con Notas",
+    "notesOnlyHelp": "Mostrar solo escaneos con notas",
+    "favoritesOnly": "Solo Favoritos",
+    "categories": "Categorías",
+    "tags": "Etiquetas"
   },
   "sort": {
-    "title": "Ordenar",
     "newest": "Más Reciente",
-    "oldest": "Más Antiguo"
+    "oldest": "Más Antiguo",
+    "tagType": "Tipo de Etiqueta",
+    "dataType": "Tipo de Datos"
+  },
+  "search": {
+    "placeholder": "Buscar..."
+  },
+  "actions": {
+    "export": "Exportar"
+  },
+  "storage": {
+    "status": "Estado de Almacenamiento",
+    "limitReached": "Límite de Almacenamiento Alcanzado",
+    "remaining": "{{count}} / {{max}} escaneos restantes",
+    "limitReachedDesc": "Los nuevos escaneos sobrescribirán los registros más antiguos",
+    "getUnlimited": "Obtener Almacenamiento Ilimitado"
   }
 } 

@@ -1,23 +1,48 @@
 {
   "title": "Settings",
+  "appName": "NFC Reader Pro",
+  "premium": {
+    "upgrade": "Upgrade to Premium",
+    "upgradeButton": "Upgrade to Premium",
+    "description": "Get access to premium features like writing, tag locking, and encryption."
+  },
   "sections": {
     "general": {
-      "title": "General",
+      "title": "App",
       "language": "Language",
+      "selectLanguage": "Select your preferred language",
       "theme": "Theme",
       "hapticFeedback": "Haptic Feedback",
-      "notifications": "Notifications"
+      "hapticFeedbackDesc": "Vibration feedback for NFC scanning and writing operations",
+      "notifications": "Notifications",
+      "notificationsDesc": "Get notifications about new features and updates",
+      "autoSave": "Auto Save",
+      "autoSaveDesc": "Automatically save scans to history"
     },
     "premium": {
       "title": "Premium",
       "status": "Premium Status",
-      "active": "Active",
+      "active": "Your Premium Subscription is Active",
       "inactive": "Inactive",
-      "manageSubscription": "Manage Subscription"
+      "manageSubscription": "Manage Subscription",
+      "plan": "plan"
+    },
+    "account": {
+      "title": "My Account",
+      "manageSubscription": "Manage Subscription",
+      "premiumFeatures": "Premium Features",
+      "restorePurchases": "Restore Purchases"
+    },
+    "support": {
+      "title": "Support",
+      "help": "Help & Support",
+      "rateApp": "Rate Our App",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service"
     },
     "data": {
-      "title": "Data & Privacy",
-      "clearHistory": "Clear Scan History",
+      "title": "Data",
+      "clearData": "Clear All Data",
       "clearHistoryDesc": "Deletes all your scan history",
       "exportData": "Export Data",
       "exportDataDesc": "Export all your data"
@@ -25,10 +50,7 @@
     "about": {
       "title": "About",
       "version": "App Version",
-      "rateApp": "Rate App",
-      "contactUs": "Contact Us",
-      "privacyPolicy": "Privacy Policy",
-      "termsOfService": "Terms of Service"
+      "contactUs": "Contact Us"
     }
   },
   "theme": {
@@ -37,9 +59,19 @@
     "dark": "Dark"
   },
   "clearData": {
-    "title": "Clear Data",
-    "message": "All your data will be deleted. This action cannot be undone.",
-    "confirm": "Clear",
-    "cancel": "Cancel"
+    "title": "Clear All Data",
+    "message": "All your scan history and settings will be deleted. This action cannot be undone.",
+    "confirm": "Delete",
+    "success": "All data has been cleared.",
+    "error": "An error occurred while clearing data."
+  },
+  "subscription": {
+    "restoreSuccess": "Your subscription has been successfully restored!",
+    "noSubscriptionFound": "No active subscription found to restore.",
+    "restoreError": "An error occurred while restoring subscriptions."
+  },
+  "developer": {
+    "removePremium": "Premium subscription removed (developer mode).",
+    "removePremiumButton": "Remove Premium Subscription (Developer)"
   }
 } 

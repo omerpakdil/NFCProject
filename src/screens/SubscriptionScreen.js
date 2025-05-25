@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Alert,
@@ -22,6 +23,8 @@ import useSubscriptionStore, {
 } from '../features/subscription/subscriptionStore';
 
 const SubscriptionScreen = ({ navigation }) => {
+  const { t } = useTranslation('subscription');
+  
   // State
   const [loading, setLoading] = useState(true);
   const [packages, setPackages] = useState([]);
@@ -33,7 +36,6 @@ const SubscriptionScreen = ({ navigation }) => {
     isPremiumUser, 
     currentPlan, 
     purchasePackage, 
-    restorePurchases,
     syncWithRevenueCat
   } = useSubscriptionStore();
   
@@ -98,16 +100,16 @@ const SubscriptionScreen = ({ navigation }) => {
         
         if (result) {
           Alert.alert(
-            'Başarılı',
-            'Premium aboneliğiniz aktif edildi. Tüm özellikler artık kullanılabilir.',
-            [{ text: 'Tamam', onPress: () => navigation.goBack() }]
+            t('common:alerts.success'),
+            t('purchase.success'),
+            [{ text: t('common:actions.ok'), onPress: () => navigation.goBack() }]
           );
         } else {
           console.log('Satın alma başarısız veya iptal edildi');
         }
       } catch (error) {
         console.error('Satın alma hatası:', error);
-        Alert.alert('Hata', 'Satın alma işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.');
+        Alert.alert(t('common:alerts.error'), t('purchase.error'));
       } finally {
         setProcessingPurchase(false);
       }
@@ -159,40 +161,16 @@ const SubscriptionScreen = ({ navigation }) => {
         
         // Başarılı bildirim
         Alert.alert(
-          'Başarılı',
-          'Premium aboneliğiniz aktif edildi. Tüm özellikler artık kullanılabilir.',
-          [{ text: 'Tamam', onPress: () => navigation.goBack() }]
+          t('common:alerts.success'),
+          t('purchase.success'),
+          [{ text: t('common:actions.ok'), onPress: () => navigation.goBack() }]
         );
         
         setProcessingPurchase(false);
       }, 1500); // Sahte işlem süresi
     } catch (error) {
       console.log('Satın alma hatası:', error);
-      Alert.alert('Hata', 'Satın alma işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.');
-      setProcessingPurchase(false);
-    }
-  };
-  
-  // Satın almaları geri yükle
-  const handleRestorePurchases = async () => {
-    setProcessingPurchase(true);
-    
-    try {
-      const restoredInfo = await restorePurchases();
-      
-      if (restoredInfo && isPremiumUser()) {
-        Alert.alert(
-          'Başarılı', 
-          'Aboneliğiniz başarıyla geri yüklendi!',
-          [{ text: 'Tamam', onPress: () => navigation.goBack() }]
-        );
-      } else {
-        Alert.alert('Bilgi', 'Geri yüklenecek aktif bir abonelik bulunamadı.');
-      }
-    } catch (error) {
-      console.error('Satın almaları geri yükleme hatası:', error);
-      Alert.alert('Hata', 'Abonelikler geri yüklenirken bir hata oluştu.');
-    } finally {
+      Alert.alert(t('common:alerts.error'), t('purchase.error'));
       setProcessingPurchase(false);
     }
   };
@@ -220,7 +198,7 @@ const SubscriptionScreen = ({ navigation }) => {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={COLORS.primary} />
-          <Text style={styles.loadingText}>Teklifler yükleniyor...</Text>
+          <Text style={styles.loadingText}>{t('loading')}</Text>
         </View>
       );
     }
@@ -250,20 +228,20 @@ const SubscriptionScreen = ({ navigation }) => {
           >
             <View style={styles.planHeader}>
               <Text style={styles.planTitle}>
-                {pkg.packageType === 'ANNUAL' ? 'YEARLY' : pkg.packageType}
+                {pkg.packageType === 'ANNUAL' ? t('plans.yearly.title') : t(`plans.${pkg.packageType.toLowerCase()}.title`)}
               </Text>
               {pkg.packageType === 'ANNUAL' && (
                 <View style={styles.discountBadge}>
-                  <Text style={styles.discountText}>33% indirim</Text>
+                  <Text style={styles.discountText}>{t('plans.yearly.discount')}</Text>
                 </View>
               )}
             </View>
             
             <Text style={styles.planPrice}>{pkg.product.priceString}</Text>
             <Text style={styles.planPeriod}>
-              /{pkg.packageType === 'ANNUAL' ? 'yıllık' : 
-                pkg.packageType === 'MONTHLY' ? 'aylık' : 
-                pkg.packageType === 'WEEKLY' ? 'haftalık' : 'ömür boyu'}
+              /{pkg.packageType === 'ANNUAL' ? t('period.yearly') : 
+                pkg.packageType === 'MONTHLY' ? t('period.monthly') : 
+                pkg.packageType === 'WEEKLY' ? t('period.weekly') : t('period.lifetime')}
             </Text>
           </TouchableOpacity>
         ))}
@@ -276,7 +254,7 @@ const SubscriptionScreen = ({ navigation }) => {
     if (isPremiumUser() && packages.length === 0) {
       return (
         <Button
-          title="Mevcut Abonelik"
+          title={t('currentSubscription')}
           disabled
           fullWidth
           style={styles.purchaseButton}
@@ -287,7 +265,7 @@ const SubscriptionScreen = ({ navigation }) => {
     return (
       <>
         <Button
-          title={isPremiumUser() ? "Aboneliği Değiştir" : "Abone Ol"}
+          title={isPremiumUser() ? t('changeSubscription') : t('subscribe')}
           type="premium"
           onPress={handlePurchase}
           loading={processingPurchase}
@@ -295,15 +273,9 @@ const SubscriptionScreen = ({ navigation }) => {
           style={styles.purchaseButton}
         />
         
-        <TouchableOpacity 
-          style={styles.restorePurchasesButton}
-          onPress={handleRestorePurchases}
-          disabled={processingPurchase}
-        >
-          <Text style={styles.restorePurchasesText}>
-            Satın Almaları Geri Yükle
-          </Text>
-        </TouchableOpacity>
+        <Text style={styles.disclaimerText}>
+          {t('disclaimer')}
+        </Text>
       </>
     );
   };
@@ -319,7 +291,7 @@ const SubscriptionScreen = ({ navigation }) => {
           size={20}
           color={isPremium ? COLORS.premium : COLORS.success}
         />
-        <Text style={styles.featureText}>{feature.name}</Text>
+        <Text style={styles.featureText}>{t(`features.${feature.id}`)}</Text>
         
         {isPremium && (
           <View style={styles.premiumIndicator}>
@@ -347,19 +319,19 @@ const SubscriptionScreen = ({ navigation }) => {
         ]}
       >
         <View style={styles.planHeader}>
-          <Text style={styles.planTitle}>{planType}</Text>
+          <Text style={styles.planTitle}>{t(`plans.${planType.toLowerCase()}.title`)}</Text>
           {plan.discount && (
             <View style={styles.discountBadge}>
-              <Text style={styles.discountText}>{plan.discount}</Text>
+              <Text style={styles.discountText}>{t(`plans.${planType.toLowerCase()}.discount`)}</Text>
             </View>
           )}
         </View>
         
         <Text style={styles.planPrice}>{plan.price}</Text>
-        <Text style={styles.planPeriod}>/{plan.period}</Text>
+        <Text style={styles.planPeriod}>/{t(`period.${planType.toLowerCase()}`)}</Text>
         
         {isCurrentPlan && (
-          <Text style={styles.currentPlanText}>Mevcut Plan</Text>
+          <Text style={styles.currentPlanText}>{t('currentPlan')}</Text>
         )}
       </TouchableOpacity>
     );
@@ -373,7 +345,7 @@ const SubscriptionScreen = ({ navigation }) => {
           <View style={styles.premiumHeader}>
             <Ionicons name="star" size={48} color={COLORS.premium} />
             <Text style={styles.premiumSubtitle}>
-              Sınırsız tarama, gelişmiş özellikler ve daha fazlası
+              {t('subtitle')}
             </Text>
           </View>
 
@@ -389,10 +361,6 @@ const SubscriptionScreen = ({ navigation }) => {
         {/* Satın alma butonu */}
         <View style={styles.purchaseContainer}>
           {renderPurchaseButton()}
-          
-          <Text style={styles.disclaimerText}>
-            * Abonelikler otomatik olarak yenilenir. İstediğiniz zaman ayarlardan iptal edebilirsiniz.
-          </Text>
         </View>
       </View>
     </SafeAreaView>
@@ -529,16 +497,6 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     color: COLORS.textSecondary,
-    fontSize: 14,
-  },
-  restorePurchasesButton: {
-    marginBottom: 15,
-    padding: 8,
-    alignSelf: 'center',
-  },
-  restorePurchasesText: {
-    color: COLORS.primary,
-    textAlign: 'center',
     fontSize: 14,
   },
 });

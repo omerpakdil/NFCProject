@@ -1,26 +1,38 @@
 {
   "title": "Premium Features",
   "subtitle": "Unlimited scans, advanced features and more",
+  "loading": "Loading offers...",
+  "subscribe": "Subscribe",
+  "changeSubscription": "Change Subscription",
+  "currentSubscription": "Current Subscription",
+  "currentPlan": "Current Plan",
+  "disclaimer": "* Subscriptions automatically renew. You can cancel anytime in settings.",
+  "purchase": {
+    "success": "Premium subscription activated. All features are now available.",
+    "error": "An error occurred during purchase. Please try again."
+  },
   "features": {
     "read": "NFC Reading",
+    "history_view": "History Viewing",
     "write": "NFC Writing",
     "lock": "Tag Locking",
-    "password": "Password Protection",
-    "storage": "Comprehensive Data Storage",
-    "merge": "Data Merging",
-    "history": "Advanced History Management",
-    "export": "Data Export"
+    "password_protection": "Password Protection",
+    "data_storage": "Comprehensive Data Storage",
+    "data_merge": "Data Merging",
+    "advanced_history": "Advanced History Management"
   },
   "plans": {
     "weekly": {
       "title": "Weekly",
       "price": "$1.99",
-      "period": "weekly"
+      "period": "weekly",
+      "discount": "10% off"
     },
     "monthly": {
       "title": "Monthly",
       "price": "$4.99",
-      "period": "monthly"
+      "period": "monthly",
+      "discount": "20% off"
     },
     "yearly": {
       "title": "Yearly",
@@ -31,10 +43,16 @@
     "lifetime": {
       "title": "Lifetime",
       "price": "$79.99",
-      "period": "one-time"
+      "period": "one-time",
+      "discount": "Best value"
     }
   },
-  "currentPlan": "Current Plan",
+  "period": {
+    "weekly": "weekly",
+    "monthly": "monthly",
+    "yearly": "yearly",
+    "lifetime": "lifetime"
+  },
   "buttons": {
     "subscribe": "Subscribe",
     "change": "Change Subscription",
@@ -45,6 +63,5 @@
     "restored": "Your subscription has been successfully restored!",
     "noRestored": "No active subscription found to restore.",
     "error": "An error occurred during purchase. Please try again."
-  },
-  "disclaimer": "* Subscriptions automatically renew. You can cancel anytime in settings."
+  }
 } 

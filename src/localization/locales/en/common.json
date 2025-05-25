@@ -7,7 +7,16 @@
     "home": "Home",
     "history": "History",
     "settings": "Settings",
-    "subscription": "Premium"
+    "subscription": "Premium",
+    "tabs": {
+      "home": "Home",
+      "history": "History",
+      "settings": "Settings"
+    },
+    "screens": {
+      "appName": "NFC Reader Pro",
+      "subscription": "Premium Subscription"
+    }
   },
   "actions": {
     "save": "Save",
@@ -25,7 +34,8 @@
     "continue": "Continue",
     "retry": "Retry",
     "apply": "Apply",
-    "reset": "Reset"
+    "reset": "Reset",
+    "ok": "OK"
   },
   "alerts": {
     "success": "Success",

@@ -5,6 +5,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Tema
@@ -46,6 +47,8 @@ const DarkTheme = {
 
 // Home Stack Navigator
 const HomeStackNavigator = () => {
+  const { t } = useTranslation('common');
+  
   return (
     <HomeStack.Navigator
       screenOptions={{
@@ -63,7 +66,7 @@ const HomeStackNavigator = () => {
         name="HomeMain" 
         component={HomeScreen} 
         options={{ 
-          title: 'NFC Reader Pro',
+          title: t('navigation.screens.appName'),
           headerShown: false,
         }} 
       />
@@ -91,7 +94,7 @@ const HomeStackNavigator = () => {
       <HomeStack.Screen 
         name="Subscription" 
         component={SubscriptionScreen} 
-        options={{ title: 'Premium Abonelik' }} 
+        options={{ title: t('navigation.screens.subscription') }} 
       />
       <HomeStack.Screen 
         name="DataMerge" 
@@ -106,6 +109,8 @@ const HomeStackNavigator = () => {
 
 // History Stack Navigator
 const HistoryStackNavigator = () => {
+  const { t } = useTranslation('common');
+  
   return (
     <HistoryStack.Navigator
       screenOptions={{
@@ -123,7 +128,7 @@ const HistoryStackNavigator = () => {
         name="HistoryMain" 
         component={HistoryScreen} 
         options={{ 
-          title: 'Geçmiş',
+          title: t('navigation.tabs.history'),
           headerShown: false,
         }} 
       />
@@ -140,6 +145,8 @@ const HistoryStackNavigator = () => {
 
 // Settings Stack Navigator
 const SettingsStackNavigator = () => {
+  const { t } = useTranslation('common');
+  
   return (
     <SettingsStack.Navigator
       screenOptions={{
@@ -157,14 +164,14 @@ const SettingsStackNavigator = () => {
         name="SettingsMain" 
         component={SettingsScreen} 
         options={{ 
-          title: 'Ayarlar',
+          title: t('navigation.tabs.settings'),
           headerShown: false,
         }} 
       />
       <SettingsStack.Screen 
         name="Subscription" 
         component={SubscriptionScreen} 
-        options={{ title: 'Premium Abonelik' }} 
+        options={{ title: t('navigation.screens.subscription') }} 
       />
     </SettingsStack.Navigator>
   );
@@ -173,6 +180,7 @@ const SettingsStackNavigator = () => {
 // Tab Navigator
 const TabNavigator = () => {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation('common');
 
   return (
     <Tab.Navigator
@@ -209,9 +217,9 @@ const TabNavigator = () => {
         }
       })}
     >
-      <Tab.Screen name="Home" component={HomeStackNavigator} options={{ title: 'Ana Sayfa' }} />
-      <Tab.Screen name="History" component={HistoryStackNavigator} options={{ title: 'Geçmiş' }} />
-      <Tab.Screen name="Settings" component={SettingsStackNavigator} options={{ title: 'Ayarlar' }} />
+      <Tab.Screen name="Home" component={HomeStackNavigator} options={{ title: t('navigation.tabs.home') }} />
+      <Tab.Screen name="History" component={HistoryStackNavigator} options={{ title: t('navigation.tabs.history') }} />
+      <Tab.Screen name="Settings" component={SettingsStackNavigator} options={{ title: t('navigation.tabs.settings') }} />
     </Tab.Navigator>
   );
 };
@@ -262,7 +270,9 @@ export default function Navigation() {
       {isFirstLaunch ? (
         <OnboardingNavigator />
       ) : (
-        <TabNavigator />
+        <MainStack.Navigator screenOptions={{ headerShown: false }}>
+          <MainStack.Screen name="MainFlow" component={TabNavigator} />
+        </MainStack.Navigator>
       )}
     </NavigationContainer>
   );

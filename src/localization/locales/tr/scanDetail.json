@@ -1,0 +1,113 @@
+{
+  "title": "Tarama Detayı",
+  "loading": "Yükleniyor...",
+  "errors": {
+    "scanNotFound": "Tarama kaydı bulunamadı."
+  },
+  "content": {
+    "encrypted": {
+      "title": "Şifreli İçerik",
+      "description": "Bu içerik şifre korumalıdır. Görüntülemek için şifre gereklidir.",
+      "enterPassword": "Şifre Girin",
+      "status": "Şifre Korumalı"
+    },
+    "decrypted": {
+      "title": "Çözülmüş İçerik",
+      "badge": "Çözüldü"
+    },
+    "types": {
+      "text": "Metin",
+      "url": "URL",
+      "phone": "Telefon Numarası",
+      "email": "E-posta Adresi",
+      "data": "Veri"
+    }
+  },
+  "actions": {
+    "openUrl": "URL'yi Aç",
+    "call": "Ara",
+    "sendMessage": "Mesaj Gönder",
+    "sendEmail": "E-posta Gönder"
+  },
+  "share": {
+    "message": "NFC Reader Pro ile tarandı: {{value}}"
+  },
+  "delete": {
+    "title": "Taramayı Sil",
+    "message": "Bu tarama kaydını silmek istediğinize emin misiniz?",
+    "button": "Sil"
+  },
+  "favorite": {
+    "add": "Favorilere Ekle",
+    "active": "Favorilerde"
+  },
+  "category": {
+    "title": "Kategori"
+  },
+  "tags": {
+    "title": "Etiketler"
+  },
+  "notes": {
+    "title": "Notlar",
+    "placeholder": "Not ekleyin...",
+    "saveButton": "Notları Kaydet",
+    "saveSuccess": "Notlar kaydedildi."
+  },
+  "write": {
+    "title": "NFC Etiketi Yaz",
+    "description": "Bu veriyi yeni bir NFC etiketine yazmak için aşağıdaki butonu kullanın.",
+    "button": "NFC Etiketi Yaz"
+  },
+  "lock": {
+    "title": "Etiketi Kilitle",
+    "cardTitle": "NFC Etiketi Kilitle",
+    "description": "NFC etiketini kalıcı olarak kilitleyerek içeriğini koruyun.",
+    "confirmMessage": "Bu NFC etiketini kilitlemeyi onaylıyor musunuz? Bu işlem geri alınamaz ve etiket bir daha değiştirilemez!",
+    "button": "NFC Etiketi Kilitle",
+    "process": {
+      "title": "İşlem Devam Ediyor",
+      "message": "NFC etiketini telefonunuza yaklaştırın..."
+    },
+    "success": {
+      "title": "Kilitleme Başarılı",
+      "message": "NFC etiketi başarıyla kilitlendi. Artık bu etiket sadece okunabilir ve içeriği değiştirilemez."
+    },
+    "error": {
+      "title": "Kilitleme Hatası",
+      "message": "NFC etiketi kilitlenirken bir hata oluştu"
+    }
+  },
+  "merge": {
+    "title": "Veri Birleştir",
+    "description": "Bu taramayı veri birleştirme işlemine ekle.",
+    "button": "Veri Birleştirmeye Ekle"
+  },
+  "password": {
+    "enterPassword": "Şifre Girin",
+    "error": {
+      "empty": "Lütfen bir şifre girin",
+      "noEncryptedContent": "Şifreli içerik bulunamadı",
+      "incorrect": "Yanlış şifre. Lütfen tekrar deneyin.",
+      "decryptFailed": "Şifre çözme işlemi başarısız oldu"
+    },
+    "modal": {
+      "title": "Şifreli İçerik",
+      "description": "Bu içerik şifre korumalıdır. Görüntülemek için şifreyi girin.",
+      "placeholder": "Şifre",
+      "decrypt": "Şifreyi Çöz"
+    }
+  },
+  "alerts": {
+    "encryptedContent": {
+      "title": "Şifreli İçerik",
+      "message": "İçerik şifrelenmiş. Paylaşmadan önce şifreyi çözmeniz gerekiyor."
+    }
+  },
+  "premium": {
+    "advancedHistory": {
+      "title": "Gelişmiş Geçmiş Yönetimi",
+      "description": "Taramaları kategorilere ayır, etiketle, filtrele ve daha fazlası"
+    },
+    "upgradeButton": "Premium'a Yükselt"
+  }
+} 

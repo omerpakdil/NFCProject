@@ -1,17 +1,19 @@
 {
-  "welcome": {
-    "title": "Bienvenido a NFC Reader Pro",
-    "description": "Tu aplicación con potentes funciones de lectura, escritura y gestión de NFC."
+  "slides": {
+    "welcome": {
+      "title": "Bienvenido a NFC Reader Pro",
+      "description": "Tu aplicación con potentes funciones de lectura, escritura y gestión NFC."
+    },
+    "scan": {
+      "title": "Lee Etiquetas NFC",
+      "description": "Escanea fácilmente cualquier etiqueta NFC y visualiza su contenido."
+    },
+    "premium": {
+      "title": "Descubre las Funciones Premium",
+      "description": "Accede a funciones avanzadas como escritura de etiquetas, bloqueo y protección con contraseña."
+    }
   },
-  "scan": {
-    "title": "Lee Etiquetas NFC",
-    "description": "Escanea fácilmente cualquier etiqueta NFC y visualiza su contenido."
-  },
-  "premium": {
-    "title": "Descubre las Funciones Premium",
-    "description": "Accede a funciones avanzadas como escritura de etiquetas, bloqueo y protección con contraseña."
-  },
-  "buttons": {
+  "actions": {
     "skip": "Omitir",
     "next": "Siguiente",
     "start": "Comenzar"

@@ -1,12 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-    FlatList,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 import Button from '../components/Button';
@@ -20,6 +21,8 @@ import NfcService, { DATA_TYPES } from '../features/nfc/nfcService';
 import useSubscriptionStore from '../features/subscription/subscriptionStore';
 
 const DataMergeScreen = ({ navigation }) => {
+  const { t } = useTranslation('dataMerge');
+  
   // Store
   const { scans } = useHistoryStore();
   const { canUseFeature } = useSubscriptionStore();
@@ -59,10 +62,10 @@ const DataMergeScreen = ({ navigation }) => {
       if (selectedScans.length === 0) {
         setAlertConfig({
           visible: true,
-          title: 'Hata',
-          message: 'Lütfen en az bir veri seçin',
+          title: t('alerts.error'),
+          message: t('alerts.selectData'),
           type: 'error',
-          buttons: [{ text: 'Tamam' }]
+          buttons: [{ text: t('common:alerts.ok') }]
         });
         return;
       }
@@ -82,8 +85,8 @@ const DataMergeScreen = ({ navigation }) => {
       // Yazma mesajı
       setAlertConfig({
         visible: true,
-        title: 'NFC Etiketi Yazılıyor',
-        message: 'Lütfen telefonunuzu NFC etiketine yaklaştırın',
+        title: t('alerts.writingTag'),
+        message: t('alerts.bringPhoneNear'),
         type: 'info',
         buttons: []
       });
@@ -92,10 +95,10 @@ const DataMergeScreen = ({ navigation }) => {
       setIsWriting(false);
       setAlertConfig({
         visible: true,
-        title: 'Hata',
-        message: 'Veri yazılamadı: ' + error.message,
+        title: t('alerts.error'),
+        message: t('alerts.writeFailed') + ': ' + error.message,
         type: 'error',
-        buttons: [{ text: 'Tamam' }]
+        buttons: [{ text: t('common:alerts.ok') }]
       });
     }
   };
@@ -105,12 +108,12 @@ const DataMergeScreen = ({ navigation }) => {
     setIsWriting(false);
     setAlertConfig({
       visible: true,
-      title: 'Başarılı',
-      message: 'Veriler başarıyla birleştirildi ve NFC etiketine yazıldı',
+      title: t('alerts.success'),
+      message: t('alerts.mergeSuccess'),
       type: 'success',
       buttons: [
         { 
-          text: 'Tamam', 
+          text: t('common:alerts.ok'), 
           onPress: () => {
             setSelectedScans([]);
             navigation.goBack();
@@ -125,10 +128,10 @@ const DataMergeScreen = ({ navigation }) => {
     setIsWriting(false);
     setAlertConfig({
       visible: true,
-      title: 'Hata',
-      message: error || 'Veri yazma işlemi başarısız oldu',
+      title: t('alerts.error'),
+      message: error || t('alerts.writeFailed'),
       type: 'error',
-      buttons: [{ text: 'Tamam' }]
+      buttons: [{ text: t('common:alerts.ok') }]
     });
   };
   
@@ -204,7 +207,7 @@ const DataMergeScreen = ({ navigation }) => {
             </View>
             <View style={styles.scanInfo}>
               <Text style={styles.scanTitle} numberOfLines={1}>
-                {item.data.value || 'NFC Etiket'}
+                {item.data.value || t('nfcTag')}
               </Text>
               <Text style={styles.scanSubtext}>
                 {item.tagType} • {item.data.type} • {formattedDate}
@@ -213,7 +216,7 @@ const DataMergeScreen = ({ navigation }) => {
               {isEncrypted && (
                 <View style={styles.encryptedBadge}>
                   <Ionicons name="lock-closed" size={12} color={COLORS.warning} />
-                  <Text style={styles.encryptedBadgeText}>Şifreli içerikler birleştirilemez</Text>
+                  <Text style={styles.encryptedBadgeText}>{t('encryptedContent')}</Text>
                 </View>
               )}
             </View>
@@ -232,12 +235,12 @@ const DataMergeScreen = ({ navigation }) => {
   const renderEmptyList = () => (
     <View style={styles.emptyContainer}>
       <Ionicons name="apps" size={64} color={COLORS.textSecondary} />
-      <Text style={styles.emptyTitle}>Tarama Bulunamadı</Text>
+      <Text style={styles.emptyTitle}>{t('empty.title')}</Text>
       <Text style={styles.emptyText}>
-        Birleştirmek için tarama geçmişinizdeki verileri kullanabilirsiniz.
+        {t('empty.description')}
       </Text>
       <Button
-        title="Yeni Tarama Yap"
+        title={t('empty.scanButton')}
         onPress={() => navigation.navigate('Home')}
         style={styles.emptyButton}
         icon="scan"
@@ -252,13 +255,13 @@ const DataMergeScreen = ({ navigation }) => {
     return (
       <View style={styles.selectionSummary}>
         <View style={styles.selectionInfo}>
-          <Text style={styles.selectionCount}>{selectedScans.length} Öğe Seçildi</Text>
+          <Text style={styles.selectionCount}>{t('selection.count', { count: selectedScans.length })}</Text>
           <TouchableOpacity onPress={() => setSelectedScans([])}>
-            <Text style={styles.clearSelection}>Temizle</Text>
+            <Text style={styles.clearSelection}>{t('selection.clear')}</Text>
           </TouchableOpacity>
         </View>
         <Button
-          title="Seçilenleri Birleştir ve Yaz"
+          title={t('selection.mergeButton')}
           onPress={handleWriteMergedData}
           style={styles.mergeButton}
           icon="git-merge"
@@ -278,14 +281,14 @@ const DataMergeScreen = ({ navigation }) => {
         >
           <Ionicons name="arrow-back" size={24} color={COLORS.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Veri Birleştirme</Text>
+        <Text style={styles.headerTitle}>{t('title')}</Text>
         <View style={styles.headerRight} />
       </View>
       
       <View style={styles.infoCard}>
         <Ionicons name="information-circle" size={24} color={COLORS.info} />
         <Text style={styles.infoText}>
-          Birleştirmek istediğiniz verileri seçin. Seçilen veriler yeni bir NFC etiketine yazılacak.
+          {t('infoText')}
         </Text>
       </View>
 
