@@ -22,29 +22,21 @@
     "advanced_history": "Gelişmiş Geçmiş Yönetimi"
   },
   "plans": {
+    "free": {
+      "title": "Ücretsiz"
+    },
     "weekly": {
-      "title": "Haftalık",
-      "price": "₺19.99",
-      "period": "haftalık",
-      "discount": "10% indirim"
+      "title": "Haftalık"
     },
     "monthly": {
-      "title": "Aylık",
-      "price": "₺49.99",
-      "period": "aylık",
-      "discount": "20% indirim"
+      "title": "Aylık"
     },
     "yearly": {
       "title": "Yıllık",
-      "price": "₺399.99",
-      "period": "yıllık",
-      "discount": "33% indirim"
+      "discount": "%33 indirim"
     },
     "lifetime": {
-      "title": "Ömür Boyu",
-      "price": "₺799.99",
-      "period": "tek seferlik",
-      "discount": "En iyi değer"
+      "title": "Ömür Boyu"
     }
   },
   "period": {
@@ -63,5 +55,17 @@
     "restored": "Aboneliğiniz başarıyla geri yüklendi!",
     "noRestored": "Geri yüklenecek aktif bir abonelik bulunamadı.",
     "error": "Satın alma işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin."
+  },
+  "sections": {
+    "premium": {
+      "active": "Premium Aktif",
+      "plan": "Plan",
+      "status": "Premium Durumu"
+    }
+  },
+  "premium": {
+    "upgrade": "Premium'a Yükselt",
+    "description": "Sınırsız tarama, gelişmiş özellikler ve daha fazlası için premium'a yükseltin.",
+    "upgradeButton": "Premium'a Yükselt"
   }
 } 

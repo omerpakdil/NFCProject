@@ -1,0 +1,51 @@
+{
+  "title": "Ayuda y Soporte",
+  "sections": {
+    "support": {
+      "help": "Ayuda y Soporte"
+    }
+  },
+  "contact": {
+    "title": "Contactar Soporte",
+    "email": "Soporte por Email",
+    "emailDesc": "Envíanos un email para asistencia"
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "nfcSupport": {
+      "question": "¿Mi dispositivo es compatible con NFC?",
+      "answer": "La mayoría de los smartphones modernos son compatibles con NFC. En Android, puedes verificar en Configuración > Dispositivos conectados. En iOS, iPhone 7 y modelos más nuevos son compatibles con lectura NFC."
+    },
+    "writeTag": {
+      "question": "¿Cómo escribo en una etiqueta NFC?",
+      "answer": "La escritura en etiquetas NFC es una función premium. Después de actualizar, simplemente toca el botón de escribir, selecciona el tipo de datos, ingresa el contenido y acerca tu teléfono a la etiqueta."
+    },
+    "dataTypes": {
+      "question": "¿Qué tipos de datos puedo leer/escribir?",
+      "answer": "Puedes leer y escribir varios tipos de datos incluyendo texto, URLs, números de teléfono, direcciones de email, credenciales WiFi e información de contacto."
+    },
+    "premium": {
+      "question": "¿Qué características incluye Premium?",
+      "answer": "Premium incluye escritura de etiquetas, protección con contraseña, fusión de datos, gestión avanzada del historial y almacenamiento ilimitado de escaneos."
+    },
+    "restore": {
+      "question": "¿Cómo restauro mi compra Premium?",
+      "answer": "Ve a Configuración > Restaurar Compras. Asegúrate de haber iniciado sesión con la misma cuenta utilizada para la compra original."
+    }
+  },
+  "troubleshooting": {
+    "title": "Solución de Problemas",
+    "nfcNotWorking": {
+      "title": "NFC No Funciona",
+      "solution": "1. Asegúrate de que NFC esté habilitado en la configuración de tu dispositivo\n2. Quita la funda del teléfono si está bloqueando la antena NFC\n3. Intenta posicionar la etiqueta en diferentes lugares de tu teléfono"
+    },
+    "readError": {
+      "title": "No Se Puede Leer la Etiqueta",
+      "solution": "1. Mantén tu teléfono firme cerca de la etiqueta\n2. Asegúrate de que la etiqueta no esté dañada\n3. Intenta leer la etiqueta con otro dispositivo compatible con NFC"
+    },
+    "writeError": {
+      "title": "Error de Escritura",
+      "solution": "1. Verifica si la etiqueta es escribible y no está bloqueada\n2. Asegúrate de que la etiqueta tenga suficiente espacio de almacenamiento\n3. Mantén tu teléfono firme durante la escritura"
+    }
+  }
+} 

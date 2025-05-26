@@ -10,7 +10,9 @@ import {
   View
 } from 'react-native';
 
+import { useTranslation } from 'react-i18next';
 import { COLORS, SIZES } from '../constants/theme';
+
 
 const TagInput = ({ 
   tags = [], 
@@ -22,6 +24,7 @@ const TagInput = ({
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const { t } = useTranslation(['scanDetail']);
   const inputRef = useRef(null);
 
   // Kullanıcı zaten eklenmiş olmayan etiketleri öner
@@ -118,7 +121,7 @@ const TagInput = ({
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               onKeyPress={handleKeyPress}
-              placeholder={tags.length === 0 ? "Etiket ekle..." : ""}
+              placeholder={tags.length === 0 ? t('tags.placeholder') : ""}
               placeholderTextColor={COLORS.textSecondary}
               onSubmitEditing={() => handleAddTag(inputValue)}
             />

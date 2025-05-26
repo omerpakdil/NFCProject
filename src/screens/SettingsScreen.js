@@ -4,7 +4,6 @@ import * as Application from 'expo-application';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Alert,
   Linking,
   Modal,
   Platform,
@@ -19,6 +18,7 @@ import {
 
 import Button from '../components/Button';
 import Card from '../components/Card';
+import CustomAlert from '../components/CustomAlert';
 import PremiumBadge from '../components/PremiumBadge';
 import { COLORS, SIZES } from '../constants/theme';
 
@@ -31,6 +31,13 @@ import useLanguageStore from '../localization/languageStore';
 const SettingsScreen = ({ navigation }) => {
   const { t } = useTranslation('settings');
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
+  const [alertConfig, setAlertConfig] = useState({
+    visible: false,
+    title: '',
+    message: '',
+    type: 'info',
+    buttons: []
+  });
   
   // Stores
   const { clearAllHistory } = useHistoryStore();
@@ -63,28 +70,48 @@ const SettingsScreen = ({ navigation }) => {
       const restoredInfo = await restorePurchases();
       
       if (restoredInfo && isPremiumUser()) {
-        Alert.alert(
-          t('common:alerts.success'), 
-          t('subscription.restoreSuccess')
-        );
+        setAlertConfig({
+          visible: true,
+          title: t('common:alerts.success'),
+          message: t('subscription.restoreSuccess'),
+          type: 'success',
+          buttons: [{ text: t('common:alerts.ok') }]
+        });
       } else {
-        Alert.alert(t('common:alerts.info'), t('subscription.noSubscriptionFound'));
+        setAlertConfig({
+          visible: true,
+          title: t('common:alerts.info'),
+          message: t('subscription.noSubscriptionFound'),
+          type: 'info',
+          buttons: [{ text: t('common:alerts.ok') }]
+        });
       }
     } catch (error) {
       console.error('Satın almaları geri yükleme hatası:', error);
-      Alert.alert(t('common:alerts.error'), t('subscription.restoreError'));
+      setAlertConfig({
+        visible: true,
+        title: t('common:alerts.error'),
+        message: t('subscription.restoreError'),
+        type: 'error',
+        buttons: [{ text: t('common:alerts.ok') }]
+      });
     }
   };
   
   // Tüm verileri temizle
   const handleClearData = () => {
-    Alert.alert(
-      t('clearData.title'),
-      t('clearData.message'),
-      [
-        { text: t('common:actions.cancel'), style: 'cancel' },
+    setAlertConfig({
+      visible: true,
+      title: t('clearData.title'),
+      message: t('clearData.message'),
+      type: 'warning',
+      buttons: [
         { 
-          text: t('clearData.confirm'), 
+          text: t('common:actions.cancel'),
+          style: 'cancel'
+        },
+        {
+          text: t('clearData.confirm'),
           style: 'destructive',
           onPress: async () => {
             // Geçmişi temizle
@@ -93,15 +120,27 @@ const SettingsScreen = ({ navigation }) => {
             // Ayarları temizle
             try {
               await AsyncStorage.clear();
-              Alert.alert(t('common:alerts.success'), t('clearData.success'));
+              setAlertConfig({
+                visible: true,
+                title: t('common:alerts.success'),
+                message: t('clearData.success'),
+                type: 'success',
+                buttons: [{ text: t('common:alerts.ok') }]
+              });
             } catch (error) {
               console.log('Veri temizleme hatası:', error);
-              Alert.alert(t('common:alerts.error'), t('clearData.error'));
+              setAlertConfig({
+                visible: true,
+                title: t('common:alerts.error'),
+                message: t('clearData.error'),
+                type: 'error',
+                buttons: [{ text: t('common:alerts.ok') }]
+              });
             }
           }
         }
       ]
-    );
+    });
   };
   
   // Uygulama versiyonu
@@ -275,7 +314,7 @@ const SettingsScreen = ({ navigation }) => {
               <View style={styles.premiumInfo}>
                 <Text style={styles.premiumTitle}>{t('sections.premium.active')}</Text>
                 <Text style={styles.premiumPlan}>
-                  {currentPlan} {t('sections.premium.plan')}
+                  {t(currentPlan)} {t('sections.premium.plan')}
                 </Text>
               </View>
               
@@ -391,7 +430,13 @@ const SettingsScreen = ({ navigation }) => {
               style={styles.devButton}
               onPress={() => {
                 clearSubscription();
-                Alert.alert(t('common:alerts.info'), t('developer.removePremium'));
+                setAlertConfig({
+                  visible: true,
+                  title: t('common:alerts.info'),
+                  message: t('developer.removePremium'),
+                  type: 'info',
+                  buttons: [{ text: t('common:alerts.ok') }]
+                });
               }}
             >
               <Text style={styles.devButtonText}>
@@ -408,7 +453,7 @@ const SettingsScreen = ({ navigation }) => {
           {renderActionItem(
             'help-circle',
             t('sections.support.help'),
-            () => Linking.openURL('https://nfcreaderpro.com/help')
+            () => navigation.navigate('HelpSupport')
           )}
           
           {renderActionItem(
@@ -426,7 +471,7 @@ const SettingsScreen = ({ navigation }) => {
           {renderActionItem(
             'document-text',
             t('sections.support.privacyPolicy'),
-            () => Linking.openURL('https://nfcreaderpro.com/privacy')
+            () => navigation.navigate('PrivacyPolicy')
           )}
         </View>
         
@@ -449,6 +494,15 @@ const SettingsScreen = ({ navigation }) => {
           </Text>
         </View>
       </ScrollView>
+      
+      <CustomAlert
+        visible={alertConfig.visible}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+        buttons={alertConfig.buttons}
+        onClose={() => setAlertConfig(prev => ({ ...prev, visible: false }))}
+      />
     </SafeAreaView>
   );
 };

@@ -1,6 +1,10 @@
 {
   "title": "Settings",
   "appName": "NFC Reader Pro",
+  "weekly": "Weekly",
+  "monthly": "Monthly",
+  "yearly": "Yearly",
+  "lifetime": "Lifetime",
   "premium": {
     "upgrade": "Upgrade to Premium",
     "upgradeButton": "Upgrade to Premium",

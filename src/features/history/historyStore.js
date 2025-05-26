@@ -8,31 +8,31 @@ import useSubscriptionStore from '../subscription/subscriptionStore';
 export const DEFAULT_CATEGORIES = {
   BUSINESS: {
     id: 'business',
-    name: 'İş',
+    name: 'categories.business',
     color: '#3D7DFF', // Mavi
     icon: 'briefcase'
   },
   PERSONAL: {
     id: 'personal',
-    name: 'Kişisel',
+    name: 'categories.personal',
     color: '#4CAF50', // Yeşil
     icon: 'person'
   },
   TRANSPORT: {
     id: 'transport',
-    name: 'Ulaşım',
+    name: 'categories.transport',
     color: '#FF9800', // Turuncu
     icon: 'bus'
   },
   TECH: {
     id: 'tech',
-    name: 'Teknoloji',
+    name: 'categories.tech',
     color: '#9C27B0', // Mor
     icon: 'hardware-chip'
   },
   OTHER: {
     id: 'other',
-    name: 'Diğer',
+    name: 'categories.other',
     color: '#607D8B', // Gri
     icon: 'ellipsis-horizontal'
   }

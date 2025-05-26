@@ -31,5 +31,30 @@
     "remaining": "Escaneos Restantes: {{count}}",
     "limitReachedDesc": "Los nuevos escaneos sobrescribirán los más antiguos",
     "premiumDesc": "Los usuarios premium obtienen almacenamiento ilimitado"
+  },
+  "writeButton": "Crear Nueva Etiqueta NFC",
+  "mergeButton": "Combinar Datos NFC",
+  "storageLimit": {
+    "title": "Estado de Almacenamiento",
+    "limitReached": "Límite de Almacenamiento Alcanzado",
+    "remaining": "Escaneos Restantes: {{count}}",
+    "description": "Los usuarios premium obtienen almacenamiento ilimitado",
+    "limitReachedDescription": "Los nuevos escaneos sobrescribirán los registros más antiguos",
+    "getUnlimited": "Obtener Almacenamiento Ilimitado"
+  },
+  "scanModal": {
+    "title": "Escaneo NFC",
+    "description": "Acerca tu teléfono a una etiqueta NFC",
+    "startButton": "Comenzar Escaneo"
+  },
+  "noNfc": {
+    "title": "NFC No Disponible",
+    "description": "Este dispositivo no es compatible con la tecnología NFC o el NFC está desactivado.",
+    "steps": {
+      "title": "Qué puedes hacer:",
+      "checkSettings": "Asegúrate de que NFC esté habilitado en tu configuración",
+      "useCompatibleDevice": "Usa un dispositivo compatible con NFC",
+      "getInfo": "Obtén información sobre la compatibilidad NFC de tu dispositivo"
+    }
   }
 } 

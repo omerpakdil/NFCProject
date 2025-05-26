@@ -1,6 +1,10 @@
 {
   "title": "Ayarlar",
   "appName": "NFC Reader Pro",
+  "weekly": "Haftalık",
+  "monthly": "Aylık",
+  "yearly": "Yıllık",
+  "lifetime": "Ömür boyu",
   "premium": {
     "upgrade": "Premium'a Yükseltin",
     "upgradeButton": "Premium'a Yükseltin",

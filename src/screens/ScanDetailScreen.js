@@ -29,7 +29,7 @@ import NfcService, { DATA_TYPES } from '../features/nfc/nfcService';
 import useSubscriptionStore from '../features/subscription/subscriptionStore';
 
 const ScanDetailScreen = ({ navigation, route }) => {
-  const { t } = useTranslation('scanDetail');
+  const { t } = useTranslation(['scanDetail', 'common']);
   
   // Store
   const { getScanById, deleteScan, updateScan, allTags, assignCategory, toggleFavorite } = useHistoryStore();
@@ -612,7 +612,13 @@ const ScanDetailScreen = ({ navigation, route }) => {
             </View>
             
             <CategorySelector 
-              categories={DEFAULT_CATEGORIES}
+              categories={Object.entries(DEFAULT_CATEGORIES).reduce((acc, [key, category]) => ({
+                ...acc,
+                [category.id]: {
+                  ...category,
+                  name: t(category.name)
+                }
+              }), {})}
               selectedCategoryId={selectedCategoryId}
               onSelectCategory={handleCategoryChange}
             />

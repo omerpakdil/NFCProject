@@ -6,33 +6,41 @@ import { I18nManager } from 'react-native';
 // Çeviri dosyalarını import et
 import enCommon from './locales/en/common.json';
 import enDataMerge from './locales/en/dataMerge.json';
+import enHelp from './locales/en/help.json';
 import enHistory from './locales/en/history.json';
 import enHome from './locales/en/home.json';
 import enOnboarding from './locales/en/onboarding.json';
+import enPrivacy from './locales/en/privacy.json';
 import enScanDetail from './locales/en/scanDetail.json';
 import enSettings from './locales/en/settings.json';
 import enSubscription from './locales/en/subscription.json';
 import enWrite from './locales/en/write.json';
 
-import trCommon from './locales/tr/common.json';
-import trDataMerge from './locales/tr/dataMerge.json';
-import trHistory from './locales/tr/history.json';
-import trHome from './locales/tr/home.json';
-import trOnboarding from './locales/tr/onboarding.json';
-import trScanDetail from './locales/tr/scanDetail.json';
-import trSettings from './locales/tr/settings.json';
-import trSubscription from './locales/tr/subscription.json';
-import trWrite from './locales/tr/write.json';
 
 import esCommon from './locales/es/common.json';
 import esDataMerge from './locales/es/dataMerge.json';
+import esHelp from './locales/es/help.json';
 import esHistory from './locales/es/history.json';
 import esHome from './locales/es/home.json';
 import esOnboarding from './locales/es/onboarding.json';
+import esPrivacy from './locales/es/privacy.json';
 import esScanDetail from './locales/es/scanDetail.json';
 import esSettings from './locales/es/settings.json';
 import esSubscription from './locales/es/subscription.json';
 import esWrite from './locales/es/write.json';
+
+
+import trCommon from './locales/tr/common.json';
+import trDataMerge from './locales/tr/dataMerge.json';
+import trHelp from './locales/tr/help.json';
+import trHistory from './locales/tr/history.json';
+import trHome from './locales/tr/home.json';
+import trOnboarding from './locales/tr/onboarding.json';
+import trPrivacy from './locales/tr/privacy.json';
+import trScanDetail from './locales/tr/scanDetail.json';
+import trSettings from './locales/tr/settings.json';
+import trSubscription from './locales/tr/subscription.json';
+import trWrite from './locales/tr/write.json';
 
 // Desteklenen diller
 export const LANGUAGES = {
@@ -92,7 +100,7 @@ const initI18n = async () => {
       lng: savedLanguage,
       fallbackLng: DEFAULT_LANGUAGE,
       supportedLngs: Object.keys(LANGUAGES),
-      ns: ['common', 'home', 'settings', 'scanDetail', 'subscription', 'write', 'dataMerge', 'history', 'onboarding'],
+      ns: ['common', 'home', 'settings', 'scanDetail', 'subscription', 'write', 'dataMerge', 'history', 'onboarding', 'help', 'privacy'],
       defaultNS: 'common',
       fallbackNS: 'common',
       interpolation: {
@@ -112,6 +120,8 @@ const initI18n = async () => {
           history: enHistory,
           onboarding: enOnboarding,
           subscription: enSubscription,
+          help: enHelp,
+          privacy: enPrivacy,
         },
         tr: {
           common: trCommon,
@@ -120,9 +130,11 @@ const initI18n = async () => {
           scanDetail: trScanDetail,
           write: trWrite,
           dataMerge: trDataMerge,
+          help: trHelp,
           history: trHistory,
           onboarding: trOnboarding,
           subscription: trSubscription,
+          privacy: trPrivacy,
         },
         es: {
           common: esCommon,
@@ -130,10 +142,12 @@ const initI18n = async () => {
           settings: esSettings,
           scanDetail: esScanDetail,
           write: esWrite,
+          help: esHelp,
           dataMerge: esDataMerge,
           history: esHistory,
           onboarding: esOnboarding,
           subscription: esSubscription,
+          privacy: esPrivacy,
         },
       },
     });

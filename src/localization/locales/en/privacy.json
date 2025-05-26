@@ -1,0 +1,56 @@
+{
+  "title": "Privacy Policy",
+  "sections": {
+    "dataCollection": {
+      "title": "Data Collection",
+      "description": "NFC Reader Pro collects minimal personal information necessary for app functionality:",
+      "items": {
+        "scanHistory": "NFC scan history (stored locally on your device)",
+        "appPreferences": "App preferences and settings",
+        "purchaseInfo": "Purchase information for premium features"
+      }
+    },
+    "dataUsage": {
+      "title": "Data Usage",
+      "description": "Your data is used solely to provide app functionality:",
+      "items": {
+        "displayHistory": "Displaying your scan history",
+        "savePreferences": "Saving your preferences",
+        "managePremium": "Managing premium feature access"
+      }
+    },
+    "dataStorage": {
+      "title": "Data Storage",
+      "description": "All scan data is stored locally on your device. We do not upload or store your NFC scan data on any servers."
+    },
+    "thirdParty": {
+      "title": "Third-Party Services",
+      "description": "We use the following third-party services:",
+      "items": {
+        "revenueCat": "RevenueCat for managing in-app purchases",
+        "appStore": "App Store / Play Store for app distribution"
+      }
+    },
+    "permissions": {
+      "title": "Permissions",
+      "description": "The app requires the following permissions:",
+      "items": {
+        "nfc": "NFC: For reading and writing NFC tags",
+        "storage": "Storage: For saving scan history",
+        "notifications": "Notifications (optional): For app notifications"
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "For privacy concerns or questions, contact us at:",
+      "email": "callousity@gmail.com"
+    },
+    "updates": {
+      "title": "Updates",
+      "description": "This privacy policy may be updated periodically. Users will be notified of any significant changes."
+    }
+  },
+  "footer": {
+    "lastUpdated": "Last updated: {{date}}"
+  }
+} 

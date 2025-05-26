@@ -1,0 +1,51 @@
+{
+  "title": "Yardım & Destek",
+  "sections": {
+    "support": {
+      "help": "Yardım & Destek"
+    }
+  },
+  "contact": {
+    "title": "Destek İletişimi",
+    "email": "E-posta Desteği",
+    "emailDesc": "Yardım için bize e-posta gönderin"
+  },
+  "faq": {
+    "title": "Sık Sorulan Sorular",
+    "nfcSupport": {
+      "question": "Cihazım NFC destekliyor mu?",
+      "answer": "Çoğu modern akıllı telefon NFC destekler. Android'de Ayarlar > Bağlı Cihazlar bölümünden kontrol edebilirsiniz. iOS'ta iPhone 7 ve üzeri modeller NFC okuma özelliğini destekler."
+    },
+    "writeTag": {
+      "question": "NFC etiketine nasıl yazabilirim?",
+      "answer": "NFC etiketlerine yazma premium bir özelliktir. Yükseltme yaptıktan sonra, yazma butonuna dokunun, veri tipini seçin, içeriği girin ve telefonunuzu etikete yaklaştırın."
+    },
+    "dataTypes": {
+      "question": "Hangi veri tiplerini okuyup/yazabilirim?",
+      "answer": "Metin, URL, telefon numarası, e-posta adresi, WiFi bilgileri ve kişi bilgileri dahil çeşitli veri tiplerini okuyup yazabilirsiniz."
+    },
+    "premium": {
+      "question": "Premium'da hangi özellikler var?",
+      "answer": "Premium, etiket yazma, şifre koruması, veri birleştirme, gelişmiş geçmiş yönetimi ve sınırsız tarama depolama özelliklerini içerir."
+    },
+    "restore": {
+      "question": "Premium satın almamı nasıl geri yüklerim?",
+      "answer": "Ayarlar > Satın Almaları Geri Yükle'ye gidin. Orijinal satın alma için kullandığınız hesapla giriş yaptığınızdan emin olun."
+    }
+  },
+  "troubleshooting": {
+    "title": "Sorun Giderme",
+    "nfcNotWorking": {
+      "title": "NFC Çalışmıyor",
+      "solution": "1. Cihaz ayarlarında NFC'nin açık olduğundan emin olun\n2. NFC antenini engelliyorsa telefon kılıfını çıkarın\n3. Etiketi telefonunuzun farklı noktalarında konumlandırmayı deneyin"
+    },
+    "readError": {
+      "title": "Etiket Okunamıyor",
+      "solution": "1. Telefonunuzu etiketin yakınında sabit tutun\n2. Etiketin hasarlı olmadığından emin olun\n3. Etiketi başka bir NFC destekli cihazla okumayı deneyin"
+    },
+    "writeError": {
+      "title": "Yazma Başarısız",
+      "solution": "1. Etiketin yazılabilir ve kilitli olmadığını kontrol edin\n2. Etiketin yeterli depolama alanına sahip olduğundan emin olun\n3. Yazma sırasında telefonunuzu sabit tutun"
+    }
+  }
+} 

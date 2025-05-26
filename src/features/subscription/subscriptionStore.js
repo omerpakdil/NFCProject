@@ -16,42 +16,42 @@ export const SUBSCRIPTION_PLANS = {
 export const FEATURES = {
   READ: {
     id: 'read',
-    name: 'NFC Okuma',
+    name: 'features.read',
     isPremium: false,
   },
   HISTORY_VIEW: {
     id: 'history_view',
-    name: 'Geçmiş Görüntüleme',
+    name: 'features.history_view',
     isPremium: false,
   },
   WRITE: {
     id: 'write',
-    name: 'NFC Yazma',
+    name: 'features.write',
     isPremium: true,
   },
   LOCK: {
     id: 'lock',
-    name: 'Etiket Kilitleme',
+    name: 'features.lock',
     isPremium: true,
   },
   PASSWORD_PROTECTION: {
     id: 'password_protection',
-    name: 'Şifre Koruması',
+    name: 'features.password_protection',
     isPremium: true,
   },
   DATA_STORAGE: {
     id: 'data_storage',
-    name: 'Kapsamlı Veri Depolama',
+    name: 'features.data_storage',
     isPremium: true,
   },
   DATA_MERGE: {
     id: 'data_merge',
-    name: 'Veri Birleştirme',
+    name: 'features.data_merge',
     isPremium: true,
   },
   ADVANCED_HISTORY: {
     id: 'advanced_history',
-    name: 'Gelişmiş Geçmiş Yönetimi',
+    name: 'features.advanced_history',
     isPremium: true,
   },
 };
@@ -61,26 +61,26 @@ export const PRICING = {
   [SUBSCRIPTION_PLANS.WEEKLY]: {
     price: '$1.99',
     priceNumeric: 1.99,
-    period: 'haftalık',
+    period: 'period.weekly',
     productId: 'weekly_subscription',
   },
   [SUBSCRIPTION_PLANS.MONTHLY]: {
     price: '$4.99',
     priceNumeric: 4.99,
-    period: 'aylık',
+    period: 'period.monthly',
     productId: 'monthly_subscription',
   },
   [SUBSCRIPTION_PLANS.YEARLY]: {
     price: '$39.99',
     priceNumeric: 39.99,
-    period: 'yıllık',
+    period: 'period.yearly',
     productId: 'yearly_subscription',
-    discount: '33% indirim',
+    discount: 'plans.yearly.discount',
   },
   [SUBSCRIPTION_PLANS.LIFETIME]: {
     price: '$79.99',
     priceNumeric: 79.99,
-    period: 'ömür boyu',
+    period: 'period.lifetime',
     productId: 'lifetime_access',
   },
 };

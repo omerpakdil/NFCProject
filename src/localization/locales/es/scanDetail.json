@@ -45,7 +45,8 @@
     "title": "Categoría"
   },
   "tags": {
-    "title": "Etiquetas"
+    "title": "Etiquetas",
+    "placeholder": "Añadir etiquetas..."
   },
   "notes": {
     "title": "Notas",

@@ -1,0 +1,56 @@
+{
+  "title": "Política de Privacidad",
+  "sections": {
+    "dataCollection": {
+      "title": "Recopilación de Datos",
+      "description": "NFC Reader Pro recopila la información personal mínima necesaria para la funcionalidad de la aplicación:",
+      "items": {
+        "scanHistory": "Historial de escaneos NFC (almacenado localmente en su dispositivo)",
+        "appPreferences": "Preferencias y configuraciones de la aplicación",
+        "purchaseInfo": "Información de compra para funciones premium"
+      }
+    },
+    "dataUsage": {
+      "title": "Uso de Datos",
+      "description": "Sus datos se utilizan únicamente para proporcionar funcionalidad a la aplicación:",
+      "items": {
+        "displayHistory": "Mostrar su historial de escaneos",
+        "savePreferences": "Guardar sus preferencias",
+        "managePremium": "Gestionar el acceso a funciones premium"
+      }
+    },
+    "dataStorage": {
+      "title": "Almacenamiento de Datos",
+      "description": "Todos los datos de escaneo se almacenan localmente en su dispositivo. No cargamos ni almacenamos sus datos de escaneo NFC en ningún servidor."
+    },
+    "thirdParty": {
+      "title": "Servicios de Terceros",
+      "description": "Utilizamos los siguientes servicios de terceros:",
+      "items": {
+        "revenueCat": "RevenueCat para gestionar compras dentro de la aplicación",
+        "appStore": "App Store / Play Store para la distribución de la aplicación"
+      }
+    },
+    "permissions": {
+      "title": "Permisos",
+      "description": "La aplicación requiere los siguientes permisos:",
+      "items": {
+        "nfc": "NFC: Para leer y escribir etiquetas NFC",
+        "storage": "Almacenamiento: Para guardar el historial de escaneos",
+        "notifications": "Notificaciones (opcional): Para notificaciones de la aplicación"
+      }
+    },
+    "contact": {
+      "title": "Contacto",
+      "description": "Para preguntas o inquietudes sobre privacidad, contáctenos en:",
+      "email": "callousity@gmail.com"
+    },
+    "updates": {
+      "title": "Actualizaciones",
+      "description": "Esta política de privacidad puede actualizarse periódicamente. Los usuarios serán notificados de cualquier cambio significativo."
+    }
+  },
+  "footer": {
+    "lastUpdated": "Última actualización: {{date}}"
+  }
+} 

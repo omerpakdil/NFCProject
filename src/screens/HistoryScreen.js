@@ -2,19 +2,19 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    Alert,
-    FlatList,
-    Modal,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Switch,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Alert,
+  FlatList,
+  Modal,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  Share,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 import Button from '../components/Button';
@@ -486,7 +486,7 @@ const HistoryScreen = ({ navigation }) => {
                           filters.categories.includes(category.id) && { color: category.color }
                         ]}
                       >
-                        {category.name}
+                        {t(category.name)}
                       </Text>
                     </TouchableOpacity>
                   ))}

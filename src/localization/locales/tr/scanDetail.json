@@ -45,7 +45,8 @@
     "title": "Kategori"
   },
   "tags": {
-    "title": "Etiketler"
+    "title": "Etiketler",
+    "placeholder": "Etiket ekle..."
   },
   "notes": {
     "title": "Notlar",

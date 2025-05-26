@@ -17,34 +17,26 @@
     "write": "NFC Writing",
     "lock": "Tag Locking",
     "password_protection": "Password Protection",
-    "data_storage": "Comprehensive Data Storage",
+    "data_storage": "Extended Data Storage",
     "data_merge": "Data Merging",
     "advanced_history": "Advanced History Management"
   },
   "plans": {
+    "free": {
+      "title": "Free"
+    },
     "weekly": {
-      "title": "Weekly",
-      "price": "$1.99",
-      "period": "weekly",
-      "discount": "10% off"
+      "title": "Weekly"
     },
     "monthly": {
-      "title": "Monthly",
-      "price": "$4.99",
-      "period": "monthly",
-      "discount": "20% off"
+      "title": "Monthly"
     },
     "yearly": {
       "title": "Yearly",
-      "price": "$39.99",
-      "period": "yearly",
       "discount": "33% off"
     },
     "lifetime": {
-      "title": "Lifetime",
-      "price": "$79.99",
-      "period": "one-time",
-      "discount": "Best value"
+      "title": "Lifetime"
     }
   },
   "period": {
@@ -63,5 +55,17 @@
     "restored": "Your subscription has been successfully restored!",
     "noRestored": "No active subscription found to restore.",
     "error": "An error occurred during purchase. Please try again."
+  },
+  "sections": {
+    "premium": {
+      "active": "Premium Active",
+      "plan": "Plan",
+      "status": "Premium Status"
+    }
+  },
+  "premium": {
+    "upgrade": "Upgrade to Premium",
+    "description": "Get unlimited scans, advanced features and more with premium.",
+    "upgradeButton": "Upgrade to Premium"
   }
 } 

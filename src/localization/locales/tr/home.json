@@ -31,5 +31,30 @@
     "remaining": "Kalan Tarama: {{count}}",
     "limitReachedDesc": "Yeni taramalar en eski kayıtların üzerine yazılacak",
     "premiumDesc": "Premium kullanıcılar sınırsız tarama depolayabilir"
+  },
+  "writeButton": "Yeni NFC Etiketi Oluştur",
+  "mergeButton": "NFC Veri Birleştirme",
+  "storageLimit": {
+    "title": "Depolama Durumu",
+    "limitReached": "Depolama Limiti Aşıldı",
+    "remaining": "Kalan Tarama: {{count}}",
+    "description": "Premium kullanıcılar sınırsız tarama depolayabilir",
+    "limitReachedDescription": "Yeni taramalar en eski kayıtların üzerine yazılacak",
+    "getUnlimited": "Sınırsız Depolama Al"
+  },
+  "scanModal": {
+    "title": "NFC Tarama",
+    "description": "Telefonunuzu NFC etiketine yaklaştırın",
+    "startButton": "Taramayı Başlat"
+  },
+  "noNfc": {
+    "title": "NFC Kullanılamıyor",
+    "description": "Bu cihaz NFC teknolojisini desteklemiyor veya NFC devre dışı bırakılmış.",
+    "steps": {
+      "title": "Yapabilecekleriniz:",
+      "checkSettings": "NFC'nin ayarlardan etkin olduğundan emin olun",
+      "useCompatibleDevice": "NFC uyumlu bir cihaz kullanın",
+      "getInfo": "Cihazınızın NFC desteği hakkında bilgi alın"
+    }
   }
 }

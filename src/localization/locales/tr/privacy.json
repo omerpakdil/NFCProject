@@ -1,0 +1,56 @@
+{
+  "title": "Gizlilik Politikası",
+  "sections": {
+    "dataCollection": {
+      "title": "Veri Toplama",
+      "description": "NFC Reader Pro, uygulama işlevselliği için minimum düzeyde kişisel bilgi toplar:",
+      "items": {
+        "scanHistory": "NFC tarama geçmişi (cihazınızda yerel olarak depolanır)",
+        "appPreferences": "Uygulama tercihleri ve ayarları",
+        "purchaseInfo": "Premium özellikler için satın alma bilgileri"
+      }
+    },
+    "dataUsage": {
+      "title": "Veri Kullanımı",
+      "description": "Verileriniz yalnızca uygulama işlevselliği sağlamak için kullanılır:",
+      "items": {
+        "displayHistory": "Tarama geçmişinizi görüntüleme",
+        "savePreferences": "Tercihlerinizi kaydetme",
+        "managePremium": "Premium özellik erişimini yönetme"
+      }
+    },
+    "dataStorage": {
+      "title": "Veri Depolama",
+      "description": "Tüm tarama verileri cihazınızda yerel olarak depolanır. NFC tarama verilerinizi herhangi bir sunucuya yüklemez veya depolamayız."
+    },
+    "thirdParty": {
+      "title": "Üçüncü Taraf Hizmetleri",
+      "description": "Aşağıdaki üçüncü taraf hizmetlerini kullanıyoruz:",
+      "items": {
+        "revenueCat": "Uygulama içi satın almaları yönetmek için RevenueCat",
+        "appStore": "Uygulama dağıtımı için App Store / Play Store"
+      }
+    },
+    "permissions": {
+      "title": "İzinler",
+      "description": "Uygulama aşağıdaki izinleri gerektirir:",
+      "items": {
+        "nfc": "NFC: NFC etiketlerini okumak ve yazmak için",
+        "storage": "Depolama: Tarama geçmişini kaydetmek için",
+        "notifications": "Bildirimler (isteğe bağlı): Uygulama bildirimleri için"
+      }
+    },
+    "contact": {
+      "title": "İletişim",
+      "description": "Gizlilik endişeleri veya sorularınız için bize ulaşın:",
+      "email": "callousity@gmail.com"
+    },
+    "updates": {
+      "title": "Güncellemeler",
+      "description": "Bu gizlilik politikası periyodik olarak güncellenebilir. Kullanıcılar önemli değişikliklerden haberdar edilecektir."
+    }
+  },
+  "footer": {
+    "lastUpdated": "Son güncelleme: {{date}}"
+  }
+} 

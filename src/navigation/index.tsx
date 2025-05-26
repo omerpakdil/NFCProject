@@ -13,9 +13,11 @@ import { COLORS } from '../constants/theme';
 
 // Ekranlar
 import DataMergeScreen from '../screens/DataMergeScreen';
+import HelpSupportScreen from '../screens/HelpSupportScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import HomeScreen from '../screens/HomeScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
+import PrivacyPolicyScreen from '../screens/PrivacyPolicyScreen';
 import ScanDetailScreen from '../screens/ScanDetailScreen';
 import ScanResultScreen from '../screens/ScanResultScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -173,6 +175,12 @@ const SettingsStackNavigator = () => {
         component={SubscriptionScreen} 
         options={{ title: t('navigation.screens.subscription') }} 
       />
+      <SettingsStack.Screen name="HelpSupport" component={HelpSupportScreen} options={{ 
+          headerShown: false 
+        }}  />
+      <SettingsStack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ 
+          headerShown: false 
+        }}  />
     </SettingsStack.Navigator>
   );
 };

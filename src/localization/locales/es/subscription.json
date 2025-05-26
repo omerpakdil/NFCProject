@@ -17,34 +17,26 @@
     "write": "Escritura NFC",
     "lock": "Bloqueo de Etiquetas",
     "password_protection": "Protección con Contraseña",
-    "data_storage": "Almacenamiento Integral de Datos",
+    "data_storage": "Almacenamiento Extendido",
     "data_merge": "Fusión de Datos",
     "advanced_history": "Gestión Avanzada del Historial"
   },
   "plans": {
+    "free": {
+      "title": "Gratis"
+    },
     "weekly": {
-      "title": "Semanal",
-      "price": "$1.99",
-      "period": "semanal",
-      "discount": "10% descuento"
+      "title": "Semanal"
     },
     "monthly": {
-      "title": "Mensual",
-      "price": "$4.99",
-      "period": "mensual",
-      "discount": "20% descuento"
+      "title": "Mensual"
     },
     "yearly": {
       "title": "Anual",
-      "price": "$39.99",
-      "period": "anual",
-      "discount": "33% descuento"
+      "discount": "33% de descuento"
     },
     "lifetime": {
-      "title": "De por Vida",
-      "price": "$79.99",
-      "period": "único pago",
-      "discount": "Mejor valor"
+      "title": "De por Vida"
     }
   },
   "period": {
@@ -63,5 +55,17 @@
     "restored": "¡Tu suscripción ha sido restaurada con éxito!",
     "noRestored": "No se encontró ninguna suscripción activa para restaurar.",
     "error": "Ocurrió un error durante la compra. Por favor, inténtalo de nuevo."
+  },
+  "sections": {
+    "premium": {
+      "active": "Premium Activo",
+      "plan": "Plan",
+      "status": "Estado Premium"
+    }
+  },
+  "premium": {
+    "upgrade": "Actualizar a Premium",
+    "description": "Obtén escaneos ilimitados, funciones avanzadas y más con premium.",
+    "upgradeButton": "Actualizar a Premium"
   }
 } 

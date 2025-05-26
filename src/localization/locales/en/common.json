@@ -58,5 +58,12 @@
     "feature": "Premium Feature",
     "upgrade": "Upgrade to Premium",
     "unlockFeature": "Unlock this feature"
+  },
+  "categories": {
+    "business": "Business",
+    "personal": "Personal",
+    "transport": "Transport",
+    "tech": "Technology",
+    "other": "Other"
   }
 } 

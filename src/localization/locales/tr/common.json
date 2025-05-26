@@ -58,5 +58,12 @@
     "feature": "Premium Özellik",
     "upgrade": "Premium'a Yükselt",
     "unlockFeature": "Bu özelliği açın"
+  },
+  "categories": {
+    "business": "İş",
+    "personal": "Kişisel",
+    "transport": "Ulaşım",
+    "tech": "Teknoloji",
+    "other": "Diğer"
   }
 } 

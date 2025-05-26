@@ -1,0 +1,51 @@
+{
+  "title": "Help & Support",
+  "sections": {
+    "support": {
+      "help": "Help & Support"
+    }
+  },
+  "contact": {
+    "title": "Contact Support",
+    "email": "Email Support",
+    "emailDesc": "Send us an email for assistance"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "nfcSupport": {
+      "question": "Does my device support NFC?",
+      "answer": "Most modern smartphones support NFC. On Android, you can check in Settings > Connected Devices. On iOS, iPhone 7 and newer models support NFC reading."
+    },
+    "writeTag": {
+      "question": "How do I write to an NFC tag?",
+      "answer": "Writing to NFC tags is a premium feature. After upgrading, simply tap the write button, select your data type, enter the content, and hold your phone near the tag."
+    },
+    "dataTypes": {
+      "question": "What types of data can I read/write?",
+      "answer": "You can read and write various data types including text, URLs, phone numbers, email addresses, WiFi credentials, and contact information."
+    },
+    "premium": {
+      "question": "What features are included in Premium?",
+      "answer": "Premium includes tag writing, password protection, data merging, advanced history management, and unlimited scan storage."
+    },
+    "restore": {
+      "question": "How do I restore my Premium purchase?",
+      "answer": "Go to Settings > Restore Purchases. Make sure you're signed in with the same account used for the original purchase."
+    }
+  },
+  "troubleshooting": {
+    "title": "Troubleshooting",
+    "nfcNotWorking": {
+      "title": "NFC Not Working",
+      "solution": "1. Ensure NFC is enabled in your device settings\n2. Remove phone case if it's blocking the NFC antenna\n3. Try positioning the tag at different spots on your phone"
+    },
+    "readError": {
+      "title": "Can't Read Tag",
+      "solution": "1. Hold your phone steady near the tag\n2. Make sure the tag isn't damaged\n3. Try reading the tag with another NFC-enabled device"
+    },
+    "writeError": {
+      "title": "Write Failed",
+      "solution": "1. Check if the tag is writable and not locked\n2. Ensure the tag has enough storage space\n3. Keep your phone steady during writing"
+    }
+  }
+} 
