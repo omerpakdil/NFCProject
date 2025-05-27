@@ -380,7 +380,7 @@ const SettingsScreen = ({ navigation }) => {
           )}
           
           {renderSettingItem(
-            'vibrate', 
+            'pulse', 
             t('sections.general.hapticFeedback'), 
             t('sections.general.hapticFeedbackDesc'),
             settings.hapticFeedback,
